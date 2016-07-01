@@ -1,8 +1,12 @@
 #include <MatrixMath.h>
 
 #include <CurieIMU.h>
+
 #include <MadgwickAHRS.h>
 #include <CurieNeurons.h>
+
+#include <CurieBLE.h>
+
 
 
 Madgwick filter; // initialise Madgwick object
@@ -14,6 +18,7 @@ float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 
+float aaa = 0.0;
 
 int ax, ay, az;
 int gx, gy, gz;
@@ -26,12 +31,17 @@ int factorX = 200;
 int factorY = 200; 
 int factorZ = 1; 
 
-int tempsCourant = 2;
+int tempsCourant = 1;
 
 int accelerometreRange = 2;
 
 float IMURate = 200;
 float tempsEntreMesure = 0.005; // 1/IMURate
+
+BLEPeripheral blePeripheral;
+BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51b");
+
+BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51b", BLERead | BLENotify, 1);
 
 void setup() {
   
@@ -52,16 +62,23 @@ void setup() {
   CurieIMU.setGyroRange(125);
   CurieIMU.setGyroRate(IMURate);
 
-  // initialisation des matrix pour la traking
-  initTracker();
+   ///////////////////////// Curie BLE /////////////////////////
 
+   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
+   blePeripheral.addAttribute(AnalogService);
+   blePeripheral.addAttribute(analogCharacteristique);
+   blePeripheral.begin();
 
 }
 
 void loop() {
+  BLECentral central = blePeripheral.central();
+  if(central){
 
+   Serial.println(central.address());
 
-  //Serial.println("\n\n\n\n");
+   while(central.connected()){
 
   getInfoIMU();
 
@@ -98,29 +115,14 @@ void loop() {
       Serial.print(","); 
       Serial.println(tabP[tempsCourant][2],10);
     }
+
   }
  
-
-/*
-  matrix.Print((float*)tabV[tempsCourant - 1], 1, 3, "V-1");
-  matrix.Print((float*)tabP[tempsCourant - 1], 1, 3, "P-1");
-
-  matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
-  matrix.Print((float*)tabV[tempsCourant], 1, 3, "V");
-  matrix.Print((float*)tabP[tempsCourant], 1, 3, "P");
-*/
   miseAjourVal();
+    }
+   }
 
 
-
-}
-
-void initTracker() {
-  
-  // init de la vitesse pour le temps 0
-  tabV[tempsCourant][0] = 0;
-  tabV[tempsCourant][1] = 0;
-  tabV[tempsCourant][2] = 0;
 
 }
 
@@ -179,12 +181,14 @@ void accelerationCarte() {
   //Serial.println("accelerometreRange = ");Serial.println(accelerometreRange);
   
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
+  //Serial.println(tabA);
 
-  tabA[tempsCourant][0] = (int)((ax/32768.0)*accelerometreRange * 9.81);
+  
+     tabA[tempsCourant][0] = (int)((ax/32768.0)*accelerometreRange * 9.81);
   tabA[tempsCourant][1] = (int)((ay/32768.0)*accelerometreRange * 9.81);
-  tabA[tempsCourant][2] = (int)(-(az/32768.0)*accelerometreRange * 9.81); 
+  tabA[tempsCourant][2] = (int)(-(az/32768.0)*accelerometreRange * 9.81);
 
-  //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
+  matrix.Print((float*)tabA, 2, 3, "A");
   
 /*
 
@@ -254,11 +258,11 @@ void positionCarte() {
 void miseAjourVal() {
   Serial.print("");
 
-  matrix.Copy((float*)tabA[2], 1, 3, (float*)tabA[1]);
+  matrix.Copy((float*)tabA[1], 1, 3, (float*)tabA[1]);
   
-  matrix.Copy((float*)tabV[2], 1, 3, (float*)tabV[1]);
+  matrix.Copy((float*)tabV[1], 1, 3, (float*)tabV[1]);
   
-  matrix.Copy((float*)tabP[2], 1, 3, (float*)tabP[1]);
+  matrix.Copy((float*)tabP[1], 1, 3, (float*)tabP[1]);
 
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
 
