@@ -22,9 +22,9 @@ float yaw;
 float pitch;
 float roll;
 
-int factorX = 10000; 
-int factorY = 10000; 
-int factorZ = 2000; 
+int factorX = 200; 
+int factorY = 200; 
+int factorZ = 1; 
 
 int tempsCourant = 2;
 
@@ -74,29 +74,29 @@ void loop() {
   if (Serial.available() > 0) {
     int val = Serial.read();
     if (val == 's') {
-      Serial.print(roll);
+      Serial.print(roll,10);
       Serial.print(","); 
-      Serial.print(yaw);
+      Serial.print(yaw,10);
       Serial.print(","); 
-      Serial.print(pitch);
+      Serial.print(pitch,10);
       Serial.print(","); 
-      Serial.print(tabA[tempsCourant][0]);
+      Serial.print(tabA[tempsCourant][0],10);
       Serial.print(","); 
-      Serial.print(tabA[tempsCourant][1]);
+      Serial.print(tabA[tempsCourant][1],10);
       Serial.print(","); 
-      Serial.print(tabA[tempsCourant][2]);
+      Serial.print(tabA[tempsCourant][2],10);
       Serial.print(","); 
-      Serial.print(tabV[tempsCourant][0]);
+      Serial.print(tabV[tempsCourant][0],10);
       Serial.print(","); 
-      Serial.print(tabV[tempsCourant][1]);
+      Serial.print(tabV[tempsCourant][1],10);
       Serial.print(","); 
-      Serial.print(tabV[tempsCourant][2]);
+      Serial.print(tabV[tempsCourant][2],10);
       Serial.print(","); 
-      Serial.print(tabP[tempsCourant][0]);
+      Serial.print(tabP[tempsCourant][0],10);
       Serial.print(","); 
-      Serial.print(tabP[tempsCourant][1]);
+      Serial.print(tabP[tempsCourant][1],10);
       Serial.print(","); 
-      Serial.println(tabP[tempsCourant][2]);
+      Serial.println(tabP[tempsCourant][2],10);
     }
   }
  
@@ -180,9 +180,9 @@ void accelerationCarte() {
   
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
 
-  tabA[tempsCourant][0] = (ax/32768.0)*accelerometreRange * 9.81;
-  tabA[tempsCourant][1] = (ay/32768.0)*accelerometreRange * 9.81;
-  tabA[tempsCourant][2] = (az/32768.0)*accelerometreRange * 9.81; 
+  tabA[tempsCourant][0] = (int)((ax/32768.0)*accelerometreRange * 9.81);
+  tabA[tempsCourant][1] = (int)((ay/32768.0)*accelerometreRange * 9.81);
+  tabA[tempsCourant][2] = (int)(-(az/32768.0)*accelerometreRange * 9.81); 
 
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
   

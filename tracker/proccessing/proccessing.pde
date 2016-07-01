@@ -21,7 +21,7 @@ float py;
 float pz;
 
 String message;
-String [] ypr = new String [9];
+String [] ypr = new String [12];
 
 void setup()
 {
@@ -37,7 +37,7 @@ void setup()
   textSize(16); // set text size
   textMode(SHAPE); // set text mode to shape
   
-  frameRate(10);
+  frameRate(2);
 }
 
 void draw()
@@ -49,8 +49,13 @@ void draw()
 
   
   fill(0, 102, 153);
-  text("roll = "+roll+"\t yaw = "+yaw+"\t yaw = "+yaw+"\t pitch = "+pitch+"\t vx = "+vx+"\t xy = "+vy+"\t vz = "+vz+"\t px = "+px+"\t py = "+py+"\t pz = "+pz,0, 30); 
- 
+  text("roll = "+roll+"\t yaw = "+yaw+"\t pitch = "+pitch+"\n ax = "+ax+"\t ay = "+ay+"\t az = "+az+"\n vx = "+vx+"\t vy = "+vy+"\t vz = "+vz+"\n px = "+px+"\t py = "+py+"\t pz = "+pz,0, 30); 
+
+  strokeWeight(4);  // Thicker
+  
+  text("roll : ",20,200);
+  line(20, 200, roll*1000, 200);
+
   popMatrix(); // end of object
 
   myPort.write("s"); // write an "s" to receive more data from Arduino
@@ -68,13 +73,17 @@ void serialEvent()
     yaw = float(ypr[1]);
     pitch = float(ypr[2]);
     
-    vx = float(ypr[3]);
-    vy = float(ypr[4]);
-    vz = float(ypr[5]);
+    ax = float(ypr[3]);
+    ay = float(ypr[4]);
+    az = float(ypr[5]);
     
-    px = float(ypr[6]);
-    py = float(ypr[7]);
-    pz = float(ypr[8]);
+    vx = float(ypr[6]);
+    vy = float(ypr[7]);
+    vz = float(ypr[8]);
+    
+    px = float(ypr[9]);
+    py = float(ypr[10]);
+    pz = float(ypr[11]);
 
     
   }
