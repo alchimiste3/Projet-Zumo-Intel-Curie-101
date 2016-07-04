@@ -90,15 +90,15 @@ void loop() {
     
     positionCarte();
            
-    if (Serial.available() > 0) {
+   /* if (Serial.available() > 0) {
       //Serial.println("salut");
       int val = Serial.read();
-      if (val == 's') {
-        Serial.print(roll,2);
+      if (val == 's') {*/
+        Serial.print(roll,4);
         Serial.print(","); 
-        Serial.print(yaw,2);
+        Serial.print(yaw,4);
         Serial.print(","); 
-        Serial.print(pitch,2);
+        Serial.print(pitch,4);
         Serial.print(","); 
         Serial.print(tabA[tempsCourant][0],10);
         Serial.print(","); 
@@ -117,9 +117,9 @@ void loop() {
         Serial.print(tabP[tempsCourant][1],10);
         Serial.print(","); 
         Serial.println(tabP[tempsCourant][2],10);
-      }
+    /*  }
     
-    }
+    }*/
  
     miseAjourVal();
 
@@ -142,7 +142,7 @@ void getInfoIMU() {
   gy = (gy/32768.9)*gyroRange;
   gz = (gz/32768.9)*gyroRange;
 
-  filter.updateIMU(gx / factorX, gy / factorY, gz / factorZ, ax, ay, az);
+  filter.updateIMU(gx, gy, gz, ax, ay, az);
 
 
 
