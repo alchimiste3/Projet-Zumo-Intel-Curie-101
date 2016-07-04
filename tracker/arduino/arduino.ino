@@ -263,11 +263,11 @@ void positionCarte() {
 void miseAjourVal() {
   Serial.print("");
 
-  matrix.Copy((float*)tabA[1], 1, 3, (float*)tabA[1]);
+  matrix.Copy((float*)tabA[1], 1, 3, (float*)tabA[0]);
   
-  matrix.Copy((float*)tabV[1], 1, 3, (float*)tabV[1]);
+  matrix.Copy((float*)tabV[1], 1, 3, (float*)tabV[0]);
   
-  matrix.Copy((float*)tabP[1], 1, 3, (float*)tabP[1]);
+  matrix.Copy((float*)tabP[1], 1, 3, (float*)tabP[0]);
 
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
 
