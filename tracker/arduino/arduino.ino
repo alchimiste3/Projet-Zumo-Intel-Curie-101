@@ -41,7 +41,7 @@ float tempsEntreMesure = 0.005; // 1/IMURate
 BLEPeripheral blePeripheral;
 BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
 
-BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 400);
+BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 20);
 
 void setup() {
   
@@ -104,10 +104,9 @@ void loop() {
         res = res + String(yaw, 4) + ",";
         Serial.print(","); 
         Serial.print(pitch,4);
+        Serial.print(","); 
         res = res + String(pitch, 4) + ",";
-        Serial.print(","); 
         res = res + String(tabA[tempsCourant][0],10) + ",";
-        Serial.print(","); 
         Serial.print(tabA[tempsCourant][1],10);
         res = res + String(tabA[tempsCourant][1],10) + ",";
         Serial.print(","); 
