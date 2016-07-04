@@ -22,17 +22,18 @@ float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 int ax, ay, az;
 int gx, gy, gz;
 
-float yaw;
-float pitch;
-float roll;
+float yaw;             // pour z
+float pitch;           // pour y
+float roll;            // pour x
 
 int factorX = 6; 
 int factorY = 6; 
-int factorZ = 6; 
+int factorZ = 1; 
 
 int tempsCourant = 1;
 
 int accelerometreRange = 2;
+int gyroRange = 125;
 
 float IMURate = 200;
 float tempsEntreMesure = 0.005; // 1/IMURate
@@ -56,7 +57,7 @@ void setup() {
 
   // parametrage du gyroscope
   CurieIMU.autoCalibrateGyroOffset();
-  CurieIMU.setGyroRange(125);
+  CurieIMU.setGyroRange(gyroRange);
   CurieIMU.setGyroRate(IMURate);
 
 
@@ -136,8 +137,14 @@ void getInfoIMU() {
   //Serial.println("\n getInfoIMU");
 
   CurieIMU.readMotionSensor(ax, ay, az, gx, gy, gz);
-  
+
+  gx = (gx/32768.9)*gyroRange;
+  gy = (gy/32768.9)*gyroRange;
+  gz = (gz/32768.9)*gyroRange;
+
   filter.updateIMU(gx / factorX, gy / factorY, gz / factorZ, ax, ay, az);
+
+
 
   roll = filter.getRollRadians();
   yaw = filter.getYawRadians();
