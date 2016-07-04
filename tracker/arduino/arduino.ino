@@ -26,9 +26,9 @@ float yaw;
 float pitch;
 float roll;
 
-int factorX = 6; 
-int factorY = 6; 
-int factorZ = 6; 
+int factorX = 1; 
+int factorY = 1; 
+int factorZ = 1; 
 
 int tempsCourant = 1;
 
@@ -38,13 +38,15 @@ float IMURate = 200;
 float tempsEntreMesure = 0.005; // 1/IMURate
 
 BLEPeripheral blePeripheral;
-BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51b");
+BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
 
-BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51b", BLERead | BLENotify, 1);
+BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 400);
 
 void setup() {
   
   Serial.begin(9600);
+
+  while(!Serial){};
 
   CurieIMU.begin();
 
@@ -62,7 +64,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
@@ -92,30 +94,51 @@ void loop() {
     if (Serial.available() > 0) {
       //Serial.println("salut");
       int val = Serial.read();
+      String res;
       if (val == 's') {
-        Serial.print(roll,2);
+        res = res + String(roll, 10) + ",";
+        Serial.print(roll,10);
         Serial.print(","); 
-        Serial.print(yaw,2);
+        Serial.print(yaw,10);
+        res = res + String(yaw, 10) + ",";
         Serial.print(","); 
-        Serial.print(pitch,2);
+        Serial.print(pitch,10);
+        res = res + String(pitch, 10) + ",";
         Serial.print(","); 
-        Serial.print(tabA[tempsCourant][0],10);
+        res = res + String(tabA[tempsCourant][0],10) + ",";
         Serial.print(","); 
         Serial.print(tabA[tempsCourant][1],10);
+        res = res + String(tabA[tempsCourant][1],10) + ",";
         Serial.print(","); 
         Serial.print(tabA[tempsCourant][2],10);
+        res = res + String(tabA[tempsCourant][2],10) + ",";
         Serial.print(","); 
         Serial.print(tabV[tempsCourant][0],10);
+        res = res + String(tabV[tempsCourant][0],10) + ",";
         Serial.print(","); 
         Serial.print(tabV[tempsCourant][1],10);
+        res = res + String(tabV[tempsCourant][1],10) + ",";
         Serial.print(","); 
         Serial.print(tabV[tempsCourant][2],10);
+        res = res + String(tabV[tempsCourant][2],10) + ",";
         Serial.print(","); 
         Serial.print(tabP[tempsCourant][0],10);
+        res = res + String(tabP[tempsCourant][0],10) + ",";
         Serial.print(","); 
         Serial.print(tabP[tempsCourant][1],10);
+        res = res + String(tabP[tempsCourant][1],10) + ",";
         Serial.print(","); 
         Serial.println(tabP[tempsCourant][2],10);
+        res = res + String(tabP[tempsCourant][2],10);
+        while (res.length() > 0) {
+          char resBLE[20];
+          String resPaquet = res.substring(0, 19);
+          res.remove(0, 19);
+          resPaquet.toCharArray(resBLE, 20);
+          analogCharacteristique.setValue((unsigned char*)resBLE, 20);
+         // delay(15);
+        }
+        
       }
     
     }
