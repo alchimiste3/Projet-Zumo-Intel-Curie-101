@@ -22,17 +22,18 @@ float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 int ax, ay, az;
 int gx, gy, gz;
 
-float yaw;
-float pitch;
-float roll;
+float yaw;             // pour z
+float pitch;           // pour y
+float roll;            // pour x
 
-int factorX = 1; 
-int factorY = 1; 
+int factorX = 6; 
+int factorY = 6; 
 int factorZ = 1; 
 
 int tempsCourant = 1;
 
 int accelerometreRange = 2;
+int gyroRange = 125;
 
 float IMURate = 200;
 float tempsEntreMesure = 0.005; // 1/IMURate
@@ -58,7 +59,7 @@ void setup() {
 
   // parametrage du gyroscope
   CurieIMU.autoCalibrateGyroOffset();
-  CurieIMU.setGyroRange(125);
+  CurieIMU.setGyroRange(gyroRange);
   CurieIMU.setGyroRate(IMURate);
 
 
@@ -96,14 +97,14 @@ void loop() {
       int val = Serial.read();
       String res;
       if (val == 's') {
-        res = res + String(roll, 10) + ",";
-        Serial.print(roll,10);
+        res = res + String(roll, 4) + ",";
+        Serial.print(roll,4);
         Serial.print(","); 
-        Serial.print(yaw,10);
-        res = res + String(yaw, 10) + ",";
+        Serial.print(yaw,4);
+        res = res + String(yaw, 4) + ",";
         Serial.print(","); 
-        Serial.print(pitch,10);
-        res = res + String(pitch, 10) + ",";
+        Serial.print(pitch,4);
+        res = res + String(pitch, 4) + ",";
         Serial.print(","); 
         res = res + String(tabA[tempsCourant][0],10) + ",";
         Serial.print(","); 
@@ -138,7 +139,6 @@ void loop() {
           analogCharacteristique.setValue((unsigned char*)resBLE, 20);
          // delay(15);
         }
-        
       }
     
     }
@@ -159,8 +159,14 @@ void getInfoIMU() {
   //Serial.println("\n getInfoIMU");
 
   CurieIMU.readMotionSensor(ax, ay, az, gx, gy, gz);
-  
-  filter.updateIMU(gx / factorX, gy / factorY, gz / factorZ, ax, ay, az);
+
+  gx = (gx/32768.9)*gyroRange;
+  gy = (gy/32768.9)*gyroRange;
+  gz = (gz/32768.9)*gyroRange;
+
+  filter.updateIMU(gx, gy, gz, ax, ay, az);
+
+
 
   roll = filter.getRollRadians();
   yaw = filter.getYawRadians();
@@ -286,11 +292,11 @@ void positionCarte() {
 void miseAjourVal() {
   Serial.print("");
 
-  matrix.Copy((float*)tabA[1], 1, 3, (float*)tabA[1]);
+  matrix.Copy((float*)tabA[1], 1, 3, (float*)tabA[0]);
   
-  matrix.Copy((float*)tabV[1], 1, 3, (float*)tabV[1]);
+  matrix.Copy((float*)tabV[1], 1, 3, (float*)tabV[0]);
   
-  matrix.Copy((float*)tabP[1], 1, 3, (float*)tabP[1]);
+  matrix.Copy((float*)tabP[1], 1, 3, (float*)tabP[0]);
 
   //matrix.Print((float*)tabA[tempsCourant], 1, 3, "A");
 
