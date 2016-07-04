@@ -93,6 +93,8 @@ void draw()
   
   translate(800, 200); // set position to centre
 
+  strokeWeight(1);  
+
   rotateX(-roll); 
   rotateY(yaw); 
   rotateZ(pitch);

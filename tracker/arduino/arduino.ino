@@ -26,9 +26,9 @@ float yaw;
 float pitch;
 float roll;
 
-int factorX = 1; 
-int factorY = 1; 
-int factorZ = 1; 
+int factorX = 6; 
+int factorY = 6; 
+int factorZ = 6; 
 
 int tempsCourant = 1;
 
@@ -45,8 +45,6 @@ BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51b",
 void setup() {
   
   Serial.begin(9600);
-
-  while(!Serial){};
 
   CurieIMU.begin();
 
@@ -95,11 +93,11 @@ void loop() {
       //Serial.println("salut");
       int val = Serial.read();
       if (val == 's') {
-        Serial.print(roll,10);
+        Serial.print(roll,2);
         Serial.print(","); 
-        Serial.print(yaw,10);
+        Serial.print(yaw,2);
         Serial.print(","); 
-        Serial.print(pitch,10);
+        Serial.print(pitch,2);
         Serial.print(","); 
         Serial.print(tabA[tempsCourant][0],10);
         Serial.print(","); 
