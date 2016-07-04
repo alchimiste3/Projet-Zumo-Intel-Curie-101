@@ -25,7 +25,7 @@ String [] ypr = new String [12];
 
 void setup()
 {
-  size(1000, 800, P3D);
+  size(1500, 800, P3D);
  
   /*Set my serial port to same as Arduino, baud rate 9600*/
   
@@ -37,13 +37,15 @@ void setup()
   textSize(16); // set text size
   textMode(SHAPE); // set text mode to shape
   
-  frameRate(2);
+  frameRate(10);
 }
 
 void draw()
 {
   serialEvent();  // read and parse incoming serial message
   background(255); // set background to white
+
+  translate(200, 0); // set position to centre
 
   pushMatrix(); // begin object
 
@@ -53,8 +55,51 @@ void draw()
 
   strokeWeight(4);  // Thicker
   
-  text("roll : ",20,200);
-  line(20, 200, roll*1000, 200);
+  text("roll : ",400,200);
+  line(405, 210, 405 + roll, 210);
+
+  text("yaw : ",400,240);
+  line(405, 250, 405 + yaw, 250);
+  
+  text("pitch : ",400,280);
+  line(405, 290, 405 + pitch, 290);
+  
+  text("ax : ",400,320);
+  line(405, 330, 405 + ax, 330);
+
+  text("ay : ",400,360);
+  line(405, 370, 405 + ay, 370);
+  
+  text("az : ",400,400);
+  line(405, 410, 405 + az, 410);
+  
+  text("vx : ",400,440);
+  line(405, 450, 405 + vx, 450);
+  
+  text("vy : ",400,480);
+  line(405, 490, 405 + vy, 490);
+  
+  text("vz : ",400,520);
+  line(405, 530, 405 + vz, 530);
+  
+  text("px : ",400,560);
+  line(405, 570, 405 + px, 570);
+  
+  text("py : ",400,600);
+  line(405, 610, 405 + py, 610);
+  
+  text("pz : ",400,640);
+  line(405, 650, 405 + pz, 650);
+  
+  translate(800, 200); // set position to centre
+
+  rotateX(-roll); 
+  rotateY(yaw); 
+  rotateZ(pitch);
+  
+  
+  drawArduino();
+  
 
   popMatrix(); // end of object
 

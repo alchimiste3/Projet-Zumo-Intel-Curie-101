@@ -18,7 +18,6 @@ float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 
-float aaa = 0.0;
 
 int ax, ay, az;
 int gx, gy, gz;
@@ -27,8 +26,8 @@ float yaw;
 float pitch;
 float roll;
 
-int factorX = 200; 
-int factorY = 200; 
+int factorX = 1; 
+int factorY = 1; 
 int factorZ = 1; 
 
 int tempsCourant = 1;
@@ -62,6 +61,7 @@ void setup() {
   CurieIMU.setGyroRange(125);
   CurieIMU.setGyroRate(IMURate);
 
+
    ///////////////////////// Curie BLE /////////////////////////
 
    blePeripheral.setLocalName("RdWrS");
@@ -74,53 +74,60 @@ void setup() {
 
 void loop() {
   BLECentral central = blePeripheral.central();
+  
   if(central){
 
    Serial.println(central.address());
 
    while(central.connected()){
 
-  getInfoIMU();
+    getInfoIMU();
 
-  accelerationCarte();
-
-  vitesseCarte();
-
-  positionCarte();
-
-  if (Serial.available() > 0) {
-    int val = Serial.read();
-    if (val == 's') {
-      Serial.print(roll,10);
-      Serial.print(","); 
-      Serial.print(yaw,10);
-      Serial.print(","); 
-      Serial.print(pitch,10);
-      Serial.print(","); 
-      Serial.print(tabA[tempsCourant][0],10);
-      Serial.print(","); 
-      Serial.print(tabA[tempsCourant][1],10);
-      Serial.print(","); 
-      Serial.print(tabA[tempsCourant][2],10);
-      Serial.print(","); 
-      Serial.print(tabV[tempsCourant][0],10);
-      Serial.print(","); 
-      Serial.print(tabV[tempsCourant][1],10);
-      Serial.print(","); 
-      Serial.print(tabV[tempsCourant][2],10);
-      Serial.print(","); 
-      Serial.print(tabP[tempsCourant][0],10);
-      Serial.print(","); 
-      Serial.print(tabP[tempsCourant][1],10);
-      Serial.print(","); 
-      Serial.println(tabP[tempsCourant][2],10);
-    }
-
-  }
+    
  
-  miseAjourVal();
+    accelerationCarte();
+
+    vitesseCarte();
+    
+    positionCarte();
+           
+    if (Serial.available() > 0) {
+      //Serial.println("salut");
+      int val = Serial.read();
+      if (val == 's') {
+        Serial.print(roll,10);
+        Serial.print(","); 
+        Serial.print(yaw,10);
+        Serial.print(","); 
+        Serial.print(pitch,10);
+        Serial.print(","); 
+        Serial.print(tabA[tempsCourant][0],10);
+        Serial.print(","); 
+        Serial.print(tabA[tempsCourant][1],10);
+        Serial.print(","); 
+        Serial.print(tabA[tempsCourant][2],10);
+        Serial.print(","); 
+        Serial.print(tabV[tempsCourant][0],10);
+        Serial.print(","); 
+        Serial.print(tabV[tempsCourant][1],10);
+        Serial.print(","); 
+        Serial.print(tabV[tempsCourant][2],10);
+        Serial.print(","); 
+        Serial.print(tabP[tempsCourant][0],10);
+        Serial.print(","); 
+        Serial.print(tabP[tempsCourant][1],10);
+        Serial.print(","); 
+        Serial.println(tabP[tempsCourant][2],10);
+      }
+    
     }
-   }
+ 
+    miseAjourVal();
+
+   
+    
+  }
+}
 
 
 
@@ -184,11 +191,11 @@ void accelerationCarte() {
   //Serial.println(tabA);
 
   
-     tabA[tempsCourant][0] = (int)((ax/32768.0)*accelerometreRange * 9.81);
+  tabA[tempsCourant][0] = (int)((ax/32768.0)*accelerometreRange * 9.81);
   tabA[tempsCourant][1] = (int)((ay/32768.0)*accelerometreRange * 9.81);
   tabA[tempsCourant][2] = (int)(-(az/32768.0)*accelerometreRange * 9.81);
 
-  matrix.Print((float*)tabA, 2, 3, "A");
+   //matrix.Print((float*)tabA, 2, 3, "A");
   
 /*
 
@@ -268,27 +275,4 @@ void miseAjourVal() {
 
 
 }
-
-
-
-
-
-
-/*
-
-      float A[3][3] = {0};
-      A[0][0] = 5;
-      float B[3][3] = {0};
-      B[0][0] = 2;
-    
-      float C[3][3] = {0};
-    
-    
-      matrix.Add((float*)A, (float*)B, 3, 3, (float*)C);
-    
-      matrix.Print((float*)A, 3, 3, "A");
-      matrix.Print((float*)B, 3, 3, "B");
-      matrix.Print((float*)C, 3, 3, "C");
-
-*/
 
