@@ -65,7 +65,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS2");
+   blePeripheral.setLocalName("RdWrS");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
@@ -100,36 +100,51 @@ void loop() {
         res = res + String(roll, 2) + ",";
         Serial.print(roll,2);
         Serial.print(","); 
+        
         Serial.print(yaw,2);
         res = res + String(yaw, 2) + ",";
         Serial.print(","); 
+        
         Serial.print(pitch,2);
         Serial.print(","); 
         res = res + String(pitch, 2) + ",";
+
         res = res + String(tabA[tempsCourant][0],5) + ",";
+        Serial.print(","); 
+        res = res + String(tabA[tempsCourant][0],5) + ",";
+        
         Serial.print(tabA[tempsCourant][1],5);
+        Serial.print(","); 
         res = res + String(tabA[tempsCourant][1],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabA[tempsCourant][2],5);
+        Serial.print(","); 
         res = res + String(tabA[tempsCourant][2],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabV[tempsCourant][0],5);
+        Serial.print(","); 
         res = res + String(tabV[tempsCourant][0],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabV[tempsCourant][1],5);
+        Serial.print(","); 
         res = res + String(tabV[tempsCourant][1],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabV[tempsCourant][2],5);
+        Serial.print(","); 
         res = res + String(tabV[tempsCourant][2],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabP[tempsCourant][0],5);
+        Serial.print(","); 
         res = res + String(tabP[tempsCourant][0],5) + ",";
-        Serial.print(","); 
+        
         Serial.print(tabP[tempsCourant][1],5);
-        res = res + String(tabP[tempsCourant][1],5) + ",";
         Serial.print(","); 
+        res = res + String(tabP[tempsCourant][1],5) + ",";
+        
         Serial.println(tabP[tempsCourant][2],5);
         res = res + String(tabP[tempsCourant][2],5);
+
+        
         while (res.length() > 0) {
           char resBLE[20];
           String resPaquet = res.substring(0, 19);
@@ -171,38 +186,6 @@ void getInfoIMU() {
   yaw = filter.getYawRadians();
   pitch = filter.getPitchRadians();
   
-}
-
-//TODO 
-void supprimerGravite(float* res){
-  /*
-  Serial.println("\n supprimerGravite");
-
-  float g[3] = {0.0};
-
-  float g0 = filter.getG0();
-  float g1 = filter.getG1();
-  float g2 = filter.getG2();
-
-  Serial.println(g0,5);
-  Serial.println(g1,5);
-  Serial.println(g2,5);
-  Serial.println("");
-
-
-  g[0] = 2 * (q1 * q3 - q0 * q2);
-  g[1] = 2 * (q0 * q1 + q2 * q3);
-  g[2] = (q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3);
-
-  Serial.println(g[0]);
-  Serial.println(g[1]);
-  Serial.println(g[2]);
-
-  res[0] = (tabA[tempsCourant][0] - g0);
-  res[1] = (tabA[tempsCourant][1] - g1);
-  res[2] = (tabA[tempsCourant][2] - g2);
-  
-*/
 }
 
 

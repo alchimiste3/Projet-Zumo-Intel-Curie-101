@@ -23,6 +23,7 @@ float yaw;             // pour z
 float pitch;           // pour y
 float roll;            // pour x
 
+int facteurYaw = 50;
 
 int tempsCourant = 1;
 
@@ -96,12 +97,15 @@ void loop() {
     res = res + String(az);
         
     while (res.length() > 0) {
-      char resBLE[20];
+      
+      char donneesEnvoyer[20];
       String resPaquet = res.substring(0, 19);
       res.remove(0, 19);
-      resPaquet.toCharArray(resBLE, 20);
-      analogCharacteristique.setValue((unsigned char*)resBLE, 20);
+      resPaquet.toCharArray(donneesEnvoyer, 20);
+      analogCharacteristique.setValue((unsigned char*)donneesEnvoyer, 20);
+
      // delay(15);
+     
     }
   }
 }
@@ -126,7 +130,7 @@ void getInfoIMU() {
   filter.updateIMU(gx, gy, gz, ax, ay, az);
   
   roll = filter.getRollRadians();
-  yaw = filter.getYawRadians();
+  yaw = filter.getYawRadians()*facteurYaw;
   pitch = filter.getPitchRadians();
   
 }
