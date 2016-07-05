@@ -1,5 +1,6 @@
 #ifndef TRAITEMENTDONNEES_H
 #define TRAITEMENTDONNEES_H
+#include <QDebug>
 #include "MatrixMath/MatrixMath.h"
 
 
@@ -7,7 +8,7 @@ class TraitementDonnees
 {
 
     const int tempsCourant = 1;
-    const float tempsEntreMesure = 0.005;
+    float tempsEntreMesure;
     float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
     float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
     float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
@@ -21,7 +22,7 @@ public:
     float* getVitesseCourante();
     float* getPositionCourante();
 
-    void traitement(float ax, float ay, float az);
+    void traitement(float ax, float ay, float az, float intervalle);
 };
 
 #endif // TRAITEMENTDONNEES_H
