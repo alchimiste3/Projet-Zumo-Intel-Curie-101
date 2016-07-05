@@ -2,7 +2,7 @@ import processing.serial.*;
 
 Serial myPort;
 
-int serialMode = 1; // Bluetooth mode si serialMode = 0
+int serialMode = 0; // Bluetooth mode si serialMode = 0
 
 int newLine = 13; // new line character in ASCII
 
