@@ -21,7 +21,6 @@ public:
     float* getVitesseCourante();
     float* getPositionCourante();
 
-
     void traitement(float ax, float ay, float az);
 };
 
