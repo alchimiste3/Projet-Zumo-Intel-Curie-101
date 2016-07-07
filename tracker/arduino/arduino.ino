@@ -178,7 +178,7 @@ void getInfoIMU() {
   gy = (gy/32768.9)*gyroRange;
   gz = (gz/32768.9)*gyroRange;
 
-  filter.updateIMU(gx, gy, gz, ax, ay, az);
+  filter.updateIMU(0, 0, gz, ax, ay, az);
 
 
 
