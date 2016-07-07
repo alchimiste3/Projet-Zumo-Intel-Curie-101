@@ -57,7 +57,7 @@ float *TraitementDonnees::getPositionCourante()
     return tabP[tempsCourant];
 }
 
-void TraitementDonnees::traitement(float ax, float ay, float az, float intervalle)
+void TraitementDonnees::traitement(float ax, float ay, float az, float gx, float gy, float gz, float intervalle)
 {
     tempsEntreMesure = intervalle;
 
@@ -67,6 +67,32 @@ void TraitementDonnees::traitement(float ax, float ay, float az, float intervall
 
     calculerPosition();
 
+    calculQuaternions(gx, gy, gz, ax, ay, az);
+
     miseAJourVal();
+}
+
+void TraitementDonnees::calculQuaternions(float gx, float gy, float gz, float ax, float ay, float az)
+{
+    filter.updateIMU(gx, gy, gz, ax, ay, az);
+
+    roll = filter.getRollRadians();
+    yaw = filter.getYawRadians();
+    pitch = filter.getPitchRadians();
+}
+
+float TraitementDonnees::getRoll()
+{
+    return roll;
+}
+
+float TraitementDonnees::getYaw()
+{
+    return yaw;
+}
+
+float TraitementDonnees::getPitch()
+{
+    return pitch;
 }
 

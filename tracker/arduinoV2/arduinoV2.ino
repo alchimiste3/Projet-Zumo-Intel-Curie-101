@@ -1,29 +1,18 @@
 
 #include <CurieIMU.h>
 
-#include <MadgwickAHRS.h>
 #include <CurieNeurons.h>
 
 #include <CurieBLE.h>
 
-
-
-Madgwick filter; // initialise Madgwick object
-
+//#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     10
 
 float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 
-
 int ax, ay, az;
 int gx, gy, gz;
-
-float yaw;             // pour z
-float pitch;           // pour y
-float roll;            // pour x
-
-int facteurYaw = 50;
 
 int tempsCourant = 1;
 
@@ -35,14 +24,16 @@ float tempsEntreMesure = 0.005; // 1/IMURate
 
 BLEPeripheral blePeripheral;
 BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
+//BLEService MotionService("3752c0a0-0d25-11e6-97f5-0002a5d5c51d");
 
 BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 20);
+//BLECharacteristic analogCharacteristique2("3752c0a0-0d25-11e6-97f5-0002a5d5c51d", BLERead | BLENotify, 20);
 
 void setup() {
   
   Serial.begin(9600);
 
-  while(!Serial){};
+ // while(!Serial){};
 
   CurieIMU.begin();
 
@@ -60,10 +51,12 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
+ //  blePeripheral.addAttribute(MotionService);
+ //  blePeripheral.addAttribute(analogCharacteristique2);
    blePeripheral.begin();
 
 }
@@ -80,11 +73,8 @@ void loop() {
     getInfoIMU();
 
     String res;
+    String chaine;
 
-    Serial.print("yaw = ");Serial.print(yaw,2);
-    res = res + String(yaw, 2) + ",";
-    
-    Serial.print(","); 
     Serial.print(ax);
     res = res + String(ax) + ",";
     
@@ -93,20 +83,25 @@ void loop() {
     res = res + String(ay) + ",";
     
     Serial.print(","); 
-    Serial.println(az);
-    res = res + String(az);
-        
-    while (res.length() > 0) {
-      
-      char donneesEnvoyer[20];
-      String resPaquet = res.substring(0, 19);
-      res.remove(0, 19);
-      resPaquet.toCharArray(donneesEnvoyer, 20);
-      analogCharacteristique.setValue((unsigned char*)donneesEnvoyer, 20);
+    Serial.print(az);
+    res = res + String(az) + ",";
 
-     // delay(15);
-     
-    }
+    Serial.print(","); 
+    Serial.println(gz);
+    res = res + String(gz);
+    chaine = chaine + String(gz);
+
+  /*  char donneesEnvoyer2[20];
+    chaine.toCharArray(donneesEnvoyer2, 20);*/
+    
+      
+    char donneesEnvoyer[20];
+    String resPaquet = res.substring(0, 19);
+    res.remove(0, 19);
+    resPaquet.toCharArray(donneesEnvoyer, 20);
+
+    analogCharacteristique.setValue((unsigned char*)donneesEnvoyer, 20);
+   // analogCharacteristique2.setValue((unsigned char*)donneesEnvoyer2, 20);
   }
 }
 
@@ -125,14 +120,6 @@ void getInfoIMU() {
   ax = (int)((ax/32768.0)*accelerometreRange * 9.81);
   ay = (int)((ay/32768.0)*accelerometreRange * 9.81);
   az = (int)(-(az/32768.0)*accelerometreRange * 9.81);
-
-  // Partie Madgwick → a faire sur QT
-  filter.updateIMU(gx, gy, gz, ax, ay, az);
-  
-  roll = filter.getRollRadians();
-  yaw = filter.getYawRadians()*facteurYaw;
-  pitch = filter.getPitchRadians();
-  
 }
 
 

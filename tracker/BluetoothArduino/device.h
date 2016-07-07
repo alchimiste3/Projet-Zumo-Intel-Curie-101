@@ -17,6 +17,7 @@ class Device : public QObject
     QBluetoothDeviceDiscoveryAgent* discoveryAgent;
     QLowEnergyController* controller;
     QLowEnergyService *service;
+    QLowEnergyService *motionService;
     QLowEnergyCharacteristic positionCharacteristic;
     const QString key = "3752c0a0-0d25-11e6-97f5-0002a5d5c51c";
     QFile* file;
@@ -35,6 +36,7 @@ public slots:
     void serviceScanDone(QBluetoothUuid serviceUuid);
     void deviceConnected();
     void serviceDetailsDiscovered(QLowEnergyService::ServiceState);
+    void motionServiceDetailsDiscovered(QLowEnergyService::ServiceState);
     void positionCharacteristicUpdate(QLowEnergyCharacteristic ch ,QByteArray byteArray);
 };
 

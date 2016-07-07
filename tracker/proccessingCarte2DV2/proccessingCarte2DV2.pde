@@ -34,7 +34,7 @@ int xMax;
 int yMin;
 int yMax;
 
-float coofDessinData = 10;
+float coofDessinData = 1;
 
 String[] position;
 
@@ -135,9 +135,9 @@ void readFile()
     vy = float(ypr[5]);
     vz = float(ypr[6]);
     
-    px = float(ypr[8]);
-    py = float(ypr[9]);
-    pz = float(ypr[10]);
+    px = float(ypr[7]);
+    py = float(ypr[8]);
+    pz = float(ypr[9]);
 
     
   }
