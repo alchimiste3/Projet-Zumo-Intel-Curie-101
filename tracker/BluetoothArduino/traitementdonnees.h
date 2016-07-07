@@ -13,6 +13,7 @@ class TraitementDonnees
     float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
     float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
     float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
+    bool immobile;
 
     Madgwick filter;
     float roll;
@@ -36,7 +37,7 @@ public:
     float getYaw();
     float getPitch();
 
-    void traitement(float ax, float ay, float az, float gx, float gy, float gz, float intervalle);
+    void traitement(float ax, float ay, float az, float gx, float gy, float gz, bool immobile, float intervalle);
 
     void calculQuaternions(float gx, float gy, float gz, float ax, float ay, float az);
 };

@@ -14,6 +14,10 @@ float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 int ax, ay, az;
 int gx, gy, gz;
 
+String incomingBytes;
+bool immobile = false;
+
+
 int tempsCourant = 1;
 
 int accelerometreRange = 2;
@@ -69,26 +73,40 @@ void loop() {
    Serial.println(central.address());
 
    while(central.connected()){
+    
+    if (Serial.available() > 0) {
+      incomingBytes = Serial.readString();
+      Serial.print("i = ");Serial.println(incomingBytes);
+      if (incomingBytes == "i") {
+        immobile = true;
+      }
+      else if (incomingBytes == "m") {
+        immobile = false;
+      }
+    }
 
     getInfoIMU();
 
     String res;
     String chaine;
 
-    Serial.print(ax);
+   // Serial.print(ax);
     res = res + String(ax) + ",";
     
-    Serial.print(","); 
-    Serial.print(ay);
+   // Serial.print(","); 
+   // Serial.print(ay);
     res = res + String(ay) + ",";
     
-    Serial.print(","); 
-    Serial.print(az);
+   // Serial.print(","); 
+   // Serial.print(az);
     res = res + String(az) + ",";
 
-    Serial.print(","); 
-    Serial.println(gz);
-    res = res + String(gz);
+   // Serial.print(","); 
+   // Serial.println(gz);
+    res = res + String(gz) + ",";
+
+    //Ajout de immobile
+    res = res + String(immobile);
     chaine = chaine + String(gz);
 
   /*  char donneesEnvoyer2[20];

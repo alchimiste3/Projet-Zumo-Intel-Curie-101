@@ -116,9 +116,10 @@ void Device::decouperPaquet(QString paquets)
     ancienTemps = temps;
     qDebug() << intervalle;
     QList<QString> listeValeurs = paquets.split(",");
-    if (listeValeurs.length() == 4)
+    if (listeValeurs.length() == 5)
     {
-        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), listeValeurs[2].toFloat(), 0, 0, listeValeurs[3].toFloat(), ((float)intervalle)/1000);
+        qDebug() << listeValeurs[4].toInt();
+        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), listeValeurs[2].toFloat(), 0, 0, listeValeurs[3].toFloat(), listeValeurs[4].toInt(), ((float)intervalle)/1000);
 
         file->open(QIODevice::WriteOnly);
         QTextStream stream(file);
