@@ -5,7 +5,9 @@ Device::Device()
     discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
     file = new QFile("../../proccessingCarte2D/positions.txt");
     cptData = 0;
-
+    traitement = new TraitementDonnees;
+    timer.start();
+    ancienTemps = 0;
 }
 
 void Device::deviceDisconnected() {
@@ -82,22 +84,27 @@ void Device::positionCharacteristicUpdate(QLowEnergyCharacteristic ch, QByteArra
     {
         if (ch.uuid() == QBluetoothUuid(key))
         {
-            qDebug() << cptData;
-            qDebug() << ch.value().constData();
-            paquets = paquets.append(ch.value().constData());
-            if (cptData >= 7)
-            {
+        //    cptData++;
+        //    qDebug() << cptData;
+            paquets =  ch.value().constData();
+       //     paquets = paquets.append(ch.value().constData());
+      //      if (cptData >= 7)
+      //      {
+                decouperPaquet(paquets);
                 file->open(QIODevice::WriteOnly);
                 QTextStream stream(file);
                 stream << paquets;
                 file->close();
-                paquets = "";
-                cptData = 0;
-            }
-            else
-            {
-                cptData++;
-            }
+        //        paquets = "";
+        //        cptData = 0;
+        //    }
+        //    else
+        //    {
+        //        cptData++;
+        //    }
+           // traitement->traitement();
+
+
 
         /*    cptData++;
             if (cptData > 6)
@@ -115,4 +122,21 @@ void Device::positionCharacteristicUpdate(QLowEnergyCharacteristic ch, QByteArra
             qDebug() << "Données  : " << ch.value().constData();*/
         }
     }
+}
+
+void Device::decouperPaquet(QString paquets)
+{
+    int temps = timer.elapsed();
+
+    int intervalle = temps - ancienTemps;
+    ancienTemps = temps;
+    QList<QString> listeValeurs = paquets.split(",");
+    if (listeValeurs.length() == 4)
+    {
+        traitement->traitement(listeValeurs[1].toFloat(), listeValeurs[2].toFloat(), listeValeurs[3].toFloat(), ((float)intervalle)/1000);
+        qDebug() << "Vitesse courante" << traitement->getVitesseCourante()[0] << "   " << traitement->getVitesseCourante()[1] << "    " << traitement->getVitesseCourante()[2];
+        qDebug() << "Position courante" << traitement->getPositionCourante()[0] << "   " << traitement->getPositionCourante()[1] << "   " << traitement->getPositionCourante()[2];
+    }
+    qDebug() << listeValeurs;
+
 }

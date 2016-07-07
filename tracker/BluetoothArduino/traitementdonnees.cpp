@@ -2,7 +2,7 @@
 
 TraitementDonnees::TraitementDonnees()
 {
-
+    tempsEntreMesure = 0;
 }
 
 void TraitementDonnees::setAcceleration(float ax, float ay, float az)
@@ -19,7 +19,6 @@ void TraitementDonnees::calculerVitesse() {
     tabinter[0] = tabA[tempsCourant][0] * tempsEntreMesure;
     tabinter[1] = tabA[tempsCourant][1] * tempsEntreMesure;
     tabinter[2] = tabA[tempsCourant][2] * tempsEntreMesure;
-
     Matrix.Add((float*)tabV[tempsCourant - 1], (float*)tabinter, 1, 3, (float*)tabV[tempsCourant]);
 }
 
@@ -58,12 +57,16 @@ float *TraitementDonnees::getPositionCourante()
     return tabP[tempsCourant];
 }
 
-void TraitementDonnees::traitement(float ax, float ay, float az)
+void TraitementDonnees::traitement(float ax, float ay, float az, float intervalle)
 {
+    tempsEntreMesure = intervalle;
+
     setAcceleration(ax,ay,az);
 
     calculerVitesse();
 
     calculerPosition();
+
+    miseAJourVal();
 }
 

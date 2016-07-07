@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <QFile>
 #include <QDebug>
+#include <QTime>
+#include "traitementdonnees.h"
 
 
 class Device : public QObject
@@ -20,9 +22,13 @@ class Device : public QObject
     QFile* file;
     int cptData;
     QString paquets;
+    TraitementDonnees* traitement;
+    QTime timer;
+    int ancienTemps;
 public:
     Device();
     void scan();
+    void decouperPaquet(QString paquets);
 public slots:
     void deviceDiscovered(const QBluetoothDeviceInfo &deviceInfo);
     void deviceDisconnected();
