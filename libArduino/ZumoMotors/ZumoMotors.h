@@ -10,6 +10,8 @@
 #ifndef ZumoMotors_h
 #define ZumoMotors_h
 
+#include "CurieTimerOne.h"
+
 #include <Arduino.h>
 
 class ZumoMotors
@@ -27,6 +29,9 @@ class ZumoMotors
     static void setLeftSpeed(int speed);
     static void setRightSpeed(int speed);
     static void setSpeeds(int leftSpeed, int rightSpeed);
+
+    static void setLeftSpeedCurie(int speed);
+
     
   private:
 

@@ -6,7 +6,6 @@
 #define DIR_R 7
 
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined (__AVR_ATmega32U4__)
-  Serial.println("USE_20KHZ_PWM");
   #define USE_20KHZ_PWM
 #endif
 
@@ -25,7 +24,6 @@ void ZumoMotors::init2()
   pinMode(PWM_R,  OUTPUT);
   pinMode(DIR_L, OUTPUT);
   pinMode(DIR_R, OUTPUT);
-  analogWriteResolution(8);
 
 #ifdef USE_20KHZ_PWM
   // Timer 1 configuration
@@ -54,12 +52,11 @@ void ZumoMotors::flipRightMotor(boolean flip)
   flipRight = flip;
 }
 
-// set speed for left motor; speed is a number between -400 and 400
-void ZumoMotors::setLeftSpeed(int speed)
+// Version avec la convertion en PWM du pin 10
+void ZumoMotors::setLeftSpeedCurie(int speed)
 {
-  Serial.print("PWM_L = ");Serial.println(PWM_L);
 
-  Serial.print("speed left = ");Serial.println(speed);
+  Serial.print("speed left curie = ");Serial.println(speed);
 
   init(); // initialize if necessary
     
@@ -73,16 +70,18 @@ void ZumoMotors::setLeftSpeed(int speed)
   if (speed > 400)  // Max 
     speed = 400;
 
-  Serial.print("speed * 51 / 80 = ");Serial.println(speed * 51 / 80);
+  Serial.print("speed * 0.25 = ");Serial.println(speed * 0.25);
 
     
 
 #ifdef USE_20KHZ_PWM
   OCR1B = speed;
-#else
-  Serial.print("analogWrite(PWM_L, ");Serial.print(speed * 51 / 80);Serial.println(")");
-  // gros probleme vitesses <= 127 marche pas mais >= 128 marche
-  analogWrite(PWM_L, speed * 51 / 80); // default to using analogWrite, mapping 400 to 255
+#else 
+
+  // On prend une periode de 2040 µs car la frequence du pin 9 pwm est de 480 Hz
+  Serial.print("CurieTimerOne.pwmStart(PWM_L,");Serial.print(speed * 0.25);Serial.println(", 2040)");
+  CurieTimerOne.pwmStart(PWM_L, speed * 0.25, 2040); // 12288 = 1/(48*256), mapping 400 to 100
+
 #endif 
 
   if (reverse ^ flipLeft) // flip if speed was negative or flipLeft setting is active, but not both
@@ -94,11 +93,10 @@ void ZumoMotors::setLeftSpeed(int speed)
 
 }
 
+
 // set speed for right motor; speed is a number between -400 and 400
 void ZumoMotors::setRightSpeed(int speed)
 {
-
-  Serial.print("PWM_R = ");Serial.println(PWM_R);
 
   Serial.print("speed rigth = ");Serial.println(speed);
 
@@ -114,14 +112,16 @@ void ZumoMotors::setRightSpeed(int speed)
   if (speed > 400)  // Max PWM dutycycle
     speed = 400;
 
-  Serial.print("speed * 51 / 80 = ");Serial.println(speed * 51 / 80);
+  Serial.print("speed * 51 / 80 = ");Serial.println(speed * 0.6375);
+  Serial.print("speed * 51 / 80 = ");Serial.println(((speed * 0.6375)*100)/255.0);
 
     
 #ifdef USE_20KHZ_PWM
   OCR1A = speed;
 #else
-  Serial.print("analogWrite(PWM_R, ");Serial.print(speed * 51 / 80);Serial.println(")");
-  analogWrite(PWM_R, speed * 51 / 80); // default to using analogWrite, mapping 400 to 255
+  Serial.print("analogWrite(PWM_R, ");Serial.print(speed * 0.6375);Serial.println(")");
+  analogWrite(PWM_R, speed * 0.6375); // 0.6375 = 51 / 80 
+  // default to using analogWrite, mapping 400 to 255
 #endif
 
   if (reverse ^ flipRight) // flip if speed was negative or flipRight setting is active, but not both
@@ -129,11 +129,16 @@ void ZumoMotors::setRightSpeed(int speed)
   else
     digitalWrite(DIR_R, LOW);
 
+
+  Serial.println("");
+
+
 }
 
 // set speed for both motors
 void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed)
 {
-  setLeftSpeed(leftSpeed);
+  //setLeftSpeed(leftSpeed);
+  setLeftSpeedCurie(leftSpeed);
   setRightSpeed(rightSpeed);
 }
