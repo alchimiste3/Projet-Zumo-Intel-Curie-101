@@ -1,0 +1,4 @@
+ActionsRobot	KEYWORD1
+
+initActionsRobot	KEYWORD2
+action              KEYWORD2
