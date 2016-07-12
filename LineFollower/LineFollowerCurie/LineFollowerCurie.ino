@@ -1,22 +1,15 @@
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
-#include <ZumoMotors.h>
-//#include <ZumoBuzzer.h>
+#include <ZumoMotorsCurie.h>
 #include <Pushbutton.h>
 
 
-
-//ZumoBuzzer buzzer;
 ZumoReflectanceSensorArray reflectanceSensors;
 ZumoMotors motors;
 Pushbutton button(ZUMO_BUTTON);
 int lastError = 0;
 
-// This is the maximum speed the motors will be allowed to turn.
-// (400 lets the motors go at top speed; decrease to impose a speed limit)
-const int MAX_SPEED = 100;
-
-
+const int MAX_SPEED = 200;
 
 
 void setup()
@@ -97,27 +90,16 @@ void loop()
   // your particular Zumo and line course.
 
 
- 
-
-  
-
-  int speedDifference = error / 4 + 10 * (error - lastError);
+  int speedDifference = error / 8 + 6 * (error - lastError);
   lastError = error;
   
 
   Serial.print("speedDifference= ");Serial.println(speedDifference);
 
-
-  // Get individual motor speeds.  The sign of speedDifference
-  // determines if the robot turns left or right.
   int m1Speed = MAX_SPEED + speedDifference;
   int m2Speed = MAX_SPEED - speedDifference;
 
-  // Here we constrain our motor speeds to be between 0 and MAX_SPEED.
-  // Generally speaking, one motor will always be turning at MAX_SPEED
-  // and the other will be at MAX_SPEED-|speedDifference| if that is positive,
-  // else it will be stationary.  For some applications, you might want to
-  // allow the motor speed to go negative so that it can spin in reverse.
+
   if (m1Speed < 0)
     m1Speed = 0;
   if (m2Speed < 0)
