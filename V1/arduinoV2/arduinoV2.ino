@@ -124,7 +124,7 @@ void loop() {
       }
     }
 
-     if(analogCharacteristique.written()) {
+     if (analogCharacteristique.written()) {
         if (((const char*)analogCharacteristique.value())[0] == 'm') {
           if (((const char*)analogCharacteristique.value())[1] == '1') {
               motors.setLeftSpeed(400);
@@ -136,9 +136,9 @@ void loop() {
           }
         }
         if (((const char*)analogCharacteristique.value())[0] == 'a') {
-          for (int i = 0 ; i < 5 ; i++){
+          for (int i=0; i<5; i++){
             getVector(); 
-            ncount = hNN.Learn(vector, sampleNbr*signalNbr, ((const char*)analogCharacteristique.value())[1]);
+            ncount=hNN.Learn(vector, sampleNbr*signalNbr, ((const char*)analogCharacteristique.value())[1]);
             
           }
           

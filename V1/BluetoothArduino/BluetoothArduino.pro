@@ -13,21 +13,14 @@ SOURCES += main.cpp \
     Madgwick/MadgwickAHRS.cpp \
     MatrixMath/MatrixMath.cpp \
     traitementdonnees.cpp \
-    mainwindow.cpp \
-    mouvement.cpp \
-    action.cpp \
-    ajouterwindow.cpp
+    mainwindow.cpp
 
 HEADERS += \
     device.h \
     Madgwick/MadgwickAHRS.h \
     MatrixMath/MatrixMath.h \
     traitementdonnees.h \
-    mainwindow.h \
-    mouvement.h \
-    action.h \
-    ajouterwindow.h
+    mainwindow.h
 
 FORMS += \
-    mainwindow.ui \
-    ajouterwindow.ui
+    mainwindow.ui
