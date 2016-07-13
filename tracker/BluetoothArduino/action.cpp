@@ -1,9 +1,10 @@
 #include "action.h"
 
-Action::Action(TypeAction typeAction, int nbMs)
+Action::Action(TypeAction typeAction, QString nomAction, float nbS)
 {
     this->type = typeAction;
-    this->nbMs = this->nbMs;
+    this->nomAction = nomAction;
+    this->nbS = nbS;
 
 }
 
@@ -12,7 +13,12 @@ TypeAction Action::getTypeAction()
     return type;
 }
 
-int Action::getNbMs()
+QString Action::getNomAction()
 {
-    return nbMs;
+    return nomAction;
+}
+
+float Action::getNbS()
+{
+    return nbS;
 }

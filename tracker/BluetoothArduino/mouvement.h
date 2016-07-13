@@ -1,18 +1,24 @@
 #ifndef MOUVEMENT_H
 #define MOUVEMENT_H
 #include <QList>
+#include <QThread>
+#include <QDebug>
 #include "action.h"
+#include "device.h"
 
 
-class Mouvement
+class Mouvement : public QThread
 {
-    QList<Action> listeActions;
+    Q_OBJECT
+    QList<Action*> listeActions;
+    Device* d;
     int idMouvement;
 
 public:
-    Mouvement(int idMouvement);
-    void ajouterAction(Action a);
+    Mouvement(Device* d, QObject* parent);
+    void ajouterAction(Action* a);
     void supprimerAction(int idAction);
+    void run();
 };
 
 #endif // MOUVEMENT_H

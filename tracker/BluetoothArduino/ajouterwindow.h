@@ -2,6 +2,9 @@
 #define AJOUTERWINDOW_H
 
 #include <QDialog>
+#include <QPushButton>
+#include <QDebug>
+
 #include "action.h"
 
 namespace Ui {
@@ -19,7 +22,12 @@ public:
     Action* getAction();
 
 private slots:
+
+    void on_buttonBox_rejected();
+
     void on_buttonBox_accepted();
+
+    void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::AjouterWindow *ui;

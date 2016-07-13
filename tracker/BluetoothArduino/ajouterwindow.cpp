@@ -10,6 +10,10 @@ AjouterWindow::AjouterWindow(QWidget *parent) :
     ui->comboBoxAction->addItem(QString("Reculer"), TypeAction::Reculer);
     ui->comboBoxAction->addItem(QString("Tourner à droite"), TypeAction::TournerDroite);
     ui->comboBoxAction->addItem(QString("Tourner à gauche"), TypeAction::TournerGauche);
+    ui->comboBoxAction->addItem(QString("Arreter"), TypeAction::Arreter);
+    ui->comboBoxAction->addItem(QString("Accélérer"), TypeAction::Accelerer);
+    ui->comboBoxAction->addItem(QString("Ralentir"), TypeAction::Ralentir);
+    ui->spinBoxVitesse->setDisabled(true);
 }
 
 AjouterWindow::~AjouterWindow()
@@ -24,5 +28,16 @@ Action *AjouterWindow::getAction()
 
 void AjouterWindow::on_buttonBox_accepted()
 {
-    a = new Action(static_cast<TypeAction>(ui->comboBoxAction->currentData().toInt()), ui->spinBoxDuree->value());
+    qDebug() << "sa";
+}
+
+void AjouterWindow::on_buttonBox_rejected()
+{
+    qDebug() << "sc";
+}
+
+void AjouterWindow::on_buttonBox_clicked(QAbstractButton *button)
+{
+    qDebug() << "sd" << ui->spinBoxDuree->value();
+    a = new Action(static_cast<TypeAction>(ui->comboBoxAction->currentData().toInt()), ui->comboBoxAction->currentText(), ui->spinBoxDuree->value());
 }

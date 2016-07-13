@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "device.h"
 #include "ajouterwindow.h"
+#include "mouvement.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     Device* d;
     AjouterWindow* ajouterWindow;
+    Mouvement* m;
 public:
     explicit MainWindow(Device* d, QWidget *parent = 0);
     ~MainWindow();
@@ -25,6 +27,10 @@ private slots:
 
     void on_ajouterButton_clicked();
     void redAccepted();
+
+    void on_supprimerButton_clicked();
+
+    void on_envoyerButton_clicked();
 
 private:
     Ui::MainWindow *ui;

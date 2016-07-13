@@ -1,21 +1,27 @@
 #ifndef ACTION_H
 #define ACTION_H
+#include <QString>
 
 typedef enum TypeAction {
-    Avancer,
-    Reculer,
-    TournerDroite,
-    TournerGauche
+    Avancer = 1,
+    Reculer = 2,
+    TournerDroite = 3,
+    TournerGauche = 4,
+    Arreter = 5,
+    Accelerer = 6,
+    Ralentir = 7
 } TypeAction;
 
 class Action
 {
     TypeAction type;
-    int nbMs;
+    float nbS;
+    QString nomAction;
 public:
-    Action(TypeAction typeAction, int nbMs);
+    Action(TypeAction typeAction, QString nomAction,  float nbS);
     TypeAction getTypeAction();
-    int getNbMs();
+    QString getNomAction();
+    float getNbS();
 };
 
 #endif // ACTION_H
