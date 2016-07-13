@@ -53,7 +53,7 @@ void ZumoMotors::flipRightMotor(boolean flip)
 }
 
 // Version avec la convertion en PWM du pin 10
-void ZumoMotors::setLeftSpeedCurie(int speed)
+void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
 {
 
   Serial.print("speed left curie = ");Serial.println(speed);
@@ -80,7 +80,7 @@ void ZumoMotors::setLeftSpeedCurie(int speed)
 
   // On prend une periode de 2040 µs car la frequence du pin 9 pwm est de 480 Hz
   Serial.print("CurieTimerOne.pwmStart(PWM_L,");Serial.print(speed * 0.25);Serial.println(", 2040)");
-  CurieTimerOne.pwmStart(PWM_L, speed * 0.25, 2040); // 12288 = 1/(48*256), mapping 400 to 100
+  CurieTimerOne.pwmStart(PWM_L, speed * 0.25, periode);
 
 #endif 
 
@@ -136,9 +136,9 @@ void ZumoMotors::setRightSpeed(int speed)
 }
 
 // set speed for both motors
-void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed)
+void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed, int periode)
 {
   //setLeftSpeed(leftSpeed);
-  setLeftSpeedCurie(leftSpeed);
+  setLeftSpeedCurie(leftSpeed, periode);
   setRightSpeed(rightSpeed);
 }
