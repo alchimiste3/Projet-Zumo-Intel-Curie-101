@@ -9,9 +9,19 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     this->d = d;
     ui->actionsTableWidget->setColumnCount(4);
     ui->actionsTableWidget->setColumnHidden(3, true);
+    QList<QAbstractButton*> listeBoutons = ui->buttonGroup->buttons();
+    for (int i = 0; i < listeBoutons.size();  i++)
+    {
+        ui->buttonGroup->setId(listeBoutons[i], i);
+    }
     connect(ui->buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(redButtonToggled(int, bool)));
     ajouterWindow = new AjouterWindow();
     chart = new LineChart;
+    chart->creerSerie("Ax");
+    chart->creerSerie("Ay");
+    QObject::connect(this, SIGNAL(ajouterPoint(QString, QPoint)), chart, SLOT(ajouterPoint(QString, QPoint)));
+    QObject::connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
+   // connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
     m = new Mouvement(d, this);
     ui->chartview->setViewport(chart->getView());
     QObject::connect(ajouterWindow, SIGNAL(accepted()), this, SLOT(redAccepted()));
@@ -40,7 +50,9 @@ void MainWindow::redMajValues(float yaw, float ax, float ay, float az, float vx,
     ui->labelPx->setText(QString::number(px));
     ui->labelPy->setText(QString::number(py));
     ui->labelPz->setText(QString::number(pz));
-    chart->ajouterPoint(QPoint(d->getTempsEcoule()/1000, ax));
+    emit ajouterPoint("Ax", QPoint(d->getTempsEcoule()/1000, ax));
+    emit ajouterPoint("Ay", QPoint(d->getTempsEcoule()/1000, ay));
+    chart->afficherSerie();
     ui->chartview->setViewport(chart->getView());
 }
 
@@ -88,9 +100,13 @@ void MainWindow::on_envoyerButton_clicked()
 
 void MainWindow::redButtonToggled(int id, bool etat)
 {
-    if (id == 0 && etat)
+    if (id == 1 && etat)
     {
-        chart->afficherSerie(0);
+        emit afficherSerie("Ax");
+    }
+    else if (id == 0 && etat)
+    {
+        emit afficherSerie("Ay");
     }
 }
 

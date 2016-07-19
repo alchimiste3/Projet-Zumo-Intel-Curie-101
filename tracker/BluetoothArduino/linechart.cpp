@@ -1,6 +1,6 @@
 #include "linechart.h"
 
-LineChart::LineChart()
+LineChart::LineChart() : QObject()
 {
     QLineSeries *series = new QLineSeries();
     chart = new QChart();
@@ -13,21 +13,32 @@ LineChart::LineChart()
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void LineChart:: afficherSerie(QString serie)
+void LineChart:: afficherSerie(QString nomSerie)
 {
-    chart->removeAllSeries();
-    chart->addSeries();
+    if (!nomSerie.isEmpty())
+        nomSerieActuelle = nomSerie;
+
+    if (!nomSerieActuelle.isEmpty())
+    {
+    QLineSeries *series = new QLineSeries();
+        for (int i = 0; i < hashSeries[nomSerieActuelle]->getListePoints().size(); i++)
+            *series << hashSeries[nomSerieActuelle]->getListePoints()[i];
+        chart->removeAllSeries();
+        chart->addSeries(series);
+        chart->createDefaultAxes();
+    }
 }
 
-void LineChart::ajouterPoint(QPoint p)
+Serie* LineChart::creerSerie(QString nomSerie)
 {
-    listePoints.append(p);
-    QLineSeries *series = new QLineSeries();
-    for (int i = 0; i < listePoints.size(); i++)
-        *series << listePoints[i];
-    chart->removeAllSeries();
-    chart->addSeries(series);
-    chart->createDefaultAxes();
+    Serie* s = new Serie(nomSerie);
+    hashSeries[nomSerie] = s;
+    return s;
+}
+
+void LineChart::ajouterPoint(QString nomSerie, QPoint p)
+{
+    hashSeries[nomSerie]->ajouterPoint(p);
 }
 
 QWidget* LineChart::getView()

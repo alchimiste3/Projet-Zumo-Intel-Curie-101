@@ -2,6 +2,8 @@
 #define SERIE_H
 #include <QList>
 #include <QPoint>
+#include <QObject>
+#include <QDebug>
 
 class Serie
 {
@@ -9,9 +11,10 @@ class Serie
     QString nom;
 public:
     Serie(QString nom);
-    void ajouterPoint(QPoint p);
     QList<QPoint> getListePoints();
     QString getNom();
+public slots:
+    void ajouterPoint(QPoint p);
 };
 
 #endif // SERIE_H

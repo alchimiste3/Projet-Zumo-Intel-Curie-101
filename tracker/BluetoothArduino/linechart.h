@@ -2,20 +2,26 @@
 #define LINECHART_H
 #include <QLineSeries>
 #include <QChartView>
+#include <QHash>
 #include "serie.h"
 
 QT_CHARTS_USE_NAMESPACE
 
-class LineChart
+class LineChart : public QObject
 {
+    Q_OBJECT
     QChartView *chartView;
     QChart *chart;
-    QList<Serie> listeSeries;
+    QHash<QString, Serie*> hashSeries;
+    QString nomSerieActuelle;
 public:
     LineChart();
-    void afficherSerie(QString serie);
-    void ajouterPoint(QPoint p);
+    Serie* creerSerie(QString nomSerie);
     QWidget* getView();
+public slots:
+    void afficherSerie(QString nomSerie = "");
+    void ajouterPoint(QString nomSerie, QPoint p);
+
 };
 
 #endif // LINECHART_H

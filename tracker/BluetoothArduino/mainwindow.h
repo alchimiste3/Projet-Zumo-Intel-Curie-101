@@ -37,6 +37,10 @@ private slots:
 
     void redButtonToggled(int id, bool etat);
 
+signals:
+    void ajouterPoint(QString nomSerie, QPoint point);
+    void afficherSerie(QString nomSerie);
+
 private:
     Ui::MainWindow *ui;
 };
