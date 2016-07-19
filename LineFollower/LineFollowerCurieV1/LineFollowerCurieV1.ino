@@ -1,14 +1,9 @@
-
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
 #include <ZumoMotorsCurie.h>
 #include <Pushbutton.h>
 #include <CurieBLE.h>
-#include <QueueArray.h>
 
-
-
-/////////////////////////////// ROBOT ///////////////////////////////
 
 ZumoReflectanceSensorArray reflectanceSensors;
 ZumoMotors motors;
@@ -25,11 +20,12 @@ int pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
 //int pariodeMoteurGauche = 2040; // µs pour une fréquence de 490Hz
 
 
-bool suivreLigne = false;
 
-QueueArray <int> vitessesMoteursDroit; 
-QueueArray <int> vitessesMoteursGauche; 
+BLEPeripheral blePeripheral;
 
+BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
+
+BLEUnsignedCharCharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLEWrite | BLENotify);
 
 
 void setup()
@@ -39,16 +35,15 @@ void setup()
   //while (!Serial);
 
 
+  ///////////////////////// Curie BLE /////////////////////////
+
+  blePeripheral.setLocalName("RdWrS");
+  blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
+  blePeripheral.addAttribute(AnalogService);
+  blePeripheral.addAttribute(analogCharacteristique);
+  blePeripheral.begin();
+
   ///////////////////////// Sensors /////////////////////////
-
-  calibrationSensors();
-
-
-}
-
-
-void calibrationSensors(){
-  
 
   reflectanceSensors.init(2);
 
@@ -112,11 +107,22 @@ void calibrationSensors(){
 
 
   button.waitForButton();
+
+
 }
 
+void loop() {
+  /*
+    BLECentral central = blePeripheral.central();
 
+    if (central) {
+      while (central.connected()) {
 
-void loop(){
+  */
+
+  
+  digitalWrite(13, LOW);
+
 
   unsigned int sensors1[6];
   unsigned int sensors2[6];
@@ -157,40 +163,19 @@ void loop(){
   Serial.print("position = "); Serial.println(position);
 
 
+  Serial.println("");
+  /////////////////////////// On suis la ligne //////////////////////////
 
-  if(!suivreLigne){
-
-    Serial.println("");
-    /////////////////////////// On suis la ligne //////////////////////////
+  suivreLigneV2(position);
   
-    suivreLigneV2(position);
-    
-    /////////////////////////// Croisement //////////////////////////
-    detecterCroisement(sensors);
-    
-    //detecterLigneV2(sensors);
-    //motors.setSpeeds(MAX_SPEED, MAX_SPEED, pariodeMoteurGauche);
+  /////////////////////////// Croisement //////////////////////////
 
-/*
-    if(!vitessesMoteursGauche.isFull() || !vitessesMoteursDroit.isFull()){
-      vitessesMoteursGauche.enqueue(m1Speed);
-      vitessesMoteursDroit.enqueue(m2Speed);
-    }
-    else{
-      digitalWrite(13, HIGH);
-    }
-  */
-    
-  }
-  else{
-    /*
-    if(!vitessesMoteursGauche.isEmpty() && !vitessesMoteursDroit.isEmpty()){
-      digitalWrite(13, LOW);
-      motors.setSpeeds(vitessesMoteursGauche.dequeue(), vitessesMoteursDroit.dequeue(), pariodeMoteurGauche);
-    }
-    */
-  }
+  //detecterLigneV2(sensors);
+  //motors.setSpeeds(MAX_SPEED, MAX_SPEED, pariodeMoteurGauche);
 
+  /*
+    }
+    }*/
 
 }
 
@@ -221,6 +206,7 @@ void suivreLigneV2(int position) {
 
     // Si le robot est trop a gauche
     if(erreurNorm > 0){
+      digitalWrite(13, HIGH);
       m1Speed = (MAX_SPEED + erreurNorm);
       m2Speed = (MAX_SPEED - erreurNorm)/DIFF;
     }
@@ -251,8 +237,6 @@ void suivreLigneV2(int position) {
 
   // On modifie les vitesses des moteurs du robot 
   motors.setSpeeds(m1Speed, m2Speed, pariodeMoteurGauche);
-
-  
 
 }
 
@@ -294,17 +278,3 @@ void detecterLigneV2(unsigned int * sensors) {
 
 }
 
-void detecterCroisement(unsigned int * sensors) {
-
-  digitalWrite(13, LOW);
-
-  if((sensors[0] > 950 || sensors[1] > 950) && (sensors[4] > 950 || sensors[5] > 950)){
-    digitalWrite(13, HIGH);
-    motors.setSpeeds(0, 0, pariodeMoteurGauche);
-    //suivreLigne = true;
-    //button.waitForButton();
-
-  }
-
-
-}

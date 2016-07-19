@@ -1,5 +1,6 @@
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
+
 #include <Pushbutton.h>
 
 #include <CurieIMU.h>
@@ -10,23 +11,16 @@
 
 #include <ActionsRobotZumo.h>
 
-//#include "ApprentissageCurieNeurons.h"
 
 
-//#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     10
+
 
 /////////////////////////////// IMU ///////////////////////////////
-
-float tabA[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
-float tabV[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
-float tabP[2][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}};
 
 int ax, ay, az;
 int gx, gy, gz;
 
-String incomingBytes;
 bool immobile = false;
-
 
 int tempsCourant = 1;
 
@@ -67,12 +61,16 @@ int mina=0xFFFF, maxa=0, ming=0xFFFF, maxg=0, da, dg;
 
 ActionsRobot actionRobot;
 
+char typeCommande = 'm';
+
+char para = '5';
+
 
 void setup() {
   
   Serial.begin(9600);
 
-  // while(!Serial){};
+  //while(!Serial){};
 
   pinMode(13,OUTPUT);
 
@@ -97,11 +95,12 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS2");
+   blePeripheral.setLocalName("RdWrS");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
    blePeripheral.begin();
+
 
    //////////////////////////// Curie neurons /////////////////////////////////////
 
@@ -126,6 +125,7 @@ void loop() {
   
     Serial.println(central.address());
     
+    
     while(central.connected()){
       
       //////////////////////////// Gestion Robot immobile ////////////////////////////
@@ -146,54 +146,72 @@ void loop() {
 void recevoirDonneesBluetooth(){
   
 
+  Serial.print("typeCommande = ");Serial.println(typeCommande);
+  Serial.print("para = ");Serial.println(para);
+  Serial.println("");
+    
   if(analogCharacteristique.written()) {
 
-    char typeCommande = ((const char*)analogCharacteristique.value())[0];
+    typeCommande = ((const char*)analogCharacteristique.value())[0];
 
-    Serial.println((const char*)analogCharacteristique.value());
+    para = ((const char*)analogCharacteristique.value())[1];
 
     //////////////////////////// Mouvement Robot ////////////////////////////
 
     if (typeCommande == 'm') {
       actionRobot.action(((const char*)analogCharacteristique.value()));
-
-    }
-
-    //////////////////////////// Apprentissage Mouvement ////////////////////////////
-
-    if (typeCommande == 'a') {
-      for (int i = 0 ; i < 5 ; i++){
-        getVector(); 
-        ncount = hNN.Learn(vector, sampleNbr*signalNbr, ((const char*)analogCharacteristique.value())[1]);
-      }
-    }
-
-    //////////////////////////// Reconnaissance Mouvement ////////////////////////////
-
-    if (typeCommande == 'r') {
-      getVector();
-      
-      hNN.Classify(vector, sampleNbr*signalNbr,&dist, &cat, &nid);
-      
-      if (cat!=prevcat){
-        
-        if (cat!=0x7FFF){
-          //switchCharacteristic.setValue(cat);
-          digitalWrite(13,HIGH);
-        
-        }
-        else{
-          //switchCharacteristic.setValue('n');
-          digitalWrite(13,LOW);
-        
-        }
-        
-        prevcat=cat;
-      }
-    }
-    
-  }
   
+    }
+
+   //////////////////////////// calibrate Sensors ////////////////////////////
+
+    if (typeCommande == 'c' && para == 's') {
+      Serial.println("cs");
+      actionRobot.calibrationSensors();
+    }
+
+  }
+
+  //////////////////////////// Suivre Ligne ////////////////////////////
+
+  if (typeCommande == 's' && para == 'l') {
+    Serial.println("sl");
+    actionRobot.suivreUneLigne();
+
+  }
+
+  //////////////////////////// Apprentissage Mouvement ////////////////////////////
+
+  if (typeCommande == 'a') {
+    for (int i = 0 ; i < 5 ; i++){
+      getVector(); 
+      ncount = hNN.Learn(vector, sampleNbr*signalNbr, ((const char*)analogCharacteristique.value())[1]);
+    }
+  }
+
+  //////////////////////////// Reconnaissance Mouvement ////////////////////////////
+
+  if (typeCommande == 'r') {
+    getVector();
+    
+    hNN.Classify(vector, sampleNbr*signalNbr,&dist, &cat, &nid);
+    
+    if (cat!=prevcat){
+      
+      if (cat!=0x7FFF){
+        //switchCharacteristic.setValue(cat);
+        digitalWrite(13,HIGH);
+      
+      }
+      else{
+        //switchCharacteristic.setValue('n');
+        digitalWrite(13,LOW);
+      
+      }
+      
+      prevcat=cat;
+    }
+  }
 }
 
 
