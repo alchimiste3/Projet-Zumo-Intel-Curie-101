@@ -28,13 +28,18 @@ void ActionsRobot::action(const char * commande){
 		char * s;
 
 		pch = strtok (chaine, ",");
-		while (pch != NULL){
-			Serial.println(pch);
-			s = pch;
-	    pch = strtok (NULL, ",");
-	  }
+		Serial.println(pch);
+	  pch = strtok (NULL, ",");
+	  Serial.println(pch);
+	  speed = atoi(pch);
 
-  	speed = atoi(s);
+		// while (pch != NULL){
+		// 	Serial.println(pch);
+		// 	s = pch;
+	 //    pch = strtok (NULL, ",");
+	 //  }
+
+  	//speed = atoi(s);
   	Serial.print("speed = ");Serial.println(speed);
 
   }
