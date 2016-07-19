@@ -6,6 +6,7 @@
 #include "device.h"
 #include "ajouterwindow.h"
 #include "mouvement.h"
+#include "linechart.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,8 @@ class MainWindow : public QMainWindow
     Device* d;
     AjouterWindow* ajouterWindow;
     Mouvement* m;
+    QList<Action*> actionsTableau;
+    LineChart* chart;
 public:
     explicit MainWindow(Device* d, QWidget *parent = 0);
     ~MainWindow();
@@ -31,6 +34,8 @@ private slots:
     void on_supprimerButton_clicked();
 
     void on_envoyerButton_clicked();
+
+    void redButtonToggled(int id, bool etat);
 
 private:
     Ui::MainWindow *ui;

@@ -7,10 +7,13 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
 {
     ui->setupUi(this);
     this->d = d;
-    ui->actionsTableWidget->setColumnCount(3);
-    ui->actionsTableWidget->setColumnHidden(2, true);
+    ui->actionsTableWidget->setColumnCount(4);
+    ui->actionsTableWidget->setColumnHidden(3, true);
+    connect(ui->buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(redButtonToggled(int, bool)));
     ajouterWindow = new AjouterWindow();
+    chart = new LineChart;
     m = new Mouvement(d, this);
+    ui->chartview->setViewport(chart->getView());
     QObject::connect(ajouterWindow, SIGNAL(accepted()), this, SLOT(redAccepted()));
     QObject::connect(d, SIGNAL(majValues(float, float, float, float,float,float,float,float,float,float)), this, SLOT(redMajValues(float, float, float, float,float,float,float,float,float,float)));
 }
@@ -37,6 +40,8 @@ void MainWindow::redMajValues(float yaw, float ax, float ay, float az, float vx,
     ui->labelPx->setText(QString::number(px));
     ui->labelPy->setText(QString::number(py));
     ui->labelPz->setText(QString::number(pz));
+    chart->ajouterPoint(QPoint(d->getTempsEcoule()/1000, ax));
+    ui->chartview->setViewport(chart->getView());
 }
 
 void MainWindow::on_ajouterButton_clicked()
@@ -47,15 +52,18 @@ void MainWindow::on_ajouterButton_clicked()
 void MainWindow::redAccepted()
 {
     Action* a = ajouterWindow->getAction();
+    actionsTableau.append(a);
     QTableWidgetItem *itemNomAction = new QTableWidgetItem(a->getNomAction());
     QTableWidgetItem *itemDuree = new QTableWidgetItem(QString::number(a->getNbS()));
     QTableWidgetItem *itemTypeAction = new QTableWidgetItem(QString::number(a->getTypeAction()));
+    QTableWidgetItem *itemPara = new QTableWidgetItem(QString::number(a->getPara()));
     int row = ui->actionsTableWidget->rowCount();
     ui->actionsTableWidget->setRowCount(ui->actionsTableWidget->rowCount()+1);
 
     ui->actionsTableWidget->setItem(row, 0, itemNomAction);
     ui->actionsTableWidget->setItem(row, 1, itemDuree);
-    ui->actionsTableWidget->setItem(row, 2, itemTypeAction);
+    ui->actionsTableWidget->setItem(row, 2, itemPara);
+    ui->actionsTableWidget->setItem(row, 3, itemTypeAction);
 
 }
 
@@ -63,8 +71,8 @@ void MainWindow::on_supprimerButton_clicked()
 {
     QList<QTableWidgetItem *> listeItems = ui->actionsTableWidget->selectedItems();
     while (listeItems.size() > 0) {
-        ui->actionsTableWidget->removeRow(listeItems.first()->row());
-        listeItems.removeFirst();
+       ui->actionsTableWidget->removeRow(listeItems.first()->row());
+       listeItems.removeFirst();
     }
 }
 
@@ -72,7 +80,17 @@ void MainWindow::on_envoyerButton_clicked()
 {
     for (int i = 0; i < ui->actionsTableWidget->rowCount(); i++)
     {
-        m->ajouterAction(new Action(static_cast<TypeAction>(ui->actionsTableWidget->item(i, 2)->text().toInt()), ui->actionsTableWidget->item(i, 0)->text(),  ui->actionsTableWidget->item(i, 1)->text().toFloat()));
+        m->ajouterAction(new Action(static_cast<TypeAction>(ui->actionsTableWidget->item(i, 3)->text().toInt()), ui->actionsTableWidget->item(i, 0)->text(),  ui->actionsTableWidget->item(i, 1)->text().toFloat(), ui->actionsTableWidget->item(i, 2)->text().toInt()));
     }
+    m->ajouterAction(new Action(TypeAction::Arreter, "Arret automatique", 0));
     m->start();
 }
+
+void MainWindow::redButtonToggled(int id, bool etat)
+{
+    if (id == 0 && etat)
+    {
+        chart->afficherSerie(0);
+    }
+}
+

@@ -29,6 +29,8 @@ private slots:
 
     void on_buttonBox_clicked(QAbstractButton *button);
 
+    void on_comboBoxAction_currentIndexChanged(int index);
+
 private:
     Ui::AjouterWindow *ui;
 };

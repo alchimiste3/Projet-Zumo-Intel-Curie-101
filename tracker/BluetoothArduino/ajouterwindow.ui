@@ -122,7 +122,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBoxVitesse"/>
+         <widget class="QSpinBox" name="spinBoxVitesse">
+          <property name="maximum">
+           <number>400</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

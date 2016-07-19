@@ -22,6 +22,7 @@ void Device::scan()
 
 void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
 {
+    device = deviceInfo;
     if(deviceInfo.name() == "RdWrS2")
     {
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
@@ -36,6 +37,9 @@ void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
             controller->connectToDevice();
         }
     }
+    discoveryAgent->stop();
+   // scan();
+
 }
 
 void Device::deviceConnected()
@@ -104,7 +108,9 @@ void Device::motionServiceDetailsDiscovered(QLowEnergyService::ServiceState)
 void Device::positionCharacteristicUpdate(QLowEnergyCharacteristic ch, QByteArray byteArray)
 {
     paquets =  ch.value().constData();
-    qDebug() << "update" << ch.uuid().toString() << "value : " << paquets;
+    qDebug() << "update" << ch.uuid().toString() << "value : " << device.rssi();
+ //   emit updateRSSI(device.rssi());
+
     decouperPaquet(paquets);
 
   /*  QString str;
@@ -146,4 +152,9 @@ void Device::envoyerCommande(QString commande)
     qDebug() << "envoi";
     QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(key));
     service->writeCharacteristic(ch, commande.toLocal8Bit());
+}
+
+int Device::getTempsEcoule()
+{
+    return timer.elapsed();
 }

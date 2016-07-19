@@ -6,6 +6,7 @@ AjouterWindow::AjouterWindow(QWidget *parent) :
     ui(new Ui::AjouterWindow)
 {
     ui->setupUi(this);
+    ui->comboBoxAction->addItem(QString("Changer la vitesse"), TypeAction::ChangerVitesse);
     ui->comboBoxAction->addItem(QString("Avancer"), TypeAction::Avancer);
     ui->comboBoxAction->addItem(QString("Reculer"), TypeAction::Reculer);
     ui->comboBoxAction->addItem(QString("Tourner à droite"), TypeAction::TournerDroite);
@@ -39,5 +40,14 @@ void AjouterWindow::on_buttonBox_rejected()
 void AjouterWindow::on_buttonBox_clicked(QAbstractButton *button)
 {
     qDebug() << "sd" << ui->spinBoxDuree->value();
-    a = new Action(static_cast<TypeAction>(ui->comboBoxAction->currentData().toInt()), ui->comboBoxAction->currentText(), ui->spinBoxDuree->value());
+    a = new Action(static_cast<TypeAction>(ui->comboBoxAction->currentData().toInt()), ui->comboBoxAction->currentText(), ui->spinBoxDuree->value(), ui->spinBoxVitesse->value());
+}
+
+void AjouterWindow::on_comboBoxAction_currentIndexChanged(int index)
+{
+    if (ui->comboBoxAction->currentData() == TypeAction::ChangerVitesse) {
+        ui->spinBoxVitesse->setDisabled(false);
+    }
+    else
+        ui->spinBoxVitesse->setDisabled(true);
 }

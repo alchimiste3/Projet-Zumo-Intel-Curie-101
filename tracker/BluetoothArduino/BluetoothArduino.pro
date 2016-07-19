@@ -1,4 +1,4 @@
-QT += core bluetooth gui widgets
+QT += core bluetooth gui widgets charts
 
 CONFIG += c++11
 
@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     mouvement.cpp \
     action.cpp \
-    ajouterwindow.cpp
+    ajouterwindow.cpp \
+    linechart.cpp \
+    serie.cpp
 
 HEADERS += \
     device.h \
@@ -26,7 +28,9 @@ HEADERS += \
     mainwindow.h \
     mouvement.h \
     action.h \
-    ajouterwindow.h
+    ajouterwindow.h \
+    linechart.h \
+    serie.h
 
 FORMS += \
     mainwindow.ui \

@@ -6,6 +6,7 @@
 #include <QLowEnergyController>
 #include <QTimer>
 #include <QFile>
+#include <QThread>
 #include <QDebug>
 #include <QTime>
 #include "traitementdonnees.h"
@@ -15,6 +16,7 @@ class Device : public QObject
 {
     Q_OBJECT
     QBluetoothDeviceDiscoveryAgent* discoveryAgent;
+    QBluetoothDeviceInfo device;
     QLowEnergyController* controller;
     QLowEnergyService *service;
     QLowEnergyService *motionService;
@@ -39,6 +41,7 @@ public slots:
     void motionServiceDetailsDiscovered(QLowEnergyService::ServiceState);
     void positionCharacteristicUpdate(QLowEnergyCharacteristic ch ,QByteArray byteArray);
     void envoyerCommande(QString commande);
+    int getTempsEcoule();
 signals:
     void majValues(float, float, float, float,float,float,float,float,float,float);
 };
