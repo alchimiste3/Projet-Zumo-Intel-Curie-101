@@ -19,7 +19,8 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     chart = new LineChart;
     chart->creerSerie("Ax");
     chart->creerSerie("Ay");
-    QObject::connect(this, SIGNAL(ajouterPoint(QString, QPoint)), chart, SLOT(ajouterPoint(QString, QPoint)));
+    chart->afficherSerie("Ay");
+    QObject::connect(this, SIGNAL(ajouterPoint(QString, QPointF)), chart, SLOT(ajouterPoint(QString, QPointF)));
     QObject::connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
    // connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
     m = new Mouvement(d, this);
@@ -50,8 +51,8 @@ void MainWindow::redMajValues(float yaw, float ax, float ay, float az, float vx,
     ui->labelPx->setText(QString::number(px));
     ui->labelPy->setText(QString::number(py));
     ui->labelPz->setText(QString::number(pz));
-    emit ajouterPoint("Ax", QPoint(d->getTempsEcoule()/1000, ax));
-    emit ajouterPoint("Ay", QPoint(d->getTempsEcoule()/1000, ay));
+    emit ajouterPoint("Ax", QPointF((float)d->getTempsEcoule()/1000, ax));
+    emit ajouterPoint("Ay", QPointF((float)d->getTempsEcoule()/1000, ay));
     chart->afficherSerie();
     ui->chartview->setViewport(chart->getView());
 }

@@ -8,7 +8,7 @@ LineChart::LineChart() : QObject()
     chart->addSeries(series);
     chart->createDefaultAxes();
     chart->setTitle("Affichage de l'accélération");
-
+    chart->scroll(60, 10);
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 }
@@ -36,7 +36,7 @@ Serie* LineChart::creerSerie(QString nomSerie)
     return s;
 }
 
-void LineChart::ajouterPoint(QString nomSerie, QPoint p)
+void LineChart::ajouterPoint(QString nomSerie, QPointF p)
 {
     hashSeries[nomSerie]->ajouterPoint(p);
 }

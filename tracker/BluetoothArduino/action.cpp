@@ -33,5 +33,5 @@ QString Action::getCommande()
     if (para == -1)
         return  QString::number(static_cast<int>(type));
     else
-        return QString::number(static_cast<int>(type)) + "," + QString::number(para);
+        return QString::number(static_cast<int>(type)) + "," + QString::number(para) + ",";
 }

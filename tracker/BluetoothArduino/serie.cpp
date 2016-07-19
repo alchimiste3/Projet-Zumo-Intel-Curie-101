@@ -3,14 +3,18 @@
 Serie::Serie(QString nom)
 {
     this->nom = nom;
+    listePoints.reserve(500);
 }
 
-void Serie::ajouterPoint(QPoint p)
+void Serie::ajouterPoint(QPointF p)
 {
+    qDebug() << "point" << p;
+    if (listePoints.size() > 500)
+        listePoints.removeFirst();
     listePoints.append(p);
 }
 
-QList<QPoint> Serie::getListePoints()
+QList<QPointF> Serie::getListePoints()
 {
     return listePoints;
 }

@@ -38,7 +38,7 @@ private slots:
     void redButtonToggled(int id, bool etat);
 
 signals:
-    void ajouterPoint(QString nomSerie, QPoint point);
+    void ajouterPoint(QString nomSerie, QPointF point);
     void afficherSerie(QString nomSerie);
 
 private:

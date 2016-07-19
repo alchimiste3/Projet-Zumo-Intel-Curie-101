@@ -2,6 +2,7 @@
 #define LINECHART_H
 #include <QLineSeries>
 #include <QChartView>
+#include <QValueAxis>
 #include <QHash>
 #include "serie.h"
 
@@ -20,7 +21,7 @@ public:
     QWidget* getView();
 public slots:
     void afficherSerie(QString nomSerie = "");
-    void ajouterPoint(QString nomSerie, QPoint p);
+    void ajouterPoint(QString nomSerie, QPointF p);
 
 };
 

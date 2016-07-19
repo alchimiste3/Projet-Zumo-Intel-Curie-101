@@ -1,20 +1,20 @@
 #ifndef SERIE_H
 #define SERIE_H
 #include <QList>
-#include <QPoint>
+#include <QPointF>
 #include <QObject>
 #include <QDebug>
 
 class Serie
 {
-    QList <QPoint> listePoints;
+    QList <QPointF> listePoints;
     QString nom;
 public:
     Serie(QString nom);
-    QList<QPoint> getListePoints();
+    QList<QPointF> getListePoints();
     QString getNom();
 public slots:
-    void ajouterPoint(QPoint p);
+    void ajouterPoint(QPointF p);
 };
 
 #endif // SERIE_H
