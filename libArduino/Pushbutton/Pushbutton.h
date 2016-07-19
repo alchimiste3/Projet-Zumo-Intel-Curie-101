@@ -26,7 +26,7 @@ class Pushbutton
 
     // constructor; takes arguments specifying whether to enable internal pull-up
     // and the default state of the pin that the button is connected to
-    Pushbutton(unsigned char pin, unsigned char pullUp = PULL_UP_ENABLED, unsigned char defaultState = DEFAULT_STATE_HIGH);
+    Pushbutton(unsigned char pin = ZUMO_BUTTON, unsigned char pullUp = PULL_UP_ENABLED, unsigned char defaultState = DEFAULT_STATE_HIGH);
 
     // wait for button to be pressed, released, or pressed and released
     void waitForPress();
