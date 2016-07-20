@@ -19,7 +19,11 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     chart = new LineChart;
     chart->creerSerie("Ax");
     chart->creerSerie("Ay");
-    chart->afficherSerie("Ay");
+    chart->creerSerie("Vx");
+    chart->creerSerie("Vy");
+    chart->creerSerie("Px");
+    chart->creerSerie("Py");
+    chart->afficherSerie("Ay", true);
     QObject::connect(this, SIGNAL(ajouterPoint(QString, QPointF)), chart, SLOT(ajouterPoint(QString, QPointF)));
     QObject::connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
    // connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
@@ -51,9 +55,13 @@ void MainWindow::redMajValues(float yaw, float ax, float ay, float az, float vx,
     ui->labelPx->setText(QString::number(px));
     ui->labelPy->setText(QString::number(py));
     ui->labelPz->setText(QString::number(pz));
-    emit ajouterPoint("Ax", QPointF((float)d->getTempsEcoule()/1000, ax));
-    emit ajouterPoint("Ay", QPointF((float)d->getTempsEcoule()/1000, ay));
-    chart->afficherSerie();
+    chart->ajouterPoint("Ax", QPointF((float)d->getTempsEcoule()/1000, ax));
+    chart->ajouterPoint("Ay", QPointF((float)d->getTempsEcoule()/1000, ay));
+    chart->ajouterPoint("Vx", QPointF((float)d->getTempsEcoule()/1000, vx));
+    chart->ajouterPoint("Vy", QPointF((float)d->getTempsEcoule()/1000, vy));
+    chart->ajouterPoint("Px", QPointF((float)d->getTempsEcoule()/1000, px));
+    chart->ajouterPoint("Py", QPointF((float)d->getTempsEcoule()/1000, py));
+    chart->afficherChart();
     ui->chartview->setViewport(chart->getView());
 }
 
@@ -101,13 +109,28 @@ void MainWindow::on_envoyerButton_clicked()
 
 void MainWindow::redButtonToggled(int id, bool etat)
 {
-    if (id == 1 && etat)
+    if (id == 0)
     {
-        emit afficherSerie("Ax");
+        (etat) ? chart->afficherSerie("Ay", true) : chart->afficherSerie("Ay", false);
     }
-    else if (id == 0 && etat)
+    else if (id == 1)
     {
-        emit afficherSerie("Ay");
+        (etat) ? chart->afficherSerie("Ax", true) : chart->afficherSerie("Ax", false);
+    }
+    else if (id == 2)
+    {
+        (etat) ? chart->afficherSerie("Vy", true) : chart->afficherSerie("Vy", false);
+    }
+    else if (id == 3)
+    {
+        (etat) ? chart->afficherSerie("Vx", true) : chart->afficherSerie("Vx", false);
+    }
+    else if (id == 4)
+    {
+        (etat) ? chart->afficherSerie("Px", true) : chart->afficherSerie("Px", false);
+    }
+    else if (id == 5)
+    {
+        (etat) ? chart->afficherSerie("Py", true) : chart->afficherSerie("Py", false);
     }
 }
-

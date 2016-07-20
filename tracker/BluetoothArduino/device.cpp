@@ -23,7 +23,7 @@ void Device::scan()
 void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
 {
     device = deviceInfo;
-    if(deviceInfo.name() == "RdWrS")
+    if(deviceInfo.name() == "RdWrS2")
     {
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
         if (deviceInfo.serviceUuids().contains(QBluetoothUuid(key)))

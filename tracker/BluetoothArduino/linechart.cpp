@@ -2,31 +2,46 @@
 
 LineChart::LineChart() : QObject()
 {
-    QLineSeries *series = new QLineSeries();
+    seriesAx = new QLineSeries();
+
+    seriesAy = new QLineSeries();
     chart = new QChart();
     chart->legend()->hide();
-    chart->addSeries(series);
+ //   chart->addSeries(series);
     chart->createDefaultAxes();
     chart->setTitle("Affichage de l'accélération");
-    chart->scroll(60, 10);
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void LineChart:: afficherSerie(QString nomSerie)
+void LineChart::afficherChart()
+{
+    if (!nomSerieActuelle.isEmpty())
+    {
+     chart->removeAllSeries();
+
+     foreach (Serie* s, hashSeries)
+     {
+         if (s->isAfficher())
+         {
+             QLineSeries* serie = new QLineSeries();
+             for (int i = 0; i < s->getListePoints().size(); i++)
+                 *serie << s->getListePoints()[i];
+             chart->addSeries(serie);
+         }
+
+     }
+     chart->createDefaultAxes();
+     ((QValueAxis)chart->axisX()).setTickCount(2);
+
+    }
+}
+
+void LineChart:: afficherSerie(QString nomSerie, bool etat)
 {
     if (!nomSerie.isEmpty())
         nomSerieActuelle = nomSerie;
-
-    if (!nomSerieActuelle.isEmpty())
-    {
-    QLineSeries *series = new QLineSeries();
-        for (int i = 0; i < hashSeries[nomSerieActuelle]->getListePoints().size(); i++)
-            *series << hashSeries[nomSerieActuelle]->getListePoints()[i];
-        chart->removeAllSeries();
-        chart->addSeries(series);
-        chart->createDefaultAxes();
-    }
+    hashSeries[nomSerie]->setAfficher(etat);
 }
 
 Serie* LineChart::creerSerie(QString nomSerie)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>531</height>
+    <width>796</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>451</width>
+      <width>421</width>
       <height>111</height>
      </rect>
     </property>
@@ -239,7 +239,7 @@
      <rect>
       <x>0</x>
       <y>120</y>
-      <width>451</width>
+      <width>421</width>
       <height>402</height>
      </rect>
     </property>
@@ -335,12 +335,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QRadioButton" name="radioButtonAy">
+        <widget class="QCheckBox" name="checkBoxAy">
          <property name="text">
           <string>Ay</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">buttonGroup</string>
@@ -348,12 +345,49 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButtonAx">
+        <widget class="QCheckBox" name="checkBoxAx">
          <property name="text">
           <string>Ax</string>
          </property>
-         <property name="checked">
-          <bool>false</bool>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxVy">
+         <property name="text">
+          <string>Vy</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxVx">
+         <property name="text">
+          <string>Vx</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxPx">
+         <property name="text">
+          <string>Px</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxPy">
+         <property name="text">
+          <string>Py</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">buttonGroup</string>
@@ -367,13 +401,16 @@
      </item>
     </layout>
    </widget>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>verticalLayoutWidget</zorder>
+   <zorder>chartview</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>458</width>
+     <width>796</width>
      <height>20</height>
     </rect>
    </property>
@@ -391,6 +428,10 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>

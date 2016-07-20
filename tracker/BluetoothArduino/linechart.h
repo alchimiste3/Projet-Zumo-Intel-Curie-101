@@ -15,12 +15,16 @@ class LineChart : public QObject
     QChart *chart;
     QHash<QString, Serie*> hashSeries;
     QString nomSerieActuelle;
+    QLineSeries *seriesAx;
+    QLineSeries *seriesAy;
+
 public:
     LineChart();
     Serie* creerSerie(QString nomSerie);
     QWidget* getView();
 public slots:
-    void afficherSerie(QString nomSerie = "");
+    void afficherSerie(QString nomSerie = "", bool etat = false);
+    void afficherChart();
     void ajouterPoint(QString nomSerie, QPointF p);
 
 };

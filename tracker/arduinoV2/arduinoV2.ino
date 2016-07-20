@@ -70,7 +70,7 @@ void setup() {
   
   Serial.begin(9600);
 
-  while(!Serial){};
+ // while(!Serial){};
 
   pinMode(13,OUTPUT);
 
@@ -95,7 +95,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
