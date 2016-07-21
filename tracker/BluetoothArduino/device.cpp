@@ -108,7 +108,7 @@ void Device::motionServiceDetailsDiscovered(QLowEnergyService::ServiceState)
 void Device::positionCharacteristicUpdate(QLowEnergyCharacteristic ch, QByteArray byteArray)
 {
     paquets =  ch.value().constData();
-    qDebug() << "update" << ch.uuid().toString() << "value : " << device.rssi();
+ //   qDebug() << "update" << ch.uuid().toString() << "value : " << device.rssi();
  //   emit updateRSSI(device.rssi());
 
     decouperPaquet(paquets);
@@ -125,14 +125,14 @@ void Device::decouperPaquet(QString paquets)
 
     int intervalle = temps - ancienTemps;
     ancienTemps = temps;
-    qDebug() << intervalle;
+//    qDebug() << intervalle;
     QList<QString> listeValeurs = paquets.split(",");
     if (listeValeurs.length() == 5)
     {
-        qDebug() << listeValeurs[4].toInt();
-        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), listeValeurs[3].toInt(), ((float)intervalle)/1000);
+  //      qDebug() << listeValeurs[4].toInt();
+        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), 0, ((float)intervalle)/1000);
 
-        file->open(QIODevice::WriteOnly);
+        file->open(QIODevice::ReadWrite);
         QTextStream stream(file);
         stream << traitement->getYaw() << "," << traitement->getAccelerationCourante()[0] << "," << traitement->getAccelerationCourante()[1] << "," << traitement->getAccelerationCourante()[2]  << ",";
         stream << traitement->getVitesseCourante()[0] << "," << traitement->getVitesseCourante()[1] << "," << traitement->getVitesseCourante()[2]  << ",";
