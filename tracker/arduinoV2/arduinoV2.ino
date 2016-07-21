@@ -80,7 +80,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS2");
+   blePeripheral.setLocalName("RdWrS");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
