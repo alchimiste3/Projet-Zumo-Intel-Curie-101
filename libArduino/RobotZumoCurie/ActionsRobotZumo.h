@@ -1,12 +1,3 @@
-/*! \file ZumoMotors.h
- *
- * See the ZumoMotors class reference for more information about this library.
- *
- * \class ZumoMotors ZumoMotors.h
- * \brief Control motor speed and direction
- * 
- */
-
 #ifndef ActionsRobotZumo_h
 #define ActionsRobotZumo_h
 
@@ -25,7 +16,7 @@ class ActionsRobot {
   //////////////////////// Motors ////////////////////////
 
   int speed;
-  bool enAttente;
+  bool immobile;
 
   //////////////////////// Sensors ////////////////////////
 
@@ -35,7 +26,7 @@ class ActionsRobot {
 
 	int calibrationAuto;
 
-	const int MAX_SPEED = 300;
+	const int MAX_SPEED = 200;
 
 	int m1Speed;
 	int m2Speed;
@@ -50,6 +41,9 @@ class ActionsRobot {
     
     void action(const char * commande);
 
+    bool estImmobile();
+
+		void vitesseMoteurs(int vitesseGauche, int vitesseDroite);
 
     void calibrationSensors();
 

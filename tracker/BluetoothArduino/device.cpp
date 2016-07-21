@@ -130,7 +130,7 @@ void Device::decouperPaquet(QString paquets)
     if (listeValeurs.length() == 5)
     {
         qDebug() << listeValeurs[4].toInt();
-        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), listeValeurs[2].toFloat(), 0, 0, listeValeurs[3].toFloat(), listeValeurs[4].toInt(), ((float)intervalle)/1000);
+        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), listeValeurs[3].toInt(), ((float)intervalle)/1000);
 
         file->open(QIODevice::WriteOnly);
         QTextStream stream(file);

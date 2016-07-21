@@ -3,7 +3,7 @@
 
 ActionsRobot::ActionsRobot(){
 	speed = 200;
-  enAttente = true;
+  immobile = true;
 
   calibrationAuto = 1;
 
@@ -21,11 +21,11 @@ void ActionsRobot::action(const char * commande){
 	char numCommande = commande[1];
 
 		////////////// changer vitesse ////////////////
+
 	if (numCommande == '0') {
 
 		char * chaine = (char *)commande;
 		char * pch;
-		char * s;
 
 		pch = strtok (chaine, ",");
 		Serial.println(pch);
@@ -33,13 +33,6 @@ void ActionsRobot::action(const char * commande){
 	  Serial.println(pch);
 	  speed = atoi(pch);
 
-		// while (pch != NULL){
-		// 	Serial.println(pch);
-		// 	s = pch;
-	 //    pch = strtok (NULL, ",");
-	 //  }
-
-  	//speed = atoi(s);
   	Serial.print("speed = ");Serial.println(speed);
 
   }
@@ -50,8 +43,11 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 
-    ZumoMotors::setLeftSpeedCurie(speed);
-    ZumoMotors::setRightSpeed(speed);
+    // ZumoMotors::setLeftSpeedCurie(speed);
+    // ZumoMotors::setRightSpeed(speed);
+
+    vitesseMoteurs(speed, speed);
+
 
   }
 
@@ -62,8 +58,11 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 
-    ZumoMotors::setLeftSpeedCurie(-speed);
-    ZumoMotors::setRightSpeed(-speed);
+    // ZumoMotors::setLeftSpeedCurie(-speed);
+    // ZumoMotors::setRightSpeed(-speed);
+
+    vitesseMoteurs(-speed, -speed);
+
   }
 
   	////////////// droite ////////////////
@@ -72,8 +71,10 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 		
-    ZumoMotors::setLeftSpeedCurie(speed);
-    ZumoMotors::setRightSpeed(-speed);
+    // ZumoMotors::setLeftSpeedCurie(speed);
+    // ZumoMotors::setRightSpeed(-speed);
+
+    vitesseMoteurs(speed, -speed);
 
   }
 
@@ -84,15 +85,21 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 		
-    ZumoMotors::setLeftSpeedCurie(-speed);
-    ZumoMotors::setRightSpeed(speed);
+    // ZumoMotors::setLeftSpeedCurie(-speed);
+    // ZumoMotors::setRightSpeed(speed);
+
+    vitesseMoteurs(-speed, speed);
+
   }
 
   ////////////// stop ////////////////
 
   if (numCommande == '5') {
-    ZumoMotors::setLeftSpeedCurie(0);
-    ZumoMotors::setRightSpeed(0);
+    // ZumoMotors::setLeftSpeedCurie(0);
+    // ZumoMotors::setRightSpeed(0);
+
+		vitesseMoteurs(0, 0);
+
   }
 
 
@@ -101,8 +108,6 @@ void ActionsRobot::action(const char * commande){
 
 void ActionsRobot::calibrationSensors(){
 	reflectanceSensors.init(2);
-
-  //button.waitForButton();
 
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
@@ -115,12 +120,12 @@ void ActionsRobot::calibrationSensors(){
     for (i = 0; i < 80; i++)
     {
       if ((i > 10 && i <= 40) || (i > 50 && i <= 80)) {
-        //Serial.print("gauche i = ");Serial.println(i);
-        ZumoMotors::setSpeeds(-200, 200, pariodeMoteurGauche);
+        vitesseMoteurs(-200, 200);
+
       }
       else {
-        //Serial.print("droite i = ");Serial.println(i);
-        ZumoMotors::setSpeeds(200, -200, pariodeMoteurGauche);
+        vitesseMoteurs(200, -200);
+
         reflectanceSensors.calibrate();
         
       }
@@ -128,7 +133,8 @@ void ActionsRobot::calibrationSensors(){
       delay(50);
     }
   
-    ZumoMotors::setSpeeds(0, 0, pariodeMoteurGauche);
+    vitesseMoteurs(0, 0);
+
   }
   else{
     
@@ -143,27 +149,6 @@ void ActionsRobot::calibrationSensors(){
 
   digitalWrite(13, LOW);
 
-
-/*
-  // Wait for the user button to be pressed and released
-  button.waitForButton();
-
-  unsigned int sensors[6];
-
-  reflectanceSensors.readCalibrated(sensors);
-
-  Serial.print("sensors 0 = "); Serial.println(sensors[0]);
-  Serial.print("sensors 1 = "); Serial.println(sensors[1]);
-  Serial.print("sensors 2 = "); Serial.println(sensors[2]);
-  Serial.print("sensors 3 = "); Serial.println(sensors[3]);
-  Serial.print("sensors 4 = "); Serial.println(sensors[4]);
-  Serial.print("sensors 5 = "); Serial.println(sensors[5]);
-
-
-
-  button.waitForButton();
-
-  */
 }
 
 void ActionsRobot::suivreUneLigne(){
@@ -195,18 +180,19 @@ void ActionsRobot::suivreUneLigne(){
     sensors[i] = (sensors1[i] + sensors2[i] + sensors3[i] + sensors4[i] + sensors5[i] + sensors6[i] + sensors7[i] + sensors8[i])/8;
   }
 
-  Serial.print("sensors 0 = "); Serial.println(sensors[0]);
-  Serial.print("sensors 1 = "); Serial.println(sensors[1]);
-  Serial.print("sensors 2 = "); Serial.println(sensors[2]);
-  Serial.print("sensors 3 = "); Serial.println(sensors[3]);
-  Serial.print("sensors 4 = "); Serial.println(sensors[4]);
-  Serial.print("sensors 5 = "); Serial.println(sensors[5]);
 
-  Serial.print("position = "); Serial.println(position);
+  // Serial.print("sensors 0 = "); Serial.println(sensors[0]);
+  // Serial.print("sensors 1 = "); Serial.println(sensors[1]);
+  // Serial.print("sensors 2 = "); Serial.println(sensors[2]);
+  // Serial.print("sensors 3 = "); Serial.println(sensors[3]);
+  // Serial.print("sensors 4 = "); Serial.println(sensors[4]);
+  // Serial.print("sensors 5 = "); Serial.println(sensors[5]);
 
-  Serial.println("");
+  // Serial.print("position = "); Serial.println(position);
+
+  // Serial.println("");
+
   /////////////////////////// On suis la ligne //////////////////////////
-
   suivreLigneV2(position);
   
   /////////////////////////// Croisement //////////////////////////
@@ -251,6 +237,18 @@ void ActionsRobot::suivreLigneV2(int position) {
       m1Speed = (MAX_SPEED + erreurNorm)/DIFF;
       m2Speed = (MAX_SPEED - erreurNorm);
     }
+
+    //     // Si le robot est trop a gauche
+    // if(erreurNorm > 0){
+    //   m1Speed = (MAX_SPEED + erreurNorm*erreurNorm);
+    //   m2Speed = (MAX_SPEED - erreurNorm*erreurNorm)/DIFF;
+    // }
+    // // Si le robot est trop a droite
+    // else if(erreurNorm < 0){
+    //   m1Speed = (MAX_SPEED - erreurNorm*erreurNorm)/DIFF;
+    //   m2Speed = (MAX_SPEED + erreurNorm*erreurNorm);
+    // }
+  
   
 
     // On borne les vitesse entre 0 et MAX_SPEED
@@ -272,11 +270,30 @@ void ActionsRobot::suivreLigneV2(int position) {
   }
 
   // On modifie les vitesses des moteurs du robot 
-  ZumoMotors::setSpeeds(m1Speed, m2Speed, pariodeMoteurGauche);
+  //ZumoMotors::setSpeeds(m1Speed, m2Speed, pariodeMoteurGauche);
 
-  
+  vitesseMoteurs(m1Speed, m2Speed);
 
 }
+
+
+void ActionsRobot::vitesseMoteurs(int vitesseGauche, int vitesseDroite) {
+
+
+	Serial.println("en mouvement");
+
+	if(vitesseGauche == 0 && vitesseDroite == 0){
+		immobile = true;
+	}
+	else{
+		Serial.println("en mouvement");
+		immobile = false;
+	}
+
+  ZumoMotors::setSpeeds(vitesseGauche, vitesseDroite, pariodeMoteurGauche);
+
+}
+
 
 
 void ActionsRobot::detecterLigneV2(unsigned int * sensors) {
@@ -322,11 +339,18 @@ void ActionsRobot::detecterCroisement(unsigned int * sensors) {
 
   if((sensors[0] > 950 || sensors[1] > 950) && (sensors[4] > 950 || sensors[5] > 950)){
     digitalWrite(13, HIGH);
-    ZumoMotors::setSpeeds(0, 0, pariodeMoteurGauche);
+    //ZumoMotors::setSpeeds(0, 0, pariodeMoteurGauche);
+    vitesseMoteurs(0, 0);
+
     //suivreLigne = true;
     //button.waitForButton();
 
   }
 
 
+}
+
+
+bool ActionsRobot::estImmobile(){
+	return immobile;
 }
