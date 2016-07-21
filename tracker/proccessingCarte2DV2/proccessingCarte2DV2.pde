@@ -1,7 +1,8 @@
 
 import processing.serial.*;
 
-Serial myPort;
+
+
 
 int serialMode = 0; // Bluetooth mode si serialMode = 0
 
@@ -19,9 +20,15 @@ float vx;
 float vy;
 float vz;
 
-float px;
-float py;
-float pz;
+float px = 0.0;
+float py = 0.0;
+float pz = 0.0;
+
+
+FloatList listPx;
+FloatList listPy;
+FloatList listPz;
+
 
 String message;
 String [] ypr = new String [12];
@@ -49,12 +56,13 @@ void setup()
   xMax =  tailleX - 100;
   yMin = 50;
   yMax = tailleY - 100;
+  
+    
+  listPx = new FloatList();
+  listPy = new FloatList();
+  listPz = new FloatList();
 
-  if(serialMode == 1){
-    println(Serial.list()[2]);
-    myPort = new Serial(this, Serial.list()[2], 9600);
-  }
-
+  
   
   frameRate(10);
 }
@@ -62,13 +70,9 @@ void setup()
 
 void draw()
 {
+
+  readFile();  
   
-  if(serialMode == 1){
-    serialEvent(); 
-  }
-  else{
-    readFile();  
-  }
   
   
   
@@ -83,13 +87,18 @@ void draw()
     translate(width/2, height/2); // set position to centre
     
     
-    // On dessine le point
+    for(int i = 0 ; i < listPx.size() ; i++){
+      strokeWeight(2);  // Thicker
+      point(listPx.get(i), listPy.get(i));
+    }
+    
     strokeWeight(8);  // Thicker
     point(px*coofDessinData, py*coofDessinData);
     strokeWeight(2);
     
     // On dessine les fleches pour la vitesse
     line(px*coofDessinData, py*coofDessinData, (px + vx)*coofDessinData, py*coofDessinData);
+    
     line(px*coofDessinData, py*coofDessinData, px*coofDessinData, (py + vy)*coofDessinData);
     
     fill(0, 102, 153);
@@ -101,13 +110,10 @@ void draw()
     translate(px*coofDessinData, py*coofDessinData); // set position to centre
 
     
-    drawCar();
+    drawRobot();
    
   popMatrix(); // end of object
 
-  if(serialMode == 1){
-    myPort.write("s"); // write an "s" to receive more data from Arduino
-  }
 }
 
 void readFile()
@@ -121,7 +127,6 @@ void readFile()
   
   if (message != null) {
     println("message = "+message);
-    
     
     ypr = split(message, ","); 
     
@@ -139,31 +144,9 @@ void readFile()
     py = float(ypr[8]);
     pz = float(ypr[9]);
 
-    
-  }
-}
-
-void serialEvent()
-{
-  message = myPort.readStringUntil(newLine); // read from port until new line (ASCII code 13)
-  if (message != null) {
-    println(message);
-    
-    
-    ypr = split(message, ","); 
-    yaw = float(ypr[0]);
-    
-    ax = float(ypr[1]);
-    ay = float(ypr[2]);
-    az = float(ypr[3]);
-    
-    vx = float(ypr[4]);
-    vy = float(ypr[5]);
-    vz = float(ypr[6]);
-    
-    px = float(ypr[8]);
-    py = float(ypr[9]);
-    pz = float(ypr[10]);
+    listPx.append(px);
+    listPy.append(py);
+    listPz.append(pz);
 
     
   }
@@ -197,12 +180,16 @@ void drawGrille() {
 
 }
 
-void drawCar() {
+void drawRobot() {
+ 
+  rotate(yaw*50);
+  //triangle(5, - 5, - 10, 0, 0, 10);
   
+  fill(255, 255, 255); // red square
+  rect(-10, -10, 20, 20);
+  rect(-10, -15, 20, 4);
 
-  strokeWeight(8);  // Thicker
-  rotate(-yaw*50);
-  triangle(5, - 5, - 10, 0, 0, 10);
+
   strokeWeight(2);
 }
 
