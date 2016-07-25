@@ -1,11 +1,14 @@
-/*! \file ZumoMotors.h
+/*
+ * ZumoMotorsCurie.h
  *
- * See the ZumoMotors class reference for more information about this library.
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ * Dernier mise a jour: 25-07-1016 (Quentin)
  *
- * \class ZumoMotors ZumoMotors.h
- * \brief Control motor speed and direction
- * 
+ * Adaptation d'un code fournie par le constructeur du robot zumo pour qu'il puis fonctionner avec la carte Intel Curie 101 :
+ * Voir : https://github.com/pololu/zumo-shield/tree/master/ZumoMotors
+ *
  */
+
 
 #ifndef ZumoMotors_h
 #define ZumoMotors_h
@@ -46,7 +49,6 @@ class ZumoMotors
       }
     }
     
-    // initializes timer1 for proper PWM generation
     static void init2();
 };
 

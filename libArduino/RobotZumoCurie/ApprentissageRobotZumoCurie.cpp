@@ -1,3 +1,15 @@
+/*
+ * ApprentissageRobotZumoCurie.cpp
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ * Dernier mise a jour: 25-07-1016 (Quentin)
+ *
+ *
+ * Cette classe permet d'utiliser le reseau de neurons integrer dans la carte Intel Curie afin d'apprendre des mouvement avec l'IMU
+ * et de sauvegrader les mouvements effectue pour pouvoir les  reproduire
+ */
+
+
 #include "ApprentissageRobotZumoCurie.h"
 
 
@@ -7,6 +19,8 @@ ApprentissageRobot::ApprentissageRobot(){
 
     hNN.Init();
     hNN.Forget(500);
+
+    int nbAction = 0;
 
 }
 
@@ -49,7 +63,7 @@ void ApprentissageRobot::reconnaitre(int * rep){
 
 void ApprentissageRobot::getVectorIMU(){
 
-  mina=0xFFFF, maxa=0, ming=0xFFFF, maxg=0, da, dg;
+  //mina=0xFFFF, maxa=0, ming=0xFFFF, maxg=0, da, dg;
   
   for (int sampleId=0; sampleId<sampleNbr; sampleId++){
     
@@ -85,4 +99,48 @@ void ApprentissageRobot::getVectorIMU(){
       vector[sampleId*signalNbr+3+i]  = (((raw_vector[sampleId*signalNbr+3+i] - ming) * 255)/dg) & 0x00FF;
     }
   }
+}
+
+
+int ApprentissageRobot::getNbActionReconnue(){
+  return nbAction;
+}
+
+
+int ApprentissageRobot::getActionReconnue(int num){
+  Serial.println("getActionReconnue");
+  Serial.print("listeAction[num][0] = ");Serial.println(listeAction[num][0]);
+
+  return listeAction[num][0];
+}
+
+int ApprentissageRobot::getTempsActionReconnue(int num){
+  return listeAction[num][1];
+}
+
+void ApprentissageRobot::viderListeActionReconnue(){
+  nbAction = 0;
+}
+
+void ApprentissageRobot::addActionReconnue(int num, int temps){
+  Serial.println("addActionReconnue");
+  Serial.print("nbAction = ");Serial.println(nbAction);
+
+
+  nbAction++;
+  listeAction[nbAction][0] = num;
+  listeAction[nbAction][1] = temps;
+
+  Serial.print("num = ");Serial.println(num);
+  Serial.print("listeAction[nbAction][0] = ");Serial.println(listeAction[nbAction][0]);
+
+
+}
+
+bool ApprentissageRobot::listeActionPleine(){
+  return (nbAction == nbMaxAction);
+}
+
+bool ApprentissageRobot::listeActionVide(){
+  return (nbAction == 0);
 }

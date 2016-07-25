@@ -16,7 +16,7 @@ Pushbutton button(ZUMO_BUTTON);
 
 int calibrationAuto = 1;
 
-const int MAX_SPEED = 300;
+const int MAX_SPEED = 200;
 
 int m1Speed = 0;
 int m2Speed = 0;
@@ -166,7 +166,7 @@ void loop(){
     suivreLigneV2(position);
     
     /////////////////////////// Croisement //////////////////////////
-    detecterCroisement(sensors);
+    //detecterCroisement(sensors);
     
     //detecterLigneV2(sensors);
     //motors.setSpeeds(MAX_SPEED, MAX_SPEED, pariodeMoteurGauche);
@@ -216,18 +216,18 @@ void suivreLigneV2(int position) {
   //Si l'erreur est plus grande que 1000 (donc avec un "capteur de decalage")
   if((error > 500) || (error < -500)){
 
-
-    int DIFF = 2;
+    int A = 2;
+    int B = 6;
 
     // Si le robot est trop a gauche
     if(erreurNorm > 0){
-      m1Speed = (MAX_SPEED + erreurNorm);
-      m2Speed = (MAX_SPEED - erreurNorm)/DIFF;
+      m1Speed = (MAX_SPEED + erreurNorm)/A;
+      m2Speed = (MAX_SPEED - erreurNorm)/B;
     }
     // Si le robot est trop a droite
     else if(erreurNorm < 0){
-      m1Speed = (MAX_SPEED + erreurNorm)/DIFF;
-      m2Speed = (MAX_SPEED - erreurNorm);
+      m1Speed = (MAX_SPEED + erreurNorm)/B;
+      m2Speed = (MAX_SPEED - erreurNorm)/A;
     }
   
 

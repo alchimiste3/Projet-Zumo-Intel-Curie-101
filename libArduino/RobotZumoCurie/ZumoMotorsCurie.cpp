@@ -1,3 +1,14 @@
+/*
+ * ZumoMotorsCurie.cpp
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ * Dernier mise a jour: 25-07-1016 (Quentin)
+ *
+ * Adaptation d'un code fournie par le constructeur du robot zumo pour qu'il puis fonctionner avec la carte Intel Curie 101 :
+ * Voir : https://github.com/pololu/zumo-shield/tree/master/ZumoMotors
+ *
+ */
+
 #include "ZumoMotorsCurie.h"
 
 #define PWM_L 10
@@ -5,19 +16,14 @@
 #define DIR_L 8
 #define DIR_R 7
 
-#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined (__AVR_ATmega32U4__)
-  #define USE_20KHZ_PWM
-#endif
 
 static boolean flipLeft = false;
 static boolean flipRight = false;
 
-// constructor (doesn't do anything)
-ZumoMotors::ZumoMotors()
-{
-}
+ZumoMotors::ZumoMotors(){}
 
-// initialize timer1 to generate the proper PWM outputs to the motor drivers
+
+// On initialise les pins sur les moteurs et les diodes
 void ZumoMotors::init2()
 {
   pinMode(PWM_L,  OUTPUT);
@@ -25,19 +31,6 @@ void ZumoMotors::init2()
   pinMode(DIR_L, OUTPUT);
   pinMode(DIR_R, OUTPUT);
 
-#ifdef USE_20KHZ_PWM
-  // Timer 1 configuration
-  // prescaler: clockI/O / 1
-  // outputs enabled
-  // phase-correct PWM
-  // top of 400
-  //
-  // PWM frequency calculation
-  // 16MHz / 1 (prescaler) / 2 (phase-correct) / 400 (top) = 20kHz
-  TCCR1A = 0b10100000;
-  TCCR1B = 0b00010001;
-  ICR1 = 400;
-#endif
 }
 
 // enable/disable flipping of left motor
@@ -52,7 +45,9 @@ void ZumoMotors::flipRightMotor(boolean flip)
   flipRight = flip;
 }
 
-// Version avec la convertion en PWM du pin 10
+// Le Robot Zumo est consue pour des carte de type Uno : notre carte Curie a le meme format mais le type de pin (digital et PWM)
+// change. Le pin 10 de la Curie (ou le moteur gauche est brancher) est digital alors que celui de la Uno est en PWM. 
+// On doit donc generer un signal PWM sur le  pin 10 avec une frequence qui varie selon les cas (490HZ ou 980Hz)
 void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
 {
 
@@ -70,124 +65,61 @@ void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
   if (speed > 400)  // Max 
     speed = 400;
 
-  //Serial.print("speed * 0.25 = ");Serial.println(speed * 0.25);
 
-    
-
-#ifdef USE_20KHZ_PWM
-  OCR1B = speed;
-#else 
-
-  // On prend une periode de 2040 µs car la frequence du pin 9 pwm est de 480 Hz
-  //Serial.print("CurieTimerOne.pwmStart(PWM_L,");Serial.print(speed * 0.25);Serial.println(", 2040)");
   CurieTimerOne.pwmStart(PWM_L, speed * 0.25, periode);
-
-#endif 
 
   if (reverse ^ flipLeft) // flip if speed was negative or flipLeft setting is active, but not both
     digitalWrite(DIR_L, HIGH);
   else
     digitalWrite(DIR_L, LOW);
 
-  //Serial.println("");
 
 }
 
-// Version avec la convertion en PWM du pin 10
+// Version sans le chois de la periode (definie pour une frequence de 980Hz)
 void ZumoMotors::setLeftSpeedCurie(int speed)
 {
 
-  //Serial.print("speed left curie = ");Serial.println(speed);
-
-  init(); // initialize if necessary
-    
-  boolean reverse = 0;
-  
-  if (speed < 0)
-  {
-    speed = -speed; // make speed a positive quantity
-    reverse = 1;    // preserve the direction
-  }
-  if (speed > 400)  // Max 
-    speed = 400;
-
-  //Serial.print("speed * 0.25 = ");Serial.println(speed * 0.25);
-
-    
-
-#ifdef USE_20KHZ_PWM
-  OCR1B = speed;
-#else 
-
-  // On prend une periode de 1020 µs car la frequence du pin 9 pwm est de 980 Hz
-  CurieTimerOne.pwmStart(PWM_L, speed * 0.25, 1020);
-
-#endif 
-
-  if (reverse ^ flipLeft) // flip if speed was negative or flipLeft setting is active, but not both
-    digitalWrite(DIR_L, HIGH);
-  else
-    digitalWrite(DIR_L, LOW);
-
-  //Serial.println("");
+  setLeftSpeedCurie(speed,1020);
 
 }
 
 
-// set speed for right motor; speed is a number between -400 and 400
+// methode pour le moteur gauche non modifie 
 void ZumoMotors::setRightSpeed(int speed)
 {
 
-  //Serial.print("speed rigth = ");Serial.println(speed);
-
-  init(); // initialize if necessary
+  init();
     
   boolean reverse = 0;
   
   if (speed < 0)
   {
-    speed = -speed;  // Make speed a positive quantity
-    reverse = 1;  // Preserve the direction
+    speed = -speed;
+    reverse = 1;  
   }
-  if (speed > 400)  // Max PWM dutycycle
+  if (speed > 400)
     speed = 400;
 
-  //Serial.print("speed * 51 / 80 = ");Serial.println(speed * 0.6375);
-  //Serial.print("speed * 51 / 80 = ");Serial.println(((speed * 0.6375)*100)/255.0);
+  analogWrite(PWM_R, speed * 0.6375); // 0.6375 = 51 / 80 : on passe la vitesse qui est sur 400 a une vitesse sur 255
 
-    
-#ifdef USE_20KHZ_PWM
-  OCR1A = speed;
-#else
-  //Serial.print("analogWrite(PWM_R, ");Serial.print(speed * 0.6375);Serial.println(")");
-  analogWrite(PWM_R, speed * 0.6375); // 0.6375 = 51 / 80 
-  // default to using analogWrite, mapping 400 to 255
-#endif
-
-  if (reverse ^ flipRight) // flip if speed was negative or flipRight setting is active, but not both
+  if (reverse ^ flipRight) 
     digitalWrite(DIR_R, HIGH);
   else
     digitalWrite(DIR_R, LOW);
 
-
-  //Serial.println("");
-
-
 }
 
-// set speed for both motors
+// modifier la vittesse de moteur en choisisant la periode PWM du moteur gauche
 void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed, int periode)
 {
-  //setLeftSpeed(leftSpeed);
   setLeftSpeedCurie(leftSpeed, periode);
   setRightSpeed(rightSpeed);
 }
 
 
-// set speed for both motors
 void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed)
 {
-  //setLeftSpeed(leftSpeed);
   setLeftSpeedCurie(leftSpeed);
   setRightSpeed(rightSpeed);
 }

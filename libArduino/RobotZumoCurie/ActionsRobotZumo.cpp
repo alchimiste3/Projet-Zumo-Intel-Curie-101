@@ -1,24 +1,42 @@
+/*
+ * ActionsRobotZumo.cpp
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ * Dernier mise a jour: 25-07-1016 (Quentin)
+ *
+ * Cette classe permet de diriger le robot et d'utiliser son capteur de ligne
+ */
+
 #include "ActionsRobotZumo.h"
 
 
+// Constructeur
 ActionsRobot::ActionsRobot(){
-	speed = 200;
-  immobile = true;
+	speed = 200; // vitesse par default
 
-  calibrationAuto = 1;
+  immobile = true; // Le robot est immobile par default
 
+  calibrationAuto = 1; // On calibre automatiquement les senseur (capteur de ligne)
+
+  // Vitesse des moteurs
 	m1Speed = 0;
 	m2Speed = 0;
 
+  // Periode du signal PWM pour le moteur gauche
 	pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
 
 }
 
 
-void ActionsRobot::action(const char * commande){
+void ActionsRobot::action(char * commande){
+    Serial.println("action");
 
 	//char numCommande = commande[0];
 	char numCommande = commande[1];
+
+  Serial.print("commande = ");Serial.println(commande);
+
+  Serial.print("numCommande = ");Serial.println(numCommande);
 
 		////////////// changer vitesse ////////////////
 
@@ -43,9 +61,6 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 
-    // ZumoMotors::setLeftSpeedCurie(speed);
-    // ZumoMotors::setRightSpeed(speed);
-
     vitesseMoteurs(speed, speed);
 
 
@@ -58,9 +73,6 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 
-    // ZumoMotors::setLeftSpeedCurie(-speed);
-    // ZumoMotors::setRightSpeed(-speed);
-
     vitesseMoteurs(-speed, -speed);
 
   }
@@ -70,9 +82,6 @@ void ActionsRobot::action(const char * commande){
 		if(speed == 0){
 			speed = 200;
 		}
-		
-    // ZumoMotors::setLeftSpeedCurie(speed);
-    // ZumoMotors::setRightSpeed(-speed);
 
     vitesseMoteurs(speed, -speed);
 
@@ -85,9 +94,6 @@ void ActionsRobot::action(const char * commande){
 			speed = 200;
 		}
 		
-    // ZumoMotors::setLeftSpeedCurie(-speed);
-    // ZumoMotors::setRightSpeed(speed);
-
     vitesseMoteurs(-speed, speed);
 
   }
@@ -95,9 +101,6 @@ void ActionsRobot::action(const char * commande){
   ////////////// stop ////////////////
 
   if (numCommande == '5') {
-    // ZumoMotors::setLeftSpeedCurie(0);
-    // ZumoMotors::setRightSpeed(0);
-
 		vitesseMoteurs(0, 0);
 
   }
@@ -152,6 +155,11 @@ void ActionsRobot::calibrationSensors(){
 }
 
 void ActionsRobot::suivreUneLigne(){
+
+
+  /*
+    On capture 8 fois les donnees du senseur puis on fait la moyenne pour reduire les erreurs de mesure
+  */
 
 	unsigned int sensors1[6];
   unsigned int sensors2[6];
