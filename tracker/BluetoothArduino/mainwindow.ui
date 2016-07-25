@@ -300,7 +300,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="apprendreButton">
          <property name="text">
           <string>Apprendre</string>
          </property>
@@ -401,9 +401,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>gridLayoutWidget</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>chartview</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

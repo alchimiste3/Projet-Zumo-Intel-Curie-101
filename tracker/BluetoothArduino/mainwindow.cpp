@@ -16,6 +16,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     }
     connect(ui->buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(redButtonToggled(int, bool)));
     ajouterWindow = new AjouterWindow();
+    apprendreWindow = new ApprendreWindow();
     chart = new LineChart;
     chart->creerSerie("Ax");
     chart->creerSerie("Ay");
@@ -30,6 +31,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     m = new Mouvement(d, this);
     ui->chartview->setViewport(chart->getView());
     QObject::connect(ajouterWindow, SIGNAL(accepted()), this, SLOT(redAccepted()));
+    QObject::connect(apprendreWindow, SIGNAL(accepted()), this, SLOT(redAcceptedCommandeApprendre()));
     QObject::connect(d, SIGNAL(majValues(float, float, float, float,float,float,float,float,float,float)), this, SLOT(redMajValues(float, float, float, float,float,float,float,float,float,float)));
 }
 
@@ -133,4 +135,15 @@ void MainWindow::redButtonToggled(int id, bool etat)
     {
         (etat) ? chart->afficherSerie("Py", true) : chart->afficherSerie("Py", false);
     }
+}
+
+void MainWindow::on_apprendreButton_clicked()
+{
+    apprendreWindow->show();
+}
+
+void MainWindow::redAcceptedCommandeApprendre()
+{
+    QString commandeApprendre = apprendreWindow->getCommandeApprendre();
+    d->envoyerCommande(commandeApprendre);
 }

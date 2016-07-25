@@ -22,9 +22,9 @@ void Device::scan()
 
 void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
 {
-    device = deviceInfo;
     if(deviceInfo.name() == "RdWrS2")
     {
+        device = deviceInfo;
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
         if (deviceInfo.serviceUuids().contains(QBluetoothUuid(key)))
         {
@@ -108,15 +108,10 @@ void Device::motionServiceDetailsDiscovered(QLowEnergyService::ServiceState)
 void Device::positionCharacteristicUpdate(QLowEnergyCharacteristic ch, QByteArray byteArray)
 {
     paquets =  ch.value().constData();
- //   qDebug() << "update" << ch.uuid().toString() << "value : " << device.rssi();
+    qDebug() << "update" << ch.uuid().toString() << "value : " << device.rssi();
  //   emit updateRSSI(device.rssi());
 
     decouperPaquet(paquets);
-
-  /*  QString str;
-    QTextStream in(stdin);
-    in >> str;
-    qDebug() << str;*/
 }
 
 void Device::decouperPaquet(QString paquets)
@@ -125,31 +120,62 @@ void Device::decouperPaquet(QString paquets)
 
     int intervalle = temps - ancienTemps;
     ancienTemps = temps;
-//    qDebug() << intervalle;
-    QList<QString> listeValeurs = paquets.split(",");
-    if (listeValeurs.length() == 5)
+
+ /*   if (temps > 10000 && temps < 10200)
     {
-  //      qDebug() << listeValeurs[4].toInt();
-        traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), 0, ((float)intervalle)/1000);
+    controller->disconnectFromDevice();
+    qDebug() << "state : " << controller->state();
+    DeviceScanner* d = new DeviceScanner(discoveryAgent);
+    connect(d, SIGNAL(rssiReady(int)), this, SLOT(rssiUpdate(int)));
+    d->run();
+    }*/
+//    qDebug() << intervalle;
+    AnalyseurPaquet analyseur;
+    TypePaquet type = analyseur.reconnaitre(paquets);
+    if (type == TypePaquet::Position)
+    {
+        QList<QString> listeValeurs = paquets.split(",");
+        if (listeValeurs.length() == 5)
+        {
+      //      qDebug() << listeValeurs[4].toInt();
+            traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), 0, ((float)intervalle)/1000);
 
-        file->open(QIODevice::ReadWrite);
-        QTextStream stream(file);
-        stream << traitement->getYaw() << "," << traitement->getAccelerationCourante()[0] << "," << traitement->getAccelerationCourante()[1] << "," << traitement->getAccelerationCourante()[2]  << ",";
-        stream << traitement->getVitesseCourante()[0] << "," << traitement->getVitesseCourante()[1] << "," << traitement->getVitesseCourante()[2]  << ",";
-        stream << traitement->getPositionCourante()[0] << "," << traitement->getPositionCourante()[1] << "," << traitement->getPositionCourante()[2];
-        emit majValues(traitement->getYaw(), traitement->getAccelerationCourante()[0], traitement->getAccelerationCourante()[1], traitement->getAccelerationCourante()[2], traitement->getVitesseCourante()[0], traitement->getVitesseCourante()[1], traitement->getVitesseCourante()[2], traitement->getPositionCourante()[0], traitement->getPositionCourante()[1], traitement->getPositionCourante()[2]);
-        file->close();
+            file->open(QIODevice::ReadWrite);
+            QTextStream stream(file);
+            stream << traitement->getYaw() << "," << traitement->getAccelerationCourante()[0] << "," << traitement->getAccelerationCourante()[1] << "," << traitement->getAccelerationCourante()[2]  << ",";
+            stream << traitement->getVitesseCourante()[0] << "," << traitement->getVitesseCourante()[1] << "," << traitement->getVitesseCourante()[2]  << ",";
+            stream << traitement->getPositionCourante()[0] << "," << traitement->getPositionCourante()[1] << "," << traitement->getPositionCourante()[2];
+            emit majValues(traitement->getYaw(), traitement->getAccelerationCourante()[0], traitement->getAccelerationCourante()[1], traitement->getAccelerationCourante()[2], traitement->getVitesseCourante()[0], traitement->getVitesseCourante()[1], traitement->getVitesseCourante()[2], traitement->getPositionCourante()[0], traitement->getPositionCourante()[1], traitement->getPositionCourante()[2]);
+            file->close();
 
-    //    qDebug() << "Vitesse courante" << traitement->getVitesseCourante()[0] << "   " << traitement->getVitesseCourante()[1] << "    " << traitement->getVitesseCourante()[2];
-    //    qDebug() << "Position courante" << traitement->getPositionCourante()[0] << "   " << traitement->getPositionCourante()[1] << "   " << traitement->getPositionCourante()[2];
-    //    qDebug() << "Yaw : " << traitement->getYaw() << "Pitch : " << traitement->getPitch() << "Roll : " << traitement->getRoll();
+        //    qDebug() << "Vitesse courante" << traitement->getVitesseCourante()[0] << "   " << traitement->getVitesseCourante()[1] << "    " << traitement->getVitesseCourante()[2];
+        //    qDebug() << "Position courante" << traitement->getPositionCourante()[0] << "   " << traitement->getPositionCourante()[1] << "   " << traitement->getPositionCourante()[2];
+        //    qDebug() << "Yaw : " << traitement->getYaw() << "Pitch : " << traitement->getPitch() << "Roll : " << traitement->getRoll();
+        }
+    }
+    else if (type == TypePaquet::Erreur)
+    {
+        envoyerCommande(derniereCommandeEnvoye);
+    }
+    else
+    {
+        qDebug() << "Commande non reconnue";
     }
 
 }
 
+void Device::rssiUpdate(int rssi)
+{
+    qDebug() << "rssi mis à jour";
+   // discoveryAgent->start();
+    controller->connectToDevice();
+    qDebug() << "state : " << controller->state();
+}
+
 void Device::envoyerCommande(QString commande)
 {
-    qDebug() << "envoi";
+    derniereCommandeEnvoye = commande;
+    qDebug() << "envoi : " << commande;
     QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(key));
     service->writeCharacteristic(ch, commande.toLocal8Bit());
 }

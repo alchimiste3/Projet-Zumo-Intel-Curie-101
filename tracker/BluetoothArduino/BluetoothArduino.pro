@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     action.cpp \
     ajouterwindow.cpp \
     linechart.cpp \
-    serie.cpp
+    serie.cpp \
+    devicescanner.cpp \
+    apprendrewindow.cpp \
+    analyseurpaquet.cpp
 
 HEADERS += \
     device.h \
@@ -30,8 +33,12 @@ HEADERS += \
     action.h \
     ajouterwindow.h \
     linechart.h \
-    serie.h
+    serie.h \
+    devicescanner.h \
+    apprendrewindow.h \
+    analyseurpaquet.h
 
 FORMS += \
     mainwindow.ui \
-    ajouterwindow.ui
+    ajouterwindow.ui \
+    apprendrewindow.ui

@@ -9,8 +9,9 @@
 #include <QThread>
 #include <QDebug>
 #include <QTime>
+#include "devicescanner.h"
 #include "traitementdonnees.h"
-
+#include "analyseurpaquet.h"
 
 class Device : public QObject
 {
@@ -28,6 +29,7 @@ class Device : public QObject
     TraitementDonnees* traitement;
     QTime timer;
     int ancienTemps;
+    QString derniereCommandeEnvoye;
 public:
     Device();
     void scan();
@@ -42,6 +44,7 @@ public slots:
     void positionCharacteristicUpdate(QLowEnergyCharacteristic ch ,QByteArray byteArray);
     void envoyerCommande(QString commande);
     int getTempsEcoule();
+    void rssiUpdate(int rssi);
 signals:
     void majValues(float, float, float, float,float,float,float,float,float,float);
 };

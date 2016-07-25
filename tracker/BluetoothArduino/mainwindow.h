@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "device.h"
 #include "ajouterwindow.h"
+#include "apprendrewindow.h"
 #include "mouvement.h"
 #include "linechart.h"
 
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     Device* d;
     AjouterWindow* ajouterWindow;
+    ApprendreWindow* apprendreWindow;
     Mouvement* m;
     QList<Action*> actionsTableau;
     LineChart* chart;
@@ -36,6 +38,10 @@ private slots:
     void on_envoyerButton_clicked();
 
     void redButtonToggled(int id, bool etat);
+
+    void on_apprendreButton_clicked();
+
+    void redAcceptedCommandeApprendre();
 
 signals:
     void ajouterPoint(QString nomSerie, QPointF point);
