@@ -1,4 +1,4 @@
-#include <QueueArray.h>
+//#include <QueueArray.h>
 
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
@@ -38,7 +38,7 @@ BLEPeripheral blePeripheral;
 BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
 
 BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 20);
-BLECharacteristic analogCharacteristique2("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLEWrite | BLENotify, 20);
+BLECharacteristic analogCharacteristique2("3752c0a0-0d25-11e6-97f5-0002a5d5c51d", BLEWrite | BLENotify, 20);
 
 
 /////////////////////////////// Neurons ///////////////////////////////
@@ -70,7 +70,7 @@ void setup() {
   
   Serial.begin(9600);
 
-  while(!Serial){};
+ // while(!Serial){};
 
 
   pinMode(13,OUTPUT);

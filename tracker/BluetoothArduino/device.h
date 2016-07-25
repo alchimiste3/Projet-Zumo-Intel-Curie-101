@@ -22,7 +22,8 @@ class Device : public QObject
     QLowEnergyService *service;
     QLowEnergyService *motionService;
     QLowEnergyCharacteristic positionCharacteristic;
-    const QString key = "3752c0a0-0d25-11e6-97f5-0002a5d5c51c";
+    const QString keyCh1 = "3752c0a0-0d25-11e6-97f5-0002a5d5c51c";
+    const QString keyCh2 = "3752c0a0-0d25-11e6-97f5-0002a5d5c51d";
     QFile* file;
     int cptData;
     QString paquets;

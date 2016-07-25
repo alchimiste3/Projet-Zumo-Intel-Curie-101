@@ -14,9 +14,11 @@ void Mouvement::run()
 {
     while (listeActions.size() > 0)
     {
-        QString commande("m");
+
+        QString commande("(m");
         float duree = listeActions.first()->getNbS()*1000;
         commande += listeActions.first()->getCommande();
+        commande += ");";
         listeActions.removeFirst();
         qDebug() << "commande : " << commande;
         d->envoyerCommande(commande);

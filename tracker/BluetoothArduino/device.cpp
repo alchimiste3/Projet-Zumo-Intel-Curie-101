@@ -26,7 +26,7 @@ void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
     {
         device = deviceInfo;
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
-        if (deviceInfo.serviceUuids().contains(QBluetoothUuid(key)))
+        if (deviceInfo.serviceUuids().contains(QBluetoothUuid(keyCh1)))
         {
             controller = QLowEnergyController::createCentral(deviceInfo);
             qDebug() << controller->state();
@@ -51,7 +51,7 @@ void Device::deviceConnected()
 
 void Device::serviceScanDone(QBluetoothUuid serviceUuid)
 {
-    if (serviceUuid == QBluetoothUuid(key))
+    if (serviceUuid == QBluetoothUuid(keyCh1))
     {
         service = controller->createServiceObject(serviceUuid);
         if (!service) {
@@ -81,7 +81,7 @@ void Device::serviceDetailsDiscovered(QLowEnergyService::ServiceState)
     foreach (const QLowEnergyCharacteristic &ch, chars)
     {
         qDebug() << "ifi" << ch.uuid();
-        if (ch.uuid() == QBluetoothUuid(key))
+        if (ch.uuid() == QBluetoothUuid(keyCh1))
         {
             QLowEnergyDescriptor notification = ch.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
             service->writeDescriptor(notification, QByteArray::fromHex("0100"));
@@ -129,7 +129,7 @@ void Device::decouperPaquet(QString paquets)
     connect(d, SIGNAL(rssiReady(int)), this, SLOT(rssiUpdate(int)));
     d->run();
     }*/
-//    qDebug() << intervalle;
+    qDebug() << intervalle;
     AnalyseurPaquet analyseur;
     TypePaquet type = analyseur.reconnaitre(paquets);
     if (type == TypePaquet::Position)
@@ -155,6 +155,8 @@ void Device::decouperPaquet(QString paquets)
     }
     else if (type == TypePaquet::Erreur)
     {
+   //     QThread::msleep(500);
+        qDebug() << "Erreur paquet : " << derniereCommandeEnvoye;
         envoyerCommande(derniereCommandeEnvoye);
     }
     else
@@ -176,8 +178,14 @@ void Device::envoyerCommande(QString commande)
 {
     derniereCommandeEnvoye = commande;
     qDebug() << "envoi : " << commande;
-    QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(key));
+    QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(keyCh2));
+    int temps = timer.elapsed();
     service->writeCharacteristic(ch, commande.toLocal8Bit());
+    service->writeCharacteristic(ch, QString("(m1);").toLocal8Bit());
+    service->writeCharacteristic(ch, QString("(m2);").toLocal8Bit());
+    int temps2 = timer.elapsed();
+    qDebug() << "aa = " << temps2 - temps;
+    ancienTemps = temps;
 }
 
 int Device::getTempsEcoule()
