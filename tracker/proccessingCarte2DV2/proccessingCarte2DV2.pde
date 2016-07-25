@@ -41,7 +41,7 @@ int xMax;
 int yMin;
 int yMax;
 
-float coofDessinData = 1;
+float coofDessinData = 100;
 
 String[] position;
 
@@ -89,12 +89,9 @@ void draw()
     
     for(int i = 0 ; i < listPx.size() ; i++){
       strokeWeight(2);  // Thicker
-      point(listPx.get(i), listPy.get(i));
+      point((listPx.get(i) + xMin)*coofDessinData, (listPy.get(i) + yMin)*coofDessinData);
     }
     
-    strokeWeight(8);  // Thicker
-    point(px*coofDessinData, py*coofDessinData);
-    strokeWeight(2);
     
     // On dessine les fleches pour la vitesse
     line(px*coofDessinData, py*coofDessinData, (px + vx)*coofDessinData, py*coofDessinData);
@@ -169,10 +166,10 @@ void drawGrille() {
   
   int interligne = 10;
   
-  for(int i=xMin + interligne; i<xMax; i+=interligne){
+  for(int i=xMin + interligne; i<xMax; i+=interligne + coofDessinData){
     line(i,yMin,i,yMax);
   }
-  for(int w=yMin + interligne; w<yMax; w+=interligne){
+  for(int w=yMin + interligne; w<yMax; w+=interligne + coofDessinData){
     line(xMin,w,xMax,w);
   }
    
@@ -182,7 +179,7 @@ void drawGrille() {
 
 void drawRobot() {
  
-  rotate(yaw*50);
+  rotate(yaw*100);
   //triangle(5, - 5, - 10, 0, 0, 10);
   
   fill(255, 255, 255); // red square
