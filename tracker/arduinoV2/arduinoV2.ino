@@ -37,7 +37,8 @@ BLEPeripheral blePeripheral;
 
 BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
 
-BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLEWrite | BLENotify, 20);
+BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 20);
+BLECharacteristic analogCharacteristique2("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLEWrite | BLENotify, 20);
 
 
 /////////////////////////////// Neurons ///////////////////////////////
@@ -95,10 +96,13 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
    blePeripheral.addAttribute(AnalogService);
    blePeripheral.addAttribute(analogCharacteristique);
+   
+   blePeripheral.addAttribute(analogCharacteristique2);
+   
    blePeripheral.begin();
 
 
@@ -151,11 +155,11 @@ void gestionCommandes(){
 
 
   // Si l'utilisateur en entrer une nouvelle commande 
-  if(analogCharacteristique.written()) { 
+  if(analogCharacteristique2.written()) { 
     
     Serial.println("written");
 
-    const unsigned char * val = analogCharacteristique.value();
+    const unsigned char * val = analogCharacteristique2.value();
 
     Serial.print("val = ");Serial.println((char *)val);
    
