@@ -181,11 +181,11 @@ void Device::envoyerCommande(QString commande)
     QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(keyCh2));
     int temps = timer.elapsed();
     service->writeCharacteristic(ch, commande.toLocal8Bit());
-    service->writeCharacteristic(ch, QString("(m1);").toLocal8Bit());
-    service->writeCharacteristic(ch, QString("(m2);").toLocal8Bit());
-    int temps2 = timer.elapsed();
-    qDebug() << "aa = " << temps2 - temps;
-    ancienTemps = temps;
+//    service->writeCharacteristic(ch, QString("(m1);").toLocal8Bit());
+//    service->writeCharacteristic(ch, QString("(m2);").toLocal8Bit());
+//    int temps2 = timer.elapsed();
+//    qDebug() << "aa = " << temps2 - temps;
+//    ancienTemps = temps;
 }
 
 int Device::getTempsEcoule()

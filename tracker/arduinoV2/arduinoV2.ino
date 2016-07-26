@@ -1,5 +1,23 @@
-//#include <QueueArray.h>
+/*
+ * arduinoV2.ino
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ *                      Clement Sibut []
 
+ * Dernier mise a jour: 26-07-1016 (Quentin)
+ *
+ * lib utiliser : RobotZumoCurie
+ * 
+ * Ce programme permet a une carte Intel Curie 101 de commander un robot zumo avec un forma Uno. 
+ * Le but est d'utiliser les outil et capteur du robot et de la carte (IMU, BLE, Line Sensors et Neurons) pour 
+ * fournie a une utilisateur distant un service bluetooth avec divers fonctionnaliter.
+ * 
+ * Le but est d'automatiser au maximum le robot qu'il puise interagire de lui meme avec l'environnement en se déplacent et en apprenant grace aux neurons.
+ * 
+ *
+ */
+
+ 
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
 
@@ -17,26 +35,32 @@
 
 /////////////////////////////// IMU ///////////////////////////////
 
+
+/*
+ * L'IMU de la carte fournie 6 valeurs : les aceleration rectiligne (accelerometre) et angulaire (giroscope)
+ */
 int ax, ay, az;
 int gx, gy, gz;
 
+
+/*
+ * Pour miniimiser la taille des paquet envoyer au l'utilisateur par le bluetooth,
+ * on ne prent que les accelerations sur x et y et la rotation sur z car le robot évolue pour l'instant sur une map en 2D.
+ */
 float axConv, ayConv;
 float gzConv;
 
-int tempsCourant = 1;
-
+/*
+ * On definie le taux de rafraichissement de l'IMU (acc et gyro) et la precision de l'accelerometre et du gyroscope
+ */
 int accelerometreRange = 2;
 int gyroRange = 125;
-
 float IMURate = 200;
-float tempsEntreMesure = 0.005; // 1/IMURate
 
 /////////////////////////////// BLE ///////////////////////////////
 
 BLEPeripheral blePeripheral;
-
-BLEService AnalogService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
-
+BLEService ZumoService("3752c0a0-0d25-11e6-97f5-0002a5d5c51c");
 BLECharacteristic analogCharacteristique("3752c0a0-0d25-11e6-97f5-0002a5d5c51c", BLERead | BLENotify, 20);
 BLECharacteristic analogCharacteristique2("3752c0a0-0d25-11e6-97f5-0002a5d5c51d", BLEWrite | BLENotify, 20);
 
@@ -97,8 +121,8 @@ void setup() {
    ///////////////////////// Curie BLE /////////////////////////
 
    blePeripheral.setLocalName("RdWrS2");
-   blePeripheral.setAdvertisedServiceUuid(AnalogService.uuid());
-   blePeripheral.addAttribute(AnalogService);
+   blePeripheral.setAdvertisedServiceUuid(ZumoService.uuid());
+   blePeripheral.addAttribute(ZumoService);
    blePeripheral.addAttribute(analogCharacteristique);
    
    blePeripheral.addAttribute(analogCharacteristique2);
@@ -111,7 +135,8 @@ void setup() {
 }
 
 /*
- * Bouble principale
+ * Boucle principale : Dans la boucle principale, on attend qu'un utilisateur se conncete puis on boucle sur une suite d'instruction tant qu'il est connecte : 
+ * On lie les commande sur une des carateristiques du service puis en envoie les informations (demandees et les mise à jours) a l'utilisateur.
  */
 void loop() {
 
@@ -127,9 +152,11 @@ void loop() {
             
       //////////////////////////// Communication Bluetooth ////////////////////////////
 
-      recevoirDonneesBluetooth(); // On recupere la commande de l'utilisateur et on  execute l'action demander
-      
-      envoieDonneesIMU(); // On envoie les donnees recueillies par le robot
+      // On recupere la commande de l'utilisateur et on  execute l'action demander
+      recevoirDonneesBluetooth();
+
+      // On envoie les donnees recueillies par le robot
+      envoieDonneesIMU();
     
     }
   }
@@ -224,7 +251,10 @@ void gestionCommandes(){
   Serial.print("commande = ");Serial.println(commande);
 
 
- ////////////////////////////////////////////////////////  On execute la commande //////////////////////////////////////////////////////// 
+ /* 
+  *  On execute la commande demander par l'utilisateur si la commande ce renouvelle automatiquement ou si l'utilisateur a entre une nouvelle commande. 
+  *  Sinon, on execute la commande par default : m5 → robot immobile.
+  */
 
   
  //////////////////////////// Action Robot ////////////////////////////
@@ -236,6 +266,9 @@ void gestionCommandes(){
 
   //////////////////////////// calibration LineSensors ////////////////////////////
 
+  /*
+   * On effectue la calibration du senseur a l'avant du robot qui permet du suivre une ligne
+   */
   else if (commande[0] == 'c' && commande[1] == 's') {
     actionRobot.calibrationSensors();
     commandeInit();
@@ -244,6 +277,9 @@ void gestionCommandes(){
 
   //////////////////////////// Suivre Ligne ////////////////////////////
 
+  /*
+   * On demande au robot de suivre une ligne 
+   */
   else if (commande[0] == 's' && commande[1] == 'l') {
     actionRobot.suivreUneLigne();
 
@@ -251,6 +287,9 @@ void gestionCommandes(){
 
   //////////////////////////// Apprentissage Actions ////////////////////////////
 
+  /*
+   * On demande au robot d'apprendre
+   */
   else if (commande[0] == 'a') {
     apprentissageRobot.apprendreAvecIMU((int)commande[1]);
 
@@ -293,19 +332,14 @@ void gestionCommandes(){
     commandeInit();
   }
 
-
-  Serial.print("commande 3 = "); Serial.println(commande);
-
-  Serial.println("");
-
 }
 
 /*
- * Cette fonction permet de reconnaitre des actions simples apprisent precedemment et les enregistrer dans une liste afin de pouvoir les reproduire.
+ * Permet de reconnaitre des actions simples apprisent precedemment et les enregistrer dans une liste afin de pouvoir les reproduire.
  */
 void reconnaitreEtEnregistrerAction(){
 
-  // Premier tour, on prent le temps
+  // Lors du de debut de la reconnaissance, on demarre le timer pour enregistrer le temps de chaque action reconnue
   if(neuronsReconnue == neuronsReconnuePres){
     tempsDebut = millis();
   }
@@ -313,12 +347,13 @@ void reconnaitreEtEnregistrerAction(){
   Serial.println("enregistrerAction");
   Serial.println("");
 
+  // On demande aux neurons de reconnaitre l'action actuelle grace a l'IMU
   apprentissageRobot.reconnaitre(&neuronsReconnue);
   
   Serial.print("neuronsReconnuePres = ");Serial.println(neuronsReconnuePres);
   Serial.print("neuronsReconnue = ");Serial.println(neuronsReconnue);
 
-
+  // Si une action differente de la precedente est reconnue et ... TODO 
   if(neuronsReconnuePres != neuronsReconnue && neuronsReconnuePres != 0){
 
     tempsFin = millis();
@@ -350,7 +385,7 @@ void reconnaitreEtEnregistrerAction(){
 
 
 /*
- * Cette fonction fait reproduire les actions au robot avec  un phase d'apprentisage. Cette est partie est bloquant pour l'instant
+ * Permet de faire reproduire les actions au robot apres une phase d'apprentisage. Cette partie est bloquant pour l'instant ( avec des delay).
  */
 void reproduireActions(){
 
@@ -390,34 +425,38 @@ void reproduireActions(){
   Serial.println("sortie reproduireActions");
 }
 
-
+/*
+ * Permet de recupere les accelarations, la rotation et de les envoyer dans un paquet a l'utilisateur.
+ */
 void envoieDonneesIMU(){
 
   getInfoIMU();
   
   String res;
 
-  
+  // On utilise une serialisation tres simple avec des ',' entre chaque donnee.
   res = res + String(axConv,1) + ",";
   res = res + String(ayConv,1) + ",";
   res = res + String(gzConv,2) + ",";
   
-  //Ajout de immobile
-
+  // On rajoute en plus un boolean qui indique si le roobot est immobile ou pas afin de corriger les erreur lors du calcule de la vitesse et de la position du robot.
   bool immobile = actionRobot.estImmobile();
   res = res + String(immobile) + ",";;
 
-  //Ajout de neuronsReconnue
-
+  // On ajoute l'acttion reconnue par les neurons TODO changer ca.
   res = res + String(neuronsReconnue);
 
+  // On envoie les informations par le service
   envoieDonneesBluetooth(res);
 
 }
 
+/*
+ * Permet d'envoyer un paquet de 20 octets au client du service Bluetooth (20 octet est la limite qui est impose par le BLE)
+ */
 void envoieDonneesBluetooth(String res){
 
-  Serial.print("commande a = "); Serial.println(commande);
+  //Serial.print("commande a = "); Serial.println(commande);
 
   char donneesEnvoyer[20];
   String resPaquet = res.substring(0, 19);
@@ -426,21 +465,29 @@ void envoieDonneesBluetooth(String res){
   
   analogCharacteristique.setValue((unsigned char*)donneesEnvoyer, 20);
   
-  Serial.print("commande b = "); Serial.println(commande);
+  //Serial.print("commande b = "); Serial.println(commande);
 
 }
 
+/*
+ * Permet de recuperer le imformation de L'IMU et de convertir l'acceleration en m/s/s et l'acceleration angulaire en °/s
+ */
 void getInfoIMU() {
 
   CurieIMU.readMotionSensor(ax, ay, az, gx, gy, gz);
 
+  // Conversion en m/s/s
   axConv = ((ax/32768.0)*accelerometreRange * 9.81);
   ayConv = ((ay/32768.0)*accelerometreRange * 9.81);
+
+  // Conversion en °/s
   gzConv = (gz/32768.9)*gyroRange;
 
 }
 
-
+/*
+ * Réinitialise la commande a sa valeur par defaut : m5 → robot immobile
+ */
 void commandeInit(){
 
   actionRobot.action("m5");
