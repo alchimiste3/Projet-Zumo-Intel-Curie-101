@@ -33,6 +33,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     QObject::connect(ajouterWindow, SIGNAL(accepted()), this, SLOT(redAccepted()));
     QObject::connect(apprendreWindow, SIGNAL(accepted()), this, SLOT(redAcceptedCommandeApprendre()));
     QObject::connect(d, SIGNAL(majValues(float, float, float, float,float,float,float,float,float,float)), this, SLOT(redMajValues(float, float, float, float,float,float,float,float,float,float)));
+    QObject::connect(d, SIGNAL(majReconaissance(int)), this, SLOT(redMajReconaissance(int)));
 }
 
 MainWindow::~MainWindow()
@@ -139,11 +140,35 @@ void MainWindow::redButtonToggled(int id, bool etat)
 
 void MainWindow::on_apprendreButton_clicked()
 {
-    apprendreWindow->show();
+    if (ui->apprendreButton->text() == "Apprendre")
+    {
+        apprendreWindow->show();
+    }
+    else
+    {
+        ui->apprendreButton->setText("Apprendre");
+        d->envoyerCommande(Action(TypeAction::Arreter, QString("Arreter")).getCommande());
+    }
 }
 
 void MainWindow::redAcceptedCommandeApprendre()
 {
     QString commandeApprendre = apprendreWindow->getCommandeApprendre();
     d->envoyerCommande(commandeApprendre);
+    ui->apprendreButton->setText("Arreter aprentissage");
+}
+
+void MainWindow::on_reconnaitreButton_clicked(bool checked)
+{
+    d->envoyerCommande("r");
+}
+
+void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
+{
+    d->envoyerCommande("ra");
+}
+
+void MainWindow::redMajReconaissance(int value)
+{
+    ui->labelR->setText(QString::number(value));
 }

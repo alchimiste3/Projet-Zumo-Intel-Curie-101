@@ -22,7 +22,7 @@ void Device::scan()
 
 void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
 {
-    if(deviceInfo.name() == "RdWrS2")
+    if(deviceInfo.name() == nomReseauBLE)
     {
         device = deviceInfo;
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
@@ -130,6 +130,7 @@ void Device::decouperPaquet(QString paquets)
     d->run();
     }*/
     qDebug() << intervalle;
+    qDebug() << paquets;
     AnalyseurPaquet analyseur;
     TypePaquet type = analyseur.reconnaitre(paquets);
     if (type == TypePaquet::Position)
@@ -151,6 +152,15 @@ void Device::decouperPaquet(QString paquets)
         //    qDebug() << "Vitesse courante" << traitement->getVitesseCourante()[0] << "   " << traitement->getVitesseCourante()[1] << "    " << traitement->getVitesseCourante()[2];
         //    qDebug() << "Position courante" << traitement->getPositionCourante()[0] << "   " << traitement->getPositionCourante()[1] << "   " << traitement->getPositionCourante()[2];
         //    qDebug() << "Yaw : " << traitement->getYaw() << "Pitch : " << traitement->getPitch() << "Roll : " << traitement->getRoll();
+        }
+    }
+    else if (type == TypePaquet::Reconaissance)
+    {
+        QList<QString> listeValeurs = paquets.split(",");
+        if (listeValeurs.size() >= 2)
+        {
+            qDebug() << "ert";
+            emit majReconaissance(listeValeurs[1].toInt());
         }
     }
     else if (type == TypePaquet::Erreur)
@@ -179,13 +189,7 @@ void Device::envoyerCommande(QString commande)
     derniereCommandeEnvoye = commande;
     qDebug() << "envoi : " << commande;
     QLowEnergyCharacteristic ch = service->characteristic(QBluetoothUuid(keyCh2));
-    int temps = timer.elapsed();
     service->writeCharacteristic(ch, commande.toLocal8Bit());
-    service->writeCharacteristic(ch, QString("(m1);").toLocal8Bit());
-    service->writeCharacteristic(ch, QString("(m2);").toLocal8Bit());
-    int temps2 = timer.elapsed();
-    qDebug() << "aa = " << temps2 - temps;
-    ancienTemps = temps;
 }
 
 int Device::getTempsEcoule()
