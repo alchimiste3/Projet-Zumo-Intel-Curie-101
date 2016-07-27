@@ -22,7 +22,7 @@ void Device::scan()
 
 void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
 {
-    if(deviceInfo.name() == "RdWrS2")
+    if(deviceInfo.name() == "RdWrS")
     {
         device = deviceInfo;
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
@@ -129,16 +129,15 @@ void Device::decouperPaquet(QString paquets)
     connect(d, SIGNAL(rssiReady(int)), this, SLOT(rssiUpdate(int)));
     d->run();
     }*/
-    qDebug() << intervalle;
+    qDebug() << paquets;
     AnalyseurPaquet analyseur;
     TypePaquet type = analyseur.reconnaitre(paquets);
     if (type == TypePaquet::Position)
     {
         QList<QString> listeValeurs = paquets.split(",");
-        if (listeValeurs.length() == 5)
+        if (listeValeurs.length() == 4)
         {
-      //      qDebug() << listeValeurs[4].toInt();
-            traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), 0, ((float)intervalle)/1000);
+            traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), listeValeurs[3].toInt(), ((float)intervalle)/1000);
 
             file->open(QIODevice::ReadWrite);
             QTextStream stream(file);
