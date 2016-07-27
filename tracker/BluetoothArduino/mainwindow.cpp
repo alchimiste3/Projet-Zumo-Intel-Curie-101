@@ -160,7 +160,7 @@ void MainWindow::redAcceptedCommandeApprendre()
 
 void MainWindow::on_reconnaitreButton_clicked(bool checked)
 {
-    d->envoyerCommande("r");
+    d->envoyerCommande("(r);");
 }
 
 void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
