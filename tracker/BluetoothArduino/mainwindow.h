@@ -43,6 +43,12 @@ private slots:
 
     void redAcceptedCommandeApprendre();
 
+    void on_reconnaitreButton_clicked(bool checked);
+
+    void on_reexucuterActionsButton_clicked(bool checked);
+
+    void redMajReconaissance(int value);
+
 signals:
     void ajouterPoint(QString nomSerie, QPointF point);
     void afficherSerie(QString nomSerie);

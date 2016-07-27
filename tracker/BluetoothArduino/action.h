@@ -21,7 +21,7 @@ class Action
     QString nomAction;
     int para;
 public:
-    Action(TypeAction typeAction, QString nomAction,  float nbS, int para = -1);
+    Action(TypeAction typeAction, QString nomAction,  float nbS = 0, int para = -1);
     TypeAction getTypeAction();
     QString getNomAction();
     float getNbS();
