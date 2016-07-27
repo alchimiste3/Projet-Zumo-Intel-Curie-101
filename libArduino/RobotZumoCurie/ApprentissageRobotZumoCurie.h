@@ -63,6 +63,7 @@ class ApprentissageRobot {
 
     ApprentissageRobot();
     
+    void init();
   
     void apprendreAvecIMU(int numNeurons);
 
