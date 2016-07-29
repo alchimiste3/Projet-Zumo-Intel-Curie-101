@@ -2,7 +2,7 @@
  * ActionsRobotZumo.h
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- * Dernier mise a jour: 25-07-1016 (Quentin)
+ * Dernier mise a jour: 29-07-1016 (Quentin)
  *
  * Cette classe permet de diriger le robot et d'utiliser son capteur de ligne
  */
@@ -34,7 +34,9 @@ class ActionsRobot {
 
 	int calibrationAuto;
 
-	const int MAX_SPEED = 200;
+  #define MAX_SPEED 200
+
+	//const int MAX_SPEED = 200;
 
 	int m1Speed;
 	int m2Speed;
@@ -47,22 +49,16 @@ class ActionsRobot {
 
     ActionsRobot();
     
-    // Execution de la commande par le robot
     void action(char * commande);
 
-    // Verifier si le robot est immobile (speed == 0)
     bool estImmobile();
 
-    // Changer la vitesse des moteurs gauche et droit du robot.
 		void vitesseMoteurs(int vitesseGauche, int vitesseDroite);
 
-    // Calibration du capteur de ligne (automatique par default)
     void calibrationSensors();
 
-    // Demander au robot de suivre une ligne 
     void suivreUneLigne();
 
-    // Demander au robot de suivre une ligne 
     void suivreLigneV2(int position);
 
     void detecterLigneV2(unsigned int * sensors);

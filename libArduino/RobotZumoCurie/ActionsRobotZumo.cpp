@@ -23,11 +23,14 @@ ActionsRobot::ActionsRobot(){
 	m2Speed = 0;
 
   // Periode du signal PWM pour le moteur gauche
-	pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
+  // pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
+	pariodeMoteurGauche = 2041; // µs pour une fréquence de 490Hz
 
 }
 
-
+/*
+Permet de modifier l'etat des moteur avec une action pres definie qui a un numero
+*/
 void ActionsRobot::action(char * commande){
     Serial.println("action");
 
@@ -109,6 +112,9 @@ void ActionsRobot::action(char * commande){
 
 }
 
+/*
+Permet de calibrer le senseur de ligne, soit automatiquement (par dedfaut) soit manuellement.
+*/
 void ActionsRobot::calibrationSensors(){
 	reflectanceSensors.init(2);
 
@@ -154,6 +160,9 @@ void ActionsRobot::calibrationSensors(){
 
 }
 
+/*
+Permet de demander au robot de suivre une ligne sur une cercuit (il faut faire la calibration avant)
+*/
 void ActionsRobot::suivreUneLigne(){
 
 
@@ -179,9 +188,10 @@ void ActionsRobot::suivreUneLigne(){
   int p7 = reflectanceSensors.readLine(sensors7);
   int p8 = reflectanceSensors.readLine(sensors8);
 
+  // Moyenne de 8 position (pour conpenser les erreurs sur la mesure du capteur de ligne)
   int position = (p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8)/8;
 
-  
+  // Moyenne des valeurs des capteurs
   unsigned int sensors[6];
 
   for(int i = 0; i < 6 ; i++){
@@ -212,24 +222,22 @@ void ActionsRobot::suivreUneLigne(){
 
 }
 
-
+/*
+Permet de demander au robot de suivre une ligne sur une cercuit (il faut faire la calibration avant).
+Version 2 plus stable
+*/
 void ActionsRobot::suivreLigneV2(int position) {
 
-  Serial.print("position = "); Serial.println(position);
-
+  // On prent une erreur par rapport au centre du robot (centre du capteur de ligne)
   int error = position - 2500;
 
+  // Constante pour tester la sensibiliter de la correction
   float C = 1;
 
   // on norme l'erreur avec la vitesse maximum
   int erreurNorm = (((float)error) / 2500.0) * ((float)MAX_SPEED) * C;
 
-
-  Serial.print("error = "); Serial.println(error);
-  Serial.print("erreurNorm = "); Serial.println(erreurNorm);
-
-
-  //Si l'erreur est plus grande que 1000 (donc avec un "capteur de decalage")
+  //Si l'erreur est plus grande que 500 (donc avec un "demi-capteur de decalage" par rapport au centre du robot)
   if((error > 500) || (error < -500)){
 
 
@@ -246,18 +254,6 @@ void ActionsRobot::suivreLigneV2(int position) {
       m2Speed = (MAX_SPEED - erreurNorm);
     }
 
-    //     // Si le robot est trop a gauche
-    // if(erreurNorm > 0){
-    //   m1Speed = (MAX_SPEED + erreurNorm*erreurNorm);
-    //   m2Speed = (MAX_SPEED - erreurNorm*erreurNorm)/DIFF;
-    // }
-    // // Si le robot est trop a droite
-    // else if(erreurNorm < 0){
-    //   m1Speed = (MAX_SPEED - erreurNorm*erreurNorm)/DIFF;
-    //   m2Speed = (MAX_SPEED + erreurNorm*erreurNorm);
-    // }
-  
-  
 
     // On borne les vitesse entre 0 et MAX_SPEED
     if (m1Speed < 0)
@@ -278,13 +274,13 @@ void ActionsRobot::suivreLigneV2(int position) {
   }
 
   // On modifie les vitesses des moteurs du robot 
-  //ZumoMotors::setSpeeds(m1Speed, m2Speed, pariodeMoteurGauche);
-
   vitesseMoteurs(m1Speed, m2Speed);
 
 }
 
-
+/*
+Permet de modifier la vitesse des moteurs du robot.
+*/
 void ActionsRobot::vitesseMoteurs(int vitesseGauche, int vitesseDroite) {
 
 
@@ -303,7 +299,10 @@ void ActionsRobot::vitesseMoteurs(int vitesseGauche, int vitesseDroite) {
 }
 
 
-
+/*
+!!!! Ne fonctionne pas encore !!!!
+Permet de detecter une ligne qui se trouve en face du robot
+*/
 void ActionsRobot::detecterLigneV2(unsigned int * sensors) {
 
   digitalWrite(13, LOW);
@@ -341,6 +340,10 @@ void ActionsRobot::detecterLigneV2(unsigned int * sensors) {
 
 }
 
+/*
+!!!! Ne fonctionne pas encore !!!!
+Permet de un croissement et de le signale avec une LED
+*/
 void ActionsRobot::detecterCroisement(unsigned int * sensors) {
 
   digitalWrite(13, LOW);
@@ -358,7 +361,9 @@ void ActionsRobot::detecterCroisement(unsigned int * sensors) {
 
 }
 
-
+/*
+Return true si le robot est immobile : vitesse nulle pour les deux moteurs.
+*/
 bool ActionsRobot::estImmobile(){
 	return immobile;
 }

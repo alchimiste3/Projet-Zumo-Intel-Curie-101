@@ -19,37 +19,46 @@
 
 class ZumoMotors
 {
-  public:  
-  
-    // constructor (doesn't do anything)
-    ZumoMotors();
-    
-    static void flipLeftMotor(boolean flip);
-    static void flipRightMotor(boolean flip);
-    
 
-    static void setRightSpeed(int speed);
+  #define PWM_L 10
+  #define PWM_R 9
+  #define DIR_L 8
+  #define DIR_R 7
 
-    static void setSpeeds(int leftSpeed, int rightSpeed, int periode);
-    static void setLeftSpeedCurie(int speed, int periode);
+  #define VITESSE_MAX 400
 
-    static void setSpeeds(int leftSpeed, int rightSpeed);
-    static void setLeftSpeedCurie(int speed);
-    
-  private:
+  static inline void init()
+  {
+    static boolean initialized = false;
 
-    static inline void init()
+    if (!initialized)
     {
-      static boolean initialized = false;
-
-      if (!initialized)
-      {
-        initialized = true;
-        init2();
-      }
+      initialized = true;
+      init2();
     }
-    
-    static void init2();
+  }
+  
+  static void init2();
+
+public:  
+
+  // constructor (doesn't do anything)
+  ZumoMotors();
+  
+  static void flipLeftMotor(boolean flip);
+  static void flipRightMotor(boolean flip);
+  
+
+  static void setRightSpeed(int speed);
+
+  static void setSpeeds(int leftSpeed, int rightSpeed, int periode);
+  static void setLeftSpeedCurie(int speed, int periode);
+
+  static void setSpeeds(int leftSpeed, int rightSpeed);
+  static void setLeftSpeedCurie(int speed);
+  
+
+
 };
 
 #endif
