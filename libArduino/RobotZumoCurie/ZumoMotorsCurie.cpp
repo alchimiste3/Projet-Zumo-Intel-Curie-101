@@ -11,11 +11,6 @@
 
 #include "ZumoMotorsCurie.h"
 
-#define PWM_L 10
-#define PWM_R 9
-#define DIR_L 8
-#define DIR_R 7
-
 
 static boolean flipLeft = false;
 static boolean flipRight = false;
@@ -47,13 +42,11 @@ void ZumoMotors::flipRightMotor(boolean flip)
 
 // Le Robot Zumo est consue pour des carte de type Uno : notre carte Curie a le meme format mais le type de pin (digital et PWM)
 // change. Le pin 10 de la Curie (ou le moteur gauche est brancher) est digital alors que celui de la Uno est en PWM. 
-// On doit donc generer un signal PWM sur le  pin 10 avec une frequence qui varie selon les cas (490HZ ou 980Hz)
+// On doit donc generer un signal PWM sur le  pin 10 avec une frequence qui varie selon les cas (490HZ ou 980Hz).
 void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
 {
 
-  //Serial.print("speed left curie = ");Serial.println(speed);
-
-  init(); // initialize if necessary
+  init();
     
   boolean reverse = 0;
   
@@ -62,8 +55,8 @@ void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
     speed = -speed; // make speed a positive quantity
     reverse = 1;    // preserve the direction
   }
-  if (speed > 400)  // Max 
-    speed = 400;
+  if (speed > VITESSE_MAX)  // Max 
+    speed = VITESSE_MAX;
 
 
   CurieTimerOne.pwmStart(PWM_L, speed * 0.25, periode);
@@ -76,16 +69,18 @@ void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
 
 }
 
-// Version sans le chois de la periode (definie pour une frequence de 980Hz)
+/*
+Version sans le chois de la periode (definie pour une frequence de 980Hz).
+*/
 void ZumoMotors::setLeftSpeedCurie(int speed)
 {
-
   setLeftSpeedCurie(speed,1020);
-
 }
 
 
-// methode pour le moteur gauche non modifie 
+/*
+Permet de modifier la vitesse du moteur droit.  
+*/
 void ZumoMotors::setRightSpeed(int speed)
 {
 
@@ -98,8 +93,8 @@ void ZumoMotors::setRightSpeed(int speed)
     speed = -speed;
     reverse = 1;  
   }
-  if (speed > 400)
-    speed = 400;
+  if (speed > VITESSE_MAX)
+    speed = VITESSE_MAX;
 
   analogWrite(PWM_R, speed * 0.6375); // 0.6375 = 51 / 80 : on passe la vitesse qui est sur 400 a une vitesse sur 255
 
@@ -110,14 +105,18 @@ void ZumoMotors::setRightSpeed(int speed)
 
 }
 
-// modifier la vittesse de moteur en choisisant la periode PWM du moteur gauche
+/*
+Permet de modifier la vitesse de moteur en choisisant la periode PWM du moteur gauche
+*/
 void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed, int periode)
 {
   setLeftSpeedCurie(leftSpeed, periode);
   setRightSpeed(rightSpeed);
 }
 
-
+/*
+Permet de modifier la vitesse de moteur.
+*/
 void ZumoMotors::setSpeeds(int leftSpeed, int rightSpeed)
 {
   setLeftSpeedCurie(leftSpeed);

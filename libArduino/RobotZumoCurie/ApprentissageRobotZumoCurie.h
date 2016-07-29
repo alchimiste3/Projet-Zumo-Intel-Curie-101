@@ -46,9 +46,16 @@ class ApprentissageRobot {
   #define sampleNbr 10  // number of samples to assemble a vector
   #define signalNbr  6  // ax,ay,az,gx,gy,gz
 
+  // Seuil entre l'etat bas et haut des accelerations (pour convertire en binaire).
+  #define seuilAcce 1000
+  #define seuilGyro 15000 
+
+
   int raw_vector[sampleNbr*signalNbr]; // vector accumulating the raw sensor data
   byte vector[sampleNbr*signalNbr]; // vector holding the pattern to learn or recognize
   int mina=0xFFFF, maxa=0, ming=0xFFFF, maxg=0, da, dg;
+
+
 
 
   ////////////////////////// Reconnaissance parcourt ////////////////////
@@ -67,10 +74,13 @@ class ApprentissageRobot {
   
     void apprendreAvecIMU(int numNeurons);
 
-    void reconnaitre(int * rep);
+    void reconnaitre(int * c, int * d);
+
+    void reconnaitreMoyenne(int * c, int * d);
 
     void getVectorIMU();
 
+    void getVectorIMUSimple();
 
     //////////////////////////// Reconnaissance de trajectoire //////////////////////////////
 

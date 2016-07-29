@@ -12,6 +12,8 @@ float yaw;
 float pitch;
 float roll;
 
+float angleRobot;
+
 float ax;
 float ay;
 float az;
@@ -72,8 +74,6 @@ void setup()
   listPy = new FloatList();
   listPz = new FloatList();
 
-  
-  
   frameRate(10);
 }
 
@@ -81,42 +81,51 @@ void setup()
 void draw()
 {
 
+   ////////////////////////////////////// On lit les donnees dans une fichier //////////////////////////////////////
+
   readFile();  
   
-  
-  
-  
+  ////////////////////////////////////// On prent un fond blanc //////////////////////////////////////
+
   background(255); 
 
-  // On prend deux axes (x et y) avec l'origine en haut a gauche pour faire la carte. la voiture est pour l'instant un simple point que se déplace.
+  // On prend deux axes (x et y) avec l'origine en haut a gauche pour faire la carte.
   
+   ////////////////////////////////////// On commence a dessine //////////////////////////////////////
+
   pushMatrix(); // begin object
   
+    ////////////////////////////////////// On dessine la grille //////////////////////////////////////
+    
     drawGrille();
         
+    ////////////////////////////////////// On dessine les position du robot depuis le debut //////////////////////////////////////
+
     translate(width/2, height/2); // set position to centre
-    
-    
+
     for(int i = 0 ; i < listPx.size() ; i++){
       strokeWeight(2);  // Thicker
       point((listPx.get(i) + xMin)*coofDessinData, (listPy.get(i) + yMin)*coofDessinData);
     }
     
-    
+    /*
+    ////////////////////////////////////// On dessine les fleche des vitesse du robot //////////////////////////////////////
+
     // On dessine les fleches pour la vitesse
     line(px*coofDessinData, py*coofDessinData, (px + vx)*coofDessinData, py*coofDessinData);
     
     line(px*coofDessinData, py*coofDessinData, px*coofDessinData, (py + vy)*coofDessinData);
+    */
     
+    
+    ////////////////////////////////////// On ecrie les donnees du robot (position, vitesse, acceleration) //////////////////////////////////////
+
     fill(0, 102, 153);
-    
-    // On écrie les data
     text("rotation (en radian) = "+yaw+"\n ax = "+ax+"\t ay = "+ay+"\t az = "+az+"\n vx = "+vx+"\t vy = "+vy+"\t vz = "+vz+"\n px = "+px+"\t py = "+py+"\t pz = "+pz,0, 30); 
 
+    ////////////////////////////////////// On  dessine le robot a la position px, py //////////////////////////////////////
 
-    translate(px*coofDessinData, py*coofDessinData); // set position to centre
-
-    
+    translate(px*coofDessinData, py*coofDessinData); 
     drawRobot();
    
   popMatrix(); // end of object
@@ -125,7 +134,6 @@ void draw()
 
 
 float distanceParcourue(){
-  
   return sqrt(pow((px - pxPres),2) + pow((py - pyPres),2));
 }
 
@@ -139,14 +147,10 @@ void calculerCoordonne()
   
   
   X = sin(abs(angle)) * distance;
-  Y = cos(abs(angle)) * distance;
+  Y = - cos(abs(angle)) * distance;
   
-  if(angle < 0){
-    X = -X;
-    Y = -Y;
-  }
   
-  println("angle = "+angle);
+  println("angle = " + angle);
 
   println("pxPres = "+pxPres);
   println("pyPres = "+pyPres);
@@ -191,7 +195,7 @@ void drawGrille() {
 
 void drawRobot() {
  
-  rotate(yaw*100);
+  rotate(angle);
   //triangle(5, - 5, - 10, 0, 0, 10);
   
   fill(255, 255, 255); // red square
