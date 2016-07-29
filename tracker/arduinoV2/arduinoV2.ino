@@ -472,8 +472,7 @@ void reconnaitreEtEnregistrerAction(){
  * Permet de reconnaitre des actions simples apprisent precedemment
  */
 void reconnaitre(){
-
-  
+  //TODO
 }
 
 
