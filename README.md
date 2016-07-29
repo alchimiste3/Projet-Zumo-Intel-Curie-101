@@ -32,7 +32,4 @@ Un "robot Zumo for Arduino", une carte Intel Curie 101, Arduino IDE, QtCreator, 
 
 ## Les truc a faire 
 
--calcule de trajectoire (processing surtout) → gros probleme de drift
--resourde bug qt
--calcule rssi
--
+-calcule de trajectoire (processing surtout) → gros probleme de drift, resourde bug qt, calcule rssi
