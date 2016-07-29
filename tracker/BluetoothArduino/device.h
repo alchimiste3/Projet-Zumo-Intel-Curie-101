@@ -13,6 +13,10 @@
 #include "traitementdonnees.h"
 #include "analyseurpaquet.h"
 
+/**
+ * @brief The Device class
+ * Cette classe permet de scanner les devices BLE
+ */
 class Device : public QObject
 {
     Q_OBJECT

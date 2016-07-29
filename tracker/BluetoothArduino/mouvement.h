@@ -6,13 +6,15 @@
 #include "action.h"
 #include "device.h"
 
-
+/**
+ * @brief The Mouvement class
+ * La classe mouvement contient un ensemble d'actions
+ */
 class Mouvement : public QThread
 {
     Q_OBJECT
     QList<Action*> listeActions;
     Device* d;
-    int idMouvement;
 
 public:
     Mouvement(Device* d, QObject* parent);

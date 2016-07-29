@@ -289,6 +289,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="modifierButton">
+         <property name="text">
+          <string>Modifier action</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="ajouterButton">
          <property name="text">
           <string>Ajouter action</string>

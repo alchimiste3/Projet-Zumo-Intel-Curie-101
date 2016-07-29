@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+/**
+  * @enum TypePaquet Correspond au type de paquet reçu par BLE coté client
+  */
 typedef enum TypePaquet {
     Position = 0,
     Erreur = 1,
@@ -14,6 +17,12 @@ class AnalyseurPaquet
 {
 public:
     AnalyseurPaquet();
+    /**
+     * @brief reconnaitre
+     * @param paquet
+     * @return Type de paquet
+     * A partir du paquet passé en paramètre détecte le type correspondant
+     */
     TypePaquet reconnaitre(QString paquet);
 };
 

@@ -28,6 +28,7 @@ void LineChart::afficherChart()
              for (int i = 0; i < s->getListePoints().size(); i++)
                  *serie << s->getListePoints()[i];
              chart->addSeries(serie);
+             s->setColor(serie->color());
          }
 
      }
@@ -54,6 +55,18 @@ Serie* LineChart::creerSerie(QString nomSerie)
 void LineChart::ajouterPoint(QString nomSerie, QPointF p)
 {
     hashSeries[nomSerie]->ajouterPoint(p);
+}
+
+QColor LineChart::getColor(QString nomSerie)
+{
+    if (hashSeries.contains(nomSerie))
+    {
+        return hashSeries[nomSerie]->getColor();
+    }
+    else
+    {
+        return QColor();
+    }
 }
 
 QWidget* LineChart::getView()

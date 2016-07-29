@@ -5,6 +5,8 @@ AjouterWindow::AjouterWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AjouterWindow)
 {
+    this->mode = ModeFenetreAjout::Ajouter;
+    this->a = a;
     ui->setupUi(this);
     ui->comboBoxAction->addItem(QString("Changer la vitesse"), TypeAction::ChangerVitesse);
     ui->comboBoxAction->addItem(QString("Avancer"), TypeAction::Avancer);
@@ -27,15 +29,23 @@ Action *AjouterWindow::getAction()
     return a;
 }
 
-void AjouterWindow::on_buttonBox_accepted()
+void AjouterWindow::chargerAction(Action *action)
 {
-    qDebug() << "sa";
+    ui->comboBoxAction->setCurrentIndex(ui->comboBoxAction->findData(action->getTypeAction()));
+    ui->spinBoxDuree->setValue(action->getNbS());
+    ui->spinBoxVitesse->setValue(action->getPara());
 }
 
-void AjouterWindow::on_buttonBox_rejected()
+void AjouterWindow::setMode(ModeFenetreAjout mode)
 {
-    qDebug() << "sc";
+    this->mode = mode;
 }
+
+ModeFenetreAjout AjouterWindow::getMode()
+{
+    return mode;
+}
+
 
 void AjouterWindow::on_buttonBox_clicked(QAbstractButton *button)
 {

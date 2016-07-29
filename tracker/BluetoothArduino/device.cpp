@@ -161,7 +161,7 @@ void Device::decouperPaquet(QString paquets)
         QList<QString> listeValeurs = paquets.split(",");
         if (listeValeurs.size() >= 2)
         {
-            qDebug() << "ert";
+            qDebug() << "Valeur reconnue : " << listeValeurs[1].toInt();
             emit majReconaissance(listeValeurs[1].toInt());
         }
     }

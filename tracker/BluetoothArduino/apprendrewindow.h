@@ -8,7 +8,10 @@
 namespace Ui {
 class ApprendreWindow;
 }
-
+/**
+ * @brief The ApprendreWindow class
+ * Cette classe permet de choisir sur quel neurone on veut apprendre un mouvement
+ */
 class ApprendreWindow : public QDialog
 {
     Q_OBJECT

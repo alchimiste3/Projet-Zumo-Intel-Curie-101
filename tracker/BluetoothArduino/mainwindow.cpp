@@ -7,6 +7,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
 {
     ui->setupUi(this);
     this->d = d;
+    indexModifie = 0;
     ui->actionsTableWidget->setColumnCount(4);
     ui->actionsTableWidget->setColumnHidden(3, true);
     QList<QAbstractButton*> listeBoutons = ui->buttonGroup->buttons();
@@ -14,6 +15,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     {
         ui->buttonGroup->setId(listeBoutons[i], i);
     }
+    ui->buttonGroup->button(0)->setChecked(true);
     connect(ui->buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(redButtonToggled(int, bool)));
     ajouterWindow = new AjouterWindow();
     apprendreWindow = new ApprendreWindow();
@@ -25,8 +27,6 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     chart->creerSerie("Px");
     chart->creerSerie("Py");
     chart->afficherSerie("Ay", true);
-    QObject::connect(this, SIGNAL(ajouterPoint(QString, QPointF)), chart, SLOT(ajouterPoint(QString, QPointF)));
-    QObject::connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
    // connect(this, SIGNAL(afficherSerie(QString)), chart, SLOT(afficherSerie(QString)));
     m = new Mouvement(d, this);
     ui->chartview->setViewport(chart->getView());
@@ -70,24 +70,41 @@ void MainWindow::redMajValues(float yaw, float ax, float ay, float az, float vx,
 
 void MainWindow::on_ajouterButton_clicked()
 {
+    ajouterWindow->setMode(ModeFenetreAjout::Ajouter);
     ajouterWindow->show();
 }
 
 void MainWindow::redAccepted()
 {
     Action* a = ajouterWindow->getAction();
-    actionsTableau.append(a);
+
     QTableWidgetItem *itemNomAction = new QTableWidgetItem(a->getNomAction());
     QTableWidgetItem *itemDuree = new QTableWidgetItem(QString::number(a->getNbS()));
     QTableWidgetItem *itemTypeAction = new QTableWidgetItem(QString::number(a->getTypeAction()));
     QTableWidgetItem *itemPara = new QTableWidgetItem(QString::number(a->getPara()));
-    int row = ui->actionsTableWidget->rowCount();
-    ui->actionsTableWidget->setRowCount(ui->actionsTableWidget->rowCount()+1);
 
-    ui->actionsTableWidget->setItem(row, 0, itemNomAction);
-    ui->actionsTableWidget->setItem(row, 1, itemDuree);
-    ui->actionsTableWidget->setItem(row, 2, itemPara);
-    ui->actionsTableWidget->setItem(row, 3, itemTypeAction);
+    //Si la fenetre a été ouvert en mode Ajout
+    if (ajouterWindow->getMode() == ModeFenetreAjout::Ajouter)
+    {
+        //On ajoute une ligne dans le tableau
+        actionsTableau.append(a);
+        int row = ui->actionsTableWidget->rowCount();
+        ui->actionsTableWidget->setRowCount(ui->actionsTableWidget->rowCount()+1);
+
+        ui->actionsTableWidget->setItem(row, 0, itemNomAction);
+        ui->actionsTableWidget->setItem(row, 1, itemDuree);
+        ui->actionsTableWidget->setItem(row, 2, itemPara);
+        ui->actionsTableWidget->setItem(row, 3, itemTypeAction);
+    }
+    else
+    {
+        //Si la fenetre a été ouvert en mode Update
+        //On modifie la valeur de la ligne correspondante dans le tableau
+        ui->actionsTableWidget->setItem(indexModifie, 0, itemNomAction);
+        ui->actionsTableWidget->setItem(indexModifie, 1, itemDuree);
+        ui->actionsTableWidget->setItem(indexModifie, 2, itemPara);
+        ui->actionsTableWidget->setItem(indexModifie, 3, itemTypeAction);
+    }
 
 }
 
@@ -136,6 +153,24 @@ void MainWindow::redButtonToggled(int id, bool etat)
     {
         (etat) ? chart->afficherSerie("Py", true) : chart->afficherSerie("Py", false);
     }
+    QPalette p = ui->checkBoxAy->palette();
+    p.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Ay"));
+    ui->checkBoxAy->setPalette(p);
+    QPalette p2 = ui->checkBoxAx->palette();
+    p2.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Ax"));
+    ui->checkBoxAx->setPalette(p2);
+    QPalette p3 = ui->checkBoxVy->palette();
+    p3.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Vy"));
+    ui->checkBoxVy->setPalette(p3);
+    QPalette p4 = ui->checkBoxVx->palette();
+    p4.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Vx"));
+    ui->checkBoxVx->setPalette(p4);
+    QPalette p5 = ui->checkBoxPx->palette();
+    p5.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Px"));
+    ui->checkBoxPx->setPalette(p5);
+    QPalette p6 = ui->checkBoxPy->palette();
+    p6.setColor(QPalette::Active, QPalette::WindowText, chart->getColor("Py"));
+    ui->checkBoxPy->setPalette(p6);
 }
 
 void MainWindow::on_apprendreButton_clicked()
@@ -147,7 +182,7 @@ void MainWindow::on_apprendreButton_clicked()
     else
     {
         ui->apprendreButton->setText("Apprendre");
-        d->envoyerCommande(Action(TypeAction::Arreter, QString("Arreter")).getCommande());
+        d->envoyerCommande("(r," + Action(TypeAction::Arreter, QString("Arreter")).getCommande() + ");");
     }
 }
 
@@ -171,4 +206,24 @@ void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
 void MainWindow::redMajReconaissance(int value)
 {
     ui->labelR->setText(QString::number(value));
+}
+
+void MainWindow::on_modifierButton_clicked(bool checked)
+{
+    qDebug() << "aa";
+    QList<QTableWidgetItem *> listeItems = ui->actionsTableWidget->selectedItems();
+    if (listeItems.size() > 0) {
+        qDebug() << "bb";
+        int row = listeItems.first()->row();
+        indexModifie = row;
+        QString nomAction = ui->actionsTableWidget->item(row, 0)->text();
+        float duree = ui->actionsTableWidget->item(row, 1)->text().toFloat();
+        int para = ui->actionsTableWidget->item(row, 2)->text().toInt();
+        int typeAction = ui->actionsTableWidget->item(row, 3)->text().toInt();
+        Action* a = new Action(static_cast<TypeAction>(typeAction), nomAction, duree, para);
+        ajouterWindow->setMode(ModeFenetreAjout::Modifier);
+        ajouterWindow->chargerAction(a);
+        ajouterWindow->show();
+     //  qDebug() << "att : " <<
+    }
 }

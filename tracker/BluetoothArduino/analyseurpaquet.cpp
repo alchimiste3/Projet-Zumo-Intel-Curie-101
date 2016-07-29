@@ -13,4 +13,6 @@ TypePaquet AnalyseurPaquet::reconnaitre(QString paquet)
         return TypePaquet::Position;
     else if (paquet.startsWith("r"))
         return TypePaquet::Reconaissance;
+    else
+        return TypePaquet::Position;
 }

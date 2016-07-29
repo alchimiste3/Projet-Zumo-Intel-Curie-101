@@ -8,6 +8,10 @@
 
 QT_CHARTS_USE_NAMESPACE
 
+/**
+ * @brief The LineChart class
+ * Cette classe contient plusieurs séries de données et peut en afficher certaines ou les cacher sur le graphique
+ */
 class LineChart : public QObject
 {
     Q_OBJECT
@@ -25,6 +29,7 @@ public:
 public slots:
     void afficherSerie(QString nomSerie = "", bool etat = false);
     void afficherChart();
+    QColor getColor(QString nomSerie);
     void ajouterPoint(QString nomSerie, QPointF p);
 
 };

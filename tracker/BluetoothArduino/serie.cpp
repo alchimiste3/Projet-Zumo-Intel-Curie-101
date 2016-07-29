@@ -40,3 +40,13 @@ bool Serie::isAfficher()
 {
     return afficher;
 }
+
+void Serie::setColor(QColor color)
+{
+    this->color = color;
+}
+
+QColor Serie::getColor()
+{
+    return color;
+}
