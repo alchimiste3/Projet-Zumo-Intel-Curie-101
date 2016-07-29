@@ -29,3 +29,10 @@ Un "robot Zumo for Arduino", une carte Intel Curie 101, Arduino IDE, QtCreator, 
 ### Proccesing
 
 -lancer le fihcier .pde avec Processing
+
+## Les truc a faire 
+
+-calcule de trajectoire (processing surtout) → gros probleme de drift
+-resourde bug qt
+-calcule rssi
+-
