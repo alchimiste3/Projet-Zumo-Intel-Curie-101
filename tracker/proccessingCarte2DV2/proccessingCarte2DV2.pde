@@ -134,7 +134,8 @@ void draw()
 
 
 float distanceParcourue(){
-  return sqrt(pow((px - pxPres),2) + pow((py - pyPres),2));
+  return px - pxPres;
+  //return sqrt(pow((px - pxPres),2) + pow((py - pyPres),2));
 }
 
 
@@ -245,17 +246,12 @@ void readFile()
     listPy.append(py);
     listPz.append(pz);
     
-    float distance = distanceParcourue();
-    println("distance = "+distance);
-
-/*
     calculerCoordonne();
-    
-    
+
     px = X;
     py = Y;
     pz = 0;
-    */
+    
     
   }
 }
