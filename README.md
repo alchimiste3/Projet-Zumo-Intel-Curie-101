@@ -9,7 +9,10 @@ Les applications à long terme sont très variés et dans de nombreux domaine di
 
 ## Les Parties
 
-Il y a 3 partie dans le projet : La programmation de la carte Arduino (et du robot), l'interface utilisateur sur ordi en Qt et l'affichage graphique du déplacement du robot avec processing.
+Il y a 3 partie dans le projet : 
+1. La programmation de la carte Arduino (et du robot)
+2. L'interface utilisateur sur ordi en Qt
+3. L'affichage graphique du déplacement du robot avec processing.
 
 
 ## Pour installer : 
@@ -49,6 +52,6 @@ Ensuite, compiler le code puis tranferer-le dans la carte. Le robot doit etre im
 
 -lancer le fihcier .pde avec Processing
 
-## Les truc a faire 
+## Les truc a faire
 
--calcule de trajectoire (processing surtout) → gros probleme de drift, resourde bug qt, calcule rssi
+Il reste de nombreuse amélioration et corrections a apporter au projet. Pour plus de détaille ce qui a était fait et ce qu'il reste a faire, consulter nos rapport de stage.
