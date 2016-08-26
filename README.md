@@ -22,7 +22,24 @@ Les logiciel utiliser : Arduino IDE, QtCreator et Processing.
  
 ### Arduino
 
--copier/coller les librairie du git dans les libraire de Arduino IDE, lancer le fichier .ino, compiler-le puis tranfere-le dans la carte. Le robot doit etre immobile lors de l'allumage pour que l'IMU s'initialise.
+-copier/coller les librairie c++ du dossier libArduino dans les libraire de Arduino IDE (le plus souvant elle est dans le dossier personnelle). Lancer l'IDE Arduino en avec un double click sur le fichier .ino. Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus est de suivre le debut du TD vue en cour de Capteurs/Actionneurs : 
+
+
+
+> Install the Intel Curie Board,
+
+> Install the associate libraries.
+
+> First of all, you'll need to install the Intel® Curie Boards core using the Arduino Boards Manager.
+> This is found in the Tools menu under Boards -> Boards Manager, where you can search 'Intel Curie
+> Boards'.
+
+> On Linux, some distributions need to be configured to perform the upload. After installing the core,
+> execute:
+
+> sudo ~/.arduino15/packages/Intel/tools/arduino101load/1.6.4+1.18/scripts/create_dfu_udev_rule
+
+Ensuite, compiler le code puis tranferer-le dans la carte. Le robot doit etre immobile lors de l'allumage pour que l'IMU s'initialise correctement.
 
 ### QT
 
