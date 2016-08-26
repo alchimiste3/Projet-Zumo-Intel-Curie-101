@@ -54,4 +54,4 @@ Ensuite, compiler le code puis tranferer-le dans la carte. Le robot doit etre im
 
 ## Les truc a faire
 
-Il reste de nombreuse amélioration et corrections a apporter au projet. Pour plus de détaille ce qui a était fait et ce qu'il reste a faire, consulter nos rapport de stage.
+Il reste de nombreuses améliorations et corrections à apporter au projet. Pour plus de détailles sur ce qui a était fait et ce qui reste a faire, consulter nos rapports de stage.
