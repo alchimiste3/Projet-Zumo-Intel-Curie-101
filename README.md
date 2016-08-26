@@ -25,7 +25,7 @@ Les logiciel utiliser : Arduino IDE, QtCreator et Processing.
  
 ### Arduino
 
--copier/coller les librairie c++ du dossier libArduino dans les libraire de Arduino IDE (le plus souvant elle est dans le dossier personnelle). Lancer l'IDE Arduino en avec un double click sur le fichier .ino. Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus est de suivre le debut du TD vue en cour de Capteurs/Actionneurs : 
+-copier/coller les librairie c++ du dossier libArduino dans les libraire de Arduino IDE (le plus souvant elle est dans le dossier personnelle). Lancer l'IDE Arduino en avec un double click sur le fichier .ino. Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus simple est de suivre le debut du TD vue en cour de Capteurs/Actionneurs : 
 
 
 
