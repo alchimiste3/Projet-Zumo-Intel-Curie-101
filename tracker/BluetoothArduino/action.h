@@ -20,13 +20,18 @@ typedef enum TypeAction {
 
 /**
  * @brief The Action class
- * La classe Action permet de représenter un mouvement que le robot doit effectuer
+ * @todo Creer une hiérarchie d'actions au lieu d'une seule classe pour tous les types
+ * La classe Action permet de représenter une action élémentaire que le robot doit effectuer
  */
 class Action
 {
     TypeAction type;
     float nbS;
     QString nomAction;
+    /**
+     * @brief para
+     * Paramètre optionnel de l'action
+     */
     int para;
 public:
     Action(TypeAction typeAction, QString nomAction,  float nbS = 0, int para = -1);

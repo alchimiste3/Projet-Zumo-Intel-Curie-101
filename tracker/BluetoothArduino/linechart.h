@@ -24,12 +24,42 @@ class LineChart : public QObject
 
 public:
     LineChart();
+    /**
+     * @param nomSerie
+     * @return la série créee
+     * Permet de créer une nouvelle série
+     */
     Serie* creerSerie(QString nomSerie);
+    /**
+     * @return view
+     * Renvoie la vue associée au graphe
+     */
     QWidget* getView();
 public slots:
+    /**
+     * @param nomSerie
+     * @param etat
+     * Permet de choisir si une série doit êter affichée sur le graphe ou non
+     */
     void afficherSerie(QString nomSerie = "", bool etat = false);
+
+    /**
+      * Met à jour le graphe
+     */
     void afficherChart();
+
+    /**
+     * @param nomSerie
+     * @return color
+     * Renvoie la couleur associée à une série
+     */
     QColor getColor(QString nomSerie);
+
+    /**
+     * @param nomSerie
+     * @param p
+     * Ajoute un point à une série
+     */
     void ajouterPoint(QString nomSerie, QPointF p);
 
 };

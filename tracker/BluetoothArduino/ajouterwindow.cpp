@@ -16,7 +16,7 @@ AjouterWindow::AjouterWindow(QWidget *parent) :
     ui->comboBoxAction->addItem(QString("Arreter"), TypeAction::Arreter);
     ui->comboBoxAction->addItem(QString("Accélérer"), TypeAction::Accelerer);
     ui->comboBoxAction->addItem(QString("Ralentir"), TypeAction::Ralentir);
-    ui->spinBoxVitesse->setDisabled(true);
+    ui->comboBoxAction->setCurrentIndex(0);
 }
 
 AjouterWindow::~AjouterWindow()
@@ -57,6 +57,7 @@ void AjouterWindow::on_comboBoxAction_currentIndexChanged(int index)
 {
     if (ui->comboBoxAction->currentData() == TypeAction::ChangerVitesse) {
         ui->spinBoxVitesse->setDisabled(false);
+            qDebug() << "eriu";
     }
     else
         ui->spinBoxVitesse->setDisabled(true);

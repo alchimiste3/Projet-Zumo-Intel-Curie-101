@@ -19,13 +19,6 @@ QList<QPointF> Serie::getListePoints()
     return listePoints;
 }
 
-QLineSeries * Serie::getSeries()
-{
-    series = new QLineSeries();
-    for (int i = 0; i < listePoints.size(); i++)
-        *series << listePoints[i];
-}
-
 QString Serie::getNom()
 {
     return nom;

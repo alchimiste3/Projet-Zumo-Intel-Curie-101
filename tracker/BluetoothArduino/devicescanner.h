@@ -6,6 +6,10 @@
 #include <QObject>
 #include <QDebug>
 
+/**
+ * @brief The DeviceScanner class
+ * @deprecated Effectuer un nouveau scan pour mettre à jour le rssi est lent et nécessite d'être déconnecté
+ */
 class DeviceScanner : public QObject
 {
     Q_OBJECT

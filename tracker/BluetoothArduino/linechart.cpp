@@ -7,7 +7,6 @@ LineChart::LineChart() : QObject()
     seriesAy = new QLineSeries();
     chart = new QChart();
     chart->legend()->hide();
- //   chart->addSeries(series);
     chart->createDefaultAxes();
     chart->setTitle("Affichage de l'accélération");
     chartView = new QChartView(chart);

@@ -309,7 +309,7 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Apprentissage : </string>
+          <string>Action reconnue : </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

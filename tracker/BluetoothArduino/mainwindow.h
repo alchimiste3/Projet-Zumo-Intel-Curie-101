@@ -90,12 +90,26 @@ private slots:
 
     void redAcceptedCommandeApprendre();
 
+    /**
+     * @param checked
+     */
     void on_reconnaitreButton_clicked(bool checked);
 
+    /**
+     * @param checked
+     */
     void on_reexucuterActionsButton_clicked(bool checked);
 
+    /**
+     * @param value
+     * Affiche la valeur reconnue
+     */
     void redMajReconaissance(int value);
 
+    /**
+     * @param checked
+     * Modifier une action après un clic sur le bouton modifier
+     */
     void on_modifierButton_clicked(bool checked);
 
 

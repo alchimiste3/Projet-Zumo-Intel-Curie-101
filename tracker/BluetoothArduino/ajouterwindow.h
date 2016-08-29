@@ -11,6 +11,7 @@ namespace Ui {
 class AjouterWindow;
 }
 
+
 typedef enum ModeFenetreAjout {
     Ajouter = 0,
     Modifier = 1
@@ -23,7 +24,15 @@ typedef enum ModeFenetreAjout {
 class AjouterWindow : public QDialog
 {
     Q_OBJECT
+    /**
+     * @brief a
+     * L'action associé à la fenêtre
+     */
     Action* a;
+    /**
+     * @brief mode
+     * Contient le mode de la fenetre : mode ajout ou modification
+     */
     ModeFenetreAjout mode;
 
 public:
@@ -32,13 +41,29 @@ public:
     /**
      * @brief getAction
      * @return
-     * Renvoie l'action généré à partir de la fenetre
+     * Renvoie l'action créee ou modifiée par la fenetre
      */
     Action* getAction();
 
+    /**
+     * @brief chargerAction
+     * @param a
+     * Permet de charger une action déjà existante pour pouvoir la modifier
+     */
     void chargerAction(Action* a);
 
+    /**
+     * @brief setMode
+     * @param mode
+     * Définit le mode de la fenetre : mode Ajout d'action ou ou mode Modification d'action
+     */
     void setMode(ModeFenetreAjout mode);
+
+    /**
+     * @brief getMode
+     * @return ModeFenetreAjout
+     * Récupérer le mode de la fenetre
+     */
     ModeFenetreAjout getMode();
 
 private slots:

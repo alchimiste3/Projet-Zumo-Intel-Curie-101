@@ -20,9 +20,18 @@ class ApprendreWindow : public QDialog
 public:
     explicit ApprendreWindow(QWidget *parent = 0);
     ~ApprendreWindow();
+
+    /**
+     * @return la commande
+     * Permet de récupérer la commande d'aprentissage
+     */
     QString getCommandeApprendre();
 
 private slots:
+    /**
+     * @param button
+     * Génère la commande lorsque l'on valide le choix du mouvement/neurone
+     */
     void on_buttonBox_clicked(QAbstractButton *button);
 
 private:

@@ -210,10 +210,8 @@ void MainWindow::redMajReconaissance(int value)
 
 void MainWindow::on_modifierButton_clicked(bool checked)
 {
-    qDebug() << "aa";
     QList<QTableWidgetItem *> listeItems = ui->actionsTableWidget->selectedItems();
     if (listeItems.size() > 0) {
-        qDebug() << "bb";
         int row = listeItems.first()->row();
         indexModifie = row;
         QString nomAction = ui->actionsTableWidget->item(row, 0)->text();
