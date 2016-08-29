@@ -1,0 +1,125 @@
+\hypertarget{classLineChart}{\section{Line\-Chart Class Reference}
+\label{classLineChart}\index{Line\-Chart@{Line\-Chart}}
+}
+
+
+The \hyperlink{classLineChart}{Line\-Chart} class Cette classe contient plusieurs séries de données et peut en afficher certaines ou les cacher sur le graphique.  
+
+
+
+
+{\ttfamily \#include $<$linechart.\-h$>$}
+
+Inheritance diagram for Line\-Chart\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classLineChart}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classLineChart_a63ff5fee1da8841e5959340669171393}{afficher\-Serie} (Q\-String nom\-Serie=\char`\"{}\char`\"{}, bool etat=false)
+\item 
+void \hyperlink{classLineChart_aeb7e88d90e0f6d4b52a9666839d50c35}{afficher\-Chart} ()
+\item 
+Q\-Color \hyperlink{classLineChart_a54618e9127e50edb4dbbbb269d422b0b}{get\-Color} (Q\-String nom\-Serie)
+\item 
+void \hyperlink{classLineChart_a4e468707e84690bd16a7d2b67485e745}{ajouter\-Point} (Q\-String nom\-Serie, Q\-Point\-F p)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSerie}{Serie} $\ast$ \hyperlink{classLineChart_add6b4014bd10e5e703f34901c305870a}{creer\-Serie} (Q\-String nom\-Serie)
+\item 
+Q\-Widget $\ast$ \hyperlink{classLineChart_a2e8faf97bbbb4dd5b8f50039725ce26d}{get\-View} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{classLineChart}{Line\-Chart} class Cette classe contient plusieurs séries de données et peut en afficher certaines ou les cacher sur le graphique. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classLineChart_aeb7e88d90e0f6d4b52a9666839d50c35}{\index{Line\-Chart@{Line\-Chart}!afficher\-Chart@{afficher\-Chart}}
+\index{afficher\-Chart@{afficher\-Chart}!LineChart@{Line\-Chart}}
+\subsubsection[{afficher\-Chart}]{\setlength{\rightskip}{0pt plus 5cm}void Line\-Chart\-::afficher\-Chart (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classLineChart_aeb7e88d90e0f6d4b52a9666839d50c35}
+Met à jour le graphe \hypertarget{classLineChart_a63ff5fee1da8841e5959340669171393}{\index{Line\-Chart@{Line\-Chart}!afficher\-Serie@{afficher\-Serie}}
+\index{afficher\-Serie@{afficher\-Serie}!LineChart@{Line\-Chart}}
+\subsubsection[{afficher\-Serie}]{\setlength{\rightskip}{0pt plus 5cm}void Line\-Chart\-::afficher\-Serie (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{nom\-Serie = {\ttfamily \char`\"{}\char`\"{}}, }
+\item[{bool}]{etat = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classLineChart_a63ff5fee1da8841e5959340669171393}
+
+\begin{DoxyParams}{Parameters}
+{\em nom\-Serie} & \\
+\hline
+{\em etat} & Permet de choisir si une série doit êter affichée sur le graphe ou non \\
+\hline
+\end{DoxyParams}
+\hypertarget{classLineChart_a4e468707e84690bd16a7d2b67485e745}{\index{Line\-Chart@{Line\-Chart}!ajouter\-Point@{ajouter\-Point}}
+\index{ajouter\-Point@{ajouter\-Point}!LineChart@{Line\-Chart}}
+\subsubsection[{ajouter\-Point}]{\setlength{\rightskip}{0pt plus 5cm}void Line\-Chart\-::ajouter\-Point (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{nom\-Serie, }
+\item[{Q\-Point\-F}]{p}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classLineChart_a4e468707e84690bd16a7d2b67485e745}
+
+\begin{DoxyParams}{Parameters}
+{\em nom\-Serie} & \\
+\hline
+{\em p} & Ajoute un point à une série \\
+\hline
+\end{DoxyParams}
+\hypertarget{classLineChart_add6b4014bd10e5e703f34901c305870a}{\index{Line\-Chart@{Line\-Chart}!creer\-Serie@{creer\-Serie}}
+\index{creer\-Serie@{creer\-Serie}!LineChart@{Line\-Chart}}
+\subsubsection[{creer\-Serie}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Serie} $\ast$ Line\-Chart\-::creer\-Serie (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{nom\-Serie}
+\end{DoxyParamCaption}
+)}}\label{classLineChart_add6b4014bd10e5e703f34901c305870a}
+
+\begin{DoxyParams}{Parameters}
+{\em nom\-Serie} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+la série créee Permet de créer une nouvelle série 
+\end{DoxyReturn}
+\hypertarget{classLineChart_a54618e9127e50edb4dbbbb269d422b0b}{\index{Line\-Chart@{Line\-Chart}!get\-Color@{get\-Color}}
+\index{get\-Color@{get\-Color}!LineChart@{Line\-Chart}}
+\subsubsection[{get\-Color}]{\setlength{\rightskip}{0pt plus 5cm}Q\-Color Line\-Chart\-::get\-Color (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{nom\-Serie}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classLineChart_a54618e9127e50edb4dbbbb269d422b0b}
+
+\begin{DoxyParams}{Parameters}
+{\em nom\-Serie} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+color Renvoie la couleur associée à une série 
+\end{DoxyReturn}
+\hypertarget{classLineChart_a2e8faf97bbbb4dd5b8f50039725ce26d}{\index{Line\-Chart@{Line\-Chart}!get\-View@{get\-View}}
+\index{get\-View@{get\-View}!LineChart@{Line\-Chart}}
+\subsubsection[{get\-View}]{\setlength{\rightskip}{0pt plus 5cm}Q\-Widget $\ast$ Line\-Chart\-::get\-View (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classLineChart_a2e8faf97bbbb4dd5b8f50039725ce26d}
+\begin{DoxyReturn}{Returns}
+view Renvoie la vue associée au graphe 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+linechart.\-h\item 
+linechart.\-cpp\end{DoxyCompactItemize}

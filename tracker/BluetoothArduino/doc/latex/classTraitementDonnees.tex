@@ -1,0 +1,183 @@
+\hypertarget{classTraitementDonnees}{\section{Traitement\-Donnees Class Reference}
+\label{classTraitementDonnees}\index{Traitement\-Donnees@{Traitement\-Donnees}}
+}
+
+
+The \hyperlink{classTraitementDonnees}{Traitement\-Donnees} class.  
+
+
+
+
+{\ttfamily \#include $<$traitementdonnees.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classTraitementDonnees_a26e84d4ff8b228448fa4341a0f626810}{set\-Acceleration} (float ax, float ay, float az)
+\item 
+void \hyperlink{classTraitementDonnees_aae3b3983aebcc36db7519e3d4c9defc8}{calculer\-Vitesse} ()
+\item 
+void \hyperlink{classTraitementDonnees_a0658a30ce0080052590f43175678b1a3}{calculer\-Position} ()
+\item 
+void \hyperlink{classTraitementDonnees_a47d3b55731475591334af21c15bf0faa}{mise\-A\-Jour\-Val} ()
+\item 
+\hypertarget{classTraitementDonnees_a7d25ee8242fd6c5e3dfa0c168a881930}{float $\ast$ {\bfseries get\-Acceleration\-Courante} ()}\label{classTraitementDonnees_a7d25ee8242fd6c5e3dfa0c168a881930}
+
+\item 
+\hypertarget{classTraitementDonnees_aa0f3af6b3031701f8500efc9d22c10db}{float $\ast$ {\bfseries get\-Vitesse\-Courante} ()}\label{classTraitementDonnees_aa0f3af6b3031701f8500efc9d22c10db}
+
+\item 
+\hypertarget{classTraitementDonnees_a97add932d94c275e7fac5682653802f7}{float $\ast$ {\bfseries get\-Position\-Courante} ()}\label{classTraitementDonnees_a97add932d94c275e7fac5682653802f7}
+
+\item 
+float \hyperlink{classTraitementDonnees_a81ffbc75f47488f0e4bbfbff13aeff0c}{get\-Roll} ()
+\item 
+float \hyperlink{classTraitementDonnees_ad7f0fe073028f88d5520bd30ddef0fd5}{get\-Yaw} ()
+\item 
+float \hyperlink{classTraitementDonnees_a0c0db9953a514fdef8c2155ea0f2555f}{get\-Pitch} ()
+\item 
+void \hyperlink{classTraitementDonnees_a3b399278ae62f30b2faeedf89dd26094}{traitement} (float ax, float ay, float az, float gx, float gy, float gz, bool immobile, float intervalle)
+\item 
+void \hyperlink{classTraitementDonnees_abae534e845da998de4cce9a23df96433}{calcul\-Quaternions} (float gx, float gy, float gz, float ax, float ay, float az)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{classTraitementDonnees}{Traitement\-Donnees} class. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classTraitementDonnees_a0658a30ce0080052590f43175678b1a3}{\index{Traitement\-Donnees@{Traitement\-Donnees}!calculer\-Position@{calculer\-Position}}
+\index{calculer\-Position@{calculer\-Position}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{calculer\-Position}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::calculer\-Position (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a0658a30ce0080052590f43175678b1a3}
+Calcul des positions à partir des vitesses \hypertarget{classTraitementDonnees_aae3b3983aebcc36db7519e3d4c9defc8}{\index{Traitement\-Donnees@{Traitement\-Donnees}!calculer\-Vitesse@{calculer\-Vitesse}}
+\index{calculer\-Vitesse@{calculer\-Vitesse}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{calculer\-Vitesse}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::calculer\-Vitesse (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_aae3b3983aebcc36db7519e3d4c9defc8}
+Calcul des vitesses à partir des accélérations \hypertarget{classTraitementDonnees_abae534e845da998de4cce9a23df96433}{\index{Traitement\-Donnees@{Traitement\-Donnees}!calcul\-Quaternions@{calcul\-Quaternions}}
+\index{calcul\-Quaternions@{calcul\-Quaternions}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{calcul\-Quaternions}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::calcul\-Quaternions (
+\begin{DoxyParamCaption}
+\item[{float}]{gx, }
+\item[{float}]{gy, }
+\item[{float}]{gz, }
+\item[{float}]{ax, }
+\item[{float}]{ay, }
+\item[{float}]{az}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_abae534e845da998de4cce9a23df96433}
+
+\begin{DoxyParams}{Parameters}
+{\em gx} & \\
+\hline
+{\em gy} & \\
+\hline
+{\em gz} & \\
+\hline
+{\em ax} & \\
+\hline
+{\em ay} & \\
+\hline
+{\em az} & On utilise l'algorithme de Madgwick pour calculer les quaternions roll yaw pitch à partir des 6 accélérations Les qquaternions donnent la rotation sur les 3 axes de la carte \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTraitementDonnees_a0c0db9953a514fdef8c2155ea0f2555f}{\index{Traitement\-Donnees@{Traitement\-Donnees}!get\-Pitch@{get\-Pitch}}
+\index{get\-Pitch@{get\-Pitch}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{get\-Pitch}]{\setlength{\rightskip}{0pt plus 5cm}float Traitement\-Donnees\-::get\-Pitch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a0c0db9953a514fdef8c2155ea0f2555f}
+\begin{DoxyReturn}{Returns}
+Renvoie pitch 
+\end{DoxyReturn}
+\hypertarget{classTraitementDonnees_a81ffbc75f47488f0e4bbfbff13aeff0c}{\index{Traitement\-Donnees@{Traitement\-Donnees}!get\-Roll@{get\-Roll}}
+\index{get\-Roll@{get\-Roll}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{get\-Roll}]{\setlength{\rightskip}{0pt plus 5cm}float Traitement\-Donnees\-::get\-Roll (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a81ffbc75f47488f0e4bbfbff13aeff0c}
+\begin{DoxyReturn}{Returns}
+Renvoie roll 
+\end{DoxyReturn}
+\hypertarget{classTraitementDonnees_ad7f0fe073028f88d5520bd30ddef0fd5}{\index{Traitement\-Donnees@{Traitement\-Donnees}!get\-Yaw@{get\-Yaw}}
+\index{get\-Yaw@{get\-Yaw}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{get\-Yaw}]{\setlength{\rightskip}{0pt plus 5cm}float Traitement\-Donnees\-::get\-Yaw (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_ad7f0fe073028f88d5520bd30ddef0fd5}
+\begin{DoxyReturn}{Returns}
+Renvoie yaw 
+\end{DoxyReturn}
+\hypertarget{classTraitementDonnees_a47d3b55731475591334af21c15bf0faa}{\index{Traitement\-Donnees@{Traitement\-Donnees}!mise\-A\-Jour\-Val@{mise\-A\-Jour\-Val}}
+\index{mise\-A\-Jour\-Val@{mise\-A\-Jour\-Val}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{mise\-A\-Jour\-Val}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::mise\-A\-Jour\-Val (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a47d3b55731475591334af21c15bf0faa}
+Met à jour la matrice d'accélérations \hypertarget{classTraitementDonnees_a26e84d4ff8b228448fa4341a0f626810}{\index{Traitement\-Donnees@{Traitement\-Donnees}!set\-Acceleration@{set\-Acceleration}}
+\index{set\-Acceleration@{set\-Acceleration}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{set\-Acceleration}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::set\-Acceleration (
+\begin{DoxyParamCaption}
+\item[{float}]{ax, }
+\item[{float}]{ay, }
+\item[{float}]{az}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a26e84d4ff8b228448fa4341a0f626810}
+
+\begin{DoxyParams}{Parameters}
+{\em ax} & \\
+\hline
+{\em ay} & \\
+\hline
+{\em az} & Définit les accélérations pour les calculs \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTraitementDonnees_a3b399278ae62f30b2faeedf89dd26094}{\index{Traitement\-Donnees@{Traitement\-Donnees}!traitement@{traitement}}
+\index{traitement@{traitement}!TraitementDonnees@{Traitement\-Donnees}}
+\subsubsection[{traitement}]{\setlength{\rightskip}{0pt plus 5cm}void Traitement\-Donnees\-::traitement (
+\begin{DoxyParamCaption}
+\item[{float}]{ax, }
+\item[{float}]{ay, }
+\item[{float}]{az, }
+\item[{float}]{gx, }
+\item[{float}]{gy, }
+\item[{float}]{gz, }
+\item[{bool}]{immobile, }
+\item[{float}]{intervalle}
+\end{DoxyParamCaption}
+)}}\label{classTraitementDonnees_a3b399278ae62f30b2faeedf89dd26094}
+
+\begin{DoxyParams}{Parameters}
+{\em ax} & \\
+\hline
+{\em ay} & \\
+\hline
+{\em az} & \\
+\hline
+{\em gx} & \\
+\hline
+{\em gy} & \\
+\hline
+{\em gz} & \\
+\hline
+{\em immobile} & \\
+\hline
+{\em intervalle} & Permet de calculer les vitesses, positions et les quaternions \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+traitementdonnees.\-h\item 
+traitementdonnees.\-cpp\end{DoxyCompactItemize}

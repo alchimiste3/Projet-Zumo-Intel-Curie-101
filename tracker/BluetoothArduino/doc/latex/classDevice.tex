@@ -1,0 +1,151 @@
+\hypertarget{classDevice}{\section{Device Class Reference}
+\label{classDevice}\index{Device@{Device}}
+}
+
+
+The \hyperlink{classDevice}{Device} class.  
+
+
+
+
+{\ttfamily \#include $<$device.\-h$>$}
+
+Inheritance diagram for Device\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDevice}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classDevice_ae52006b42aa38769c6d30dc12c83668a}{device\-Discovered} (const Q\-Bluetooth\-Device\-Info \&device\-Info)
+\begin{DoxyCompactList}\small\item\em device\-Discovered \end{DoxyCompactList}\item 
+\hypertarget{classDevice_a8aa8ff0486557a7ed117766f24a077b7}{void \hyperlink{classDevice_a8aa8ff0486557a7ed117766f24a077b7}{device\-Disconnected} ()}\label{classDevice_a8aa8ff0486557a7ed117766f24a077b7}
+
+\begin{DoxyCompactList}\small\item\em device\-Disconnected Les deconnections ne sont pas gérées pour le moment \end{DoxyCompactList}\item 
+\hypertarget{classDevice_a421f7ceff3256ea79de2f316aeace553}{void \hyperlink{classDevice_a421f7ceff3256ea79de2f316aeace553}{service\-Scan\-Done} (Q\-Bluetooth\-Uuid service\-Uuid)}\label{classDevice_a421f7ceff3256ea79de2f316aeace553}
+
+\begin{DoxyCompactList}\small\item\em service\-Scan\-Done Lorsqu'un service a été découvert, on l'identifie et on commence à chercher les informations des characteristic \end{DoxyCompactList}\item 
+\hypertarget{classDevice_ac6cad0d2107e449c9027b2baf60418f2}{void \hyperlink{classDevice_ac6cad0d2107e449c9027b2baf60418f2}{device\-Connected} ()}\label{classDevice_ac6cad0d2107e449c9027b2baf60418f2}
+
+\begin{DoxyCompactList}\small\item\em device\-Connected Lorsqu'on se connecte à un device on cherche ses services asscociés \end{DoxyCompactList}\item 
+\hypertarget{classDevice_a1770e7dab50cb12e4ca64fd8c35a9eb7}{void \hyperlink{classDevice_a1770e7dab50cb12e4ca64fd8c35a9eb7}{service\-Details\-Discovered} (Q\-Low\-Energy\-Service\-::\-Service\-State)}\label{classDevice_a1770e7dab50cb12e4ca64fd8c35a9eb7}
+
+\begin{DoxyCompactList}\small\item\em service\-Details\-Discovered Appelé quand une characteristic associé au service a été découverte, mise en place du système de notification \end{DoxyCompactList}\item 
+void \hyperlink{classDevice_aab4bfb4bd87c6f38a46c88e85248978d}{position\-Characteristic\-Update} (Q\-Low\-Energy\-Characteristic ch, Q\-Byte\-Array byte\-Array)
+\begin{DoxyCompactList}\small\item\em position\-Characteristic\-Update \end{DoxyCompactList}\item 
+void \hyperlink{classDevice_a117df211456a907881351f34d668c272}{envoyer\-Commande} (Q\-String commande)
+\begin{DoxyCompactList}\small\item\em envoyer\-Commande \end{DoxyCompactList}\item 
+int \hyperlink{classDevice_aeba9db522dae3a0b46314c9ecd4bccb8}{get\-Temps\-Ecoule} ()
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classDevice_a4a90c926fc9b522a38ee0d2fdf4568a9}{void \hyperlink{classDevice_a4a90c926fc9b522a38ee0d2fdf4568a9}{maj\-Values} (float, float, float, float, float, float, float, float, float, float)}\label{classDevice_a4a90c926fc9b522a38ee0d2fdf4568a9}
+
+\begin{DoxyCompactList}\small\item\em maj\-Values Signal émis lorsque l'on veut envoyer les données à Processing, dans l'ordre \-: yaw,ax,ay,az,vx,vy,vz,px,py,pz \end{DoxyCompactList}\item 
+\hypertarget{classDevice_a6d7cf166a67336a048ddc945a9bbc7c9}{void \hyperlink{classDevice_a6d7cf166a67336a048ddc945a9bbc7c9}{maj\-Reconaissance} (int)}\label{classDevice_a6d7cf166a67336a048ddc945a9bbc7c9}
+
+\begin{DoxyCompactList}\small\item\em maj\-Reconaissance Signal émis lors de la reconaisse d'un mouvement, le paramètre contient le numéro de mouvement / neurone \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classDevice_a25d44dc002f2608a0267e895241f503e}{void {\bfseries scan} ()}\label{classDevice_a25d44dc002f2608a0267e895241f503e}
+
+\item 
+void \hyperlink{classDevice_a673451e545fc673395ffe2a5420711d1}{decouper\-Paquet} (Q\-String paquets)
+\begin{DoxyCompactList}\small\item\em decouper\-Paquet \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{classDevice}{Device} class. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]Mise à jour du rssi en temps réel Cette classe permet de scanner les devices B\-L\-E \end{DoxyRefDesc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classDevice_a673451e545fc673395ffe2a5420711d1}{\index{Device@{Device}!decouper\-Paquet@{decouper\-Paquet}}
+\index{decouper\-Paquet@{decouper\-Paquet}!Device@{Device}}
+\subsubsection[{decouper\-Paquet}]{\setlength{\rightskip}{0pt plus 5cm}void Device\-::decouper\-Paquet (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{paquets}
+\end{DoxyParamCaption}
+)}}\label{classDevice_a673451e545fc673395ffe2a5420711d1}
+
+
+decouper\-Paquet 
+
+
+\begin{DoxyParams}{Parameters}
+{\em paquets} & Decoupe les paquets recues en fonction de leur type et réalise les traitements liés \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDevice_ae52006b42aa38769c6d30dc12c83668a}{\index{Device@{Device}!device\-Discovered@{device\-Discovered}}
+\index{device\-Discovered@{device\-Discovered}!Device@{Device}}
+\subsubsection[{device\-Discovered}]{\setlength{\rightskip}{0pt plus 5cm}void Device\-::device\-Discovered (
+\begin{DoxyParamCaption}
+\item[{const Q\-Bluetooth\-Device\-Info \&}]{device\-Info}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classDevice_ae52006b42aa38769c6d30dc12c83668a}
+
+
+device\-Discovered 
+
+
+\begin{DoxyParams}{Parameters}
+{\em device\-Info} & Permet de traiter un device chaque fois qu'on en detecte un Lorsque le device que l'on cherchait a été trouvé, on arrete le scan et on se connecte au device \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDevice_a117df211456a907881351f34d668c272}{\index{Device@{Device}!envoyer\-Commande@{envoyer\-Commande}}
+\index{envoyer\-Commande@{envoyer\-Commande}!Device@{Device}}
+\subsubsection[{envoyer\-Commande}]{\setlength{\rightskip}{0pt plus 5cm}void Device\-::envoyer\-Commande (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{commande}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classDevice_a117df211456a907881351f34d668c272}
+
+
+envoyer\-Commande 
+
+
+\begin{DoxyParams}{Parameters}
+{\em commande} & Envoyer une commande au robot par Bluetooth en utilisant la characteristic correspondant à key\-Ch2 \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDevice_aeba9db522dae3a0b46314c9ecd4bccb8}{\index{Device@{Device}!get\-Temps\-Ecoule@{get\-Temps\-Ecoule}}
+\index{get\-Temps\-Ecoule@{get\-Temps\-Ecoule}!Device@{Device}}
+\subsubsection[{get\-Temps\-Ecoule}]{\setlength{\rightskip}{0pt plus 5cm}int Device\-::get\-Temps\-Ecoule (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classDevice_aeba9db522dae3a0b46314c9ecd4bccb8}
+\begin{DoxyReturn}{Returns}
+Renvoie le temps écoulé depuis le lancement de l'application Chaque point sur le graphe sera associé à un temps 
+\end{DoxyReturn}
+\hypertarget{classDevice_aab4bfb4bd87c6f38a46c88e85248978d}{\index{Device@{Device}!position\-Characteristic\-Update@{position\-Characteristic\-Update}}
+\index{position\-Characteristic\-Update@{position\-Characteristic\-Update}!Device@{Device}}
+\subsubsection[{position\-Characteristic\-Update}]{\setlength{\rightskip}{0pt plus 5cm}void Device\-::position\-Characteristic\-Update (
+\begin{DoxyParamCaption}
+\item[{Q\-Low\-Energy\-Characteristic}]{ch, }
+\item[{Q\-Byte\-Array}]{byte\-Array}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{classDevice_aab4bfb4bd87c6f38a46c88e85248978d}
+
+
+position\-Characteristic\-Update 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ch} & \\
+\hline
+{\em byte\-Array} & Methode qui permet de traiter les données recues quand on recoit une notification \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+device.\-h\item 
+device.\-cpp\end{DoxyCompactItemize}
