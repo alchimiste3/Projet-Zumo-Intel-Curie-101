@@ -2,7 +2,7 @@
  * ZumoMotorsCurie.cpp
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- * Dernier mise a jour: 25-07-1016 (Quentin)
+ * Dernier mise a jour: 29-08-1016 (Quentin)
  *
  * Adaptation d'un code fournie par le constructeur du robot zumo pour qu'il puis fonctionner avec la carte Intel Curie 101 :
  * Voir : https://github.com/pololu/zumo-shield/tree/master/ZumoMotors
@@ -70,7 +70,7 @@ void ZumoMotors::setLeftSpeedCurie(int speed, int periode)
 }
 
 /*
-Version sans le chois de la periode (definie pour une frequence de 980Hz).
+Version sans le choix de la periode (definie pour une frequence de 980Hz).
 */
 void ZumoMotors::setLeftSpeedCurie(int speed)
 {

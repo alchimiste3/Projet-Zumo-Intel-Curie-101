@@ -2,7 +2,7 @@
  * ZumoMotorsCurie.h
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- * Dernier mise a jour: 25-07-1016 (Quentin)
+ * Dernier mise a jour: 29-08-1016 (Quentin)
  *
  * Adaptation d'un code fournie par le constructeur du robot zumo pour qu'il puis fonctionner avec la carte Intel Curie 101 :
  * Voir : https://github.com/pololu/zumo-shield/tree/master/ZumoMotors

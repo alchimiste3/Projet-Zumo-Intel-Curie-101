@@ -46,6 +46,8 @@ void QTRSensors::init(unsigned char *pins, unsigned char numSensors,
     calibratedMinimumOff=0;
     calibratedMaximumOff=0;
 
+    _lastValue=0; // assume initially that the line is left.
+
     if (numSensors > QTR_MAX_SENSORS)
         _numSensors = QTR_MAX_SENSORS;
     else
@@ -61,11 +63,7 @@ void QTRSensors::init(unsigned char *pins, unsigned char numSensors,
     unsigned char i;
     for (i = 0; i < _numSensors; i++)
     {
-        _pins[i] = pins[i];     
-
-        //Serial.print("pin ");Serial.print(i);Serial.print(" = ");Serial.println(pins[i]);
-        //Serial.print("_pins ");Serial.print(i);Serial.print(" = ");Serial.println(_pins[i]);
-
+        _pins[i] = pins[i];
     }
 
     _emitterPin = emitterPin;
@@ -82,45 +80,26 @@ void QTRSensors::init(unsigned char *pins, unsigned char numSensors,
 // surface or a void).
 void QTRSensors::read(unsigned int *sensor_values, unsigned char readMode)
 {
-
-    //Serial.println("QTRSensors::read");
-
     unsigned int off_values[QTR_MAX_SENSORS];
     unsigned char i;
 
-    if(readMode == QTR_EMITTERS_ON || readMode == QTR_EMITTERS_ON_AND_OFF){
+    if(readMode == QTR_EMITTERS_ON || readMode == QTR_EMITTERS_ON_AND_OFF)
         emittersOn();
-    }
-    else{
+    else
         emittersOff();
-    }
-
 
     readPrivate(sensor_values);
-
     emittersOff();
 
     if(readMode == QTR_EMITTERS_ON_AND_OFF)
     {
         readPrivate(off_values);
 
-
         for(i=0;i<_numSensors;i++)
         {
             sensor_values[i] += _maxValue - off_values[i];
-
         }
     }
-
-/*
-    Serial.println("sensor_values");
-
-    for(i=0;i<_numSensors;i++)
-    {
-        Serial.println(sensor_values[i]);
-    }
-*/
-
 }
 
 
@@ -336,12 +315,10 @@ void QTRSensors::readCalibrated(unsigned int *sensor_values, unsigned char readM
 int QTRSensors::readLine(unsigned int *sensor_values,
     unsigned char readMode, unsigned char white_line)
 {
-
     unsigned char i, on_line = 0;
     unsigned long avg; // this is for the weighted total, which is long
                        // before division
     unsigned int sum; // this is for the denominator which is <= 64000
-    static int last_value=0; // assume initially that the line is left.
 
     readCalibrated(sensor_values, readMode);
 
@@ -368,7 +345,7 @@ int QTRSensors::readLine(unsigned int *sensor_values,
     if(!on_line)
     {
         // If it last read to the left of center, return 0.
-        if(last_value < (_numSensors-1)*1000/2)
+        if(_lastValue < (_numSensors-1)*1000/2)
             return 0;
 
         // If it last read to the right of center, return the max.
@@ -377,9 +354,9 @@ int QTRSensors::readLine(unsigned int *sensor_values,
 
     }
 
-    last_value = avg/sum;
+    _lastValue = avg/sum;
 
-    return last_value;
+    return _lastValue;
 }
 
 
@@ -446,8 +423,6 @@ void QTRSensorsRC::init(unsigned char* pins,
 // timeout (as specified in the constructor).
 void QTRSensorsRC::readPrivate(unsigned int *sensor_values)
 {
-
-    //Serial.println("readPrivate");
     unsigned char i;
 
     if (_pins == 0)
@@ -456,8 +431,8 @@ void QTRSensorsRC::readPrivate(unsigned int *sensor_values)
     for(i = 0; i < _numSensors; i++)
     {
         sensor_values[i] = _maxValue;
-        pinMode(_pins[i], OUTPUT);      // drive sensor line high
         digitalWrite(_pins[i], HIGH);   // make sensor line an output
+        pinMode(_pins[i], OUTPUT);      // drive sensor line high
     }
 
     delayMicroseconds(10);              // charge lines for 10 us

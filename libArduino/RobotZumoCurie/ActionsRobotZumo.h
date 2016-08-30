@@ -2,7 +2,7 @@
  * ActionsRobotZumo.h
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- * Dernier mise a jour: 29-07-1016 (Quentin)
+ * Dernier mise a jour: 29-08-1016 (Quentin)
  *
  * Cette classe permet de diriger le robot et d'utiliser son capteur de ligne
  */
@@ -17,7 +17,6 @@
 #include <ZumoMotorsCurie.h>
 #include <QTRSensors.h>
 #include <ZumoReflectanceSensorArray.h>
-#include <Pushbutton.h>
 
 class ActionsRobot {
 
@@ -30,13 +29,9 @@ class ActionsRobot {
 
   ZumoReflectanceSensorArray reflectanceSensors;
 
-	Pushbutton button;
-
 	int calibrationAuto;
 
-  #define MAX_SPEED 200
-
-	//const int MAX_SPEED = 200;
+	#define MAX_SPEED 200
 
 	int m1Speed;
 	int m2Speed;
@@ -59,11 +54,16 @@ class ActionsRobot {
 
     void suivreUneLigne();
 
+
+		// !!!! Ne fonctionne pas !!!!
+
     void suivreLigneV2(int position);
 
     void detecterLigneV2(unsigned int * sensors);
 
     void detecterCroisement(unsigned int * sensors);
+
+		// !!!! Ne fonctionne pas !!!!
 
 };
 

@@ -1,25 +1,27 @@
 #######################################
-# Syntax Coloring Map For MadgwickAHRS
+# Syntax Coloring Map For CurieTime
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-Madgwick	KEYWORD1
-
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+now	KEYWORD2
+second	KEYWORD2
+minute	KEYWORD2
+hour	KEYWORD2
+day	KEYWORD2
+month	KEYWORD2
+year	KEYWORD2
+setTime	KEYWORD2
 
-update	KEYWORD2
-updateIMU	KEYWORD2
-getPitch	KEYWORD2
-getYaw	KEYWORD2
-getRoll	KEYWORD2
-
+#######################################
+# Instances (KEYWORD2)
+#######################################
 
 #######################################
 # Constants (LITERAL1)
 #######################################
-

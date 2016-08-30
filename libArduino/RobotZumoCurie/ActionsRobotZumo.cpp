@@ -2,7 +2,7 @@
  * ActionsRobotZumo.cpp
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- * Dernier mise a jour: 25-07-1016 (Quentin)
+ * Dernier mise a jour: 29-08-1016 (Quentin)
  *
  * Cette classe permet de diriger le robot et d'utiliser son capteur de ligne
  */
@@ -34,15 +34,9 @@ Permet de modifier l'etat des moteur avec une action pres definie qui a un numer
 void ActionsRobot::action(char * commande){
     Serial.println("action");
 
-	//char numCommande = commande[0];
 	char numCommande = commande[1];
 
-  Serial.print("commande = ");Serial.println(commande);
-
-  Serial.print("numCommande = ");Serial.println(numCommande);
-
-		////////////// changer vitesse ////////////////
-
+	////////////// changer vitesse ////////////////
 	if (numCommande == '0') {
 
 		char * chaine = (char *)commande;
@@ -50,9 +44,9 @@ void ActionsRobot::action(char * commande){
 
 		pch = strtok (chaine, ",");
 		Serial.println(pch);
-	  pch = strtok (NULL, ",");
-	  Serial.println(pch);
-	  speed = atoi(pch);
+		pch = strtok (NULL, ",");
+		Serial.println(pch);
+		speed = atoi(pch);
 
   	Serial.print("speed = ");Serial.println(speed);
 
@@ -65,7 +59,6 @@ void ActionsRobot::action(char * commande){
 		}
 
     vitesseMoteurs(speed, speed);
-
 
   }
 
@@ -130,11 +123,9 @@ void ActionsRobot::calibrationSensors(){
     {
       if ((i > 10 && i <= 40) || (i > 50 && i <= 80)) {
         vitesseMoteurs(-200, 200);
-
       }
       else {
         vitesseMoteurs(200, -200);
-
         reflectanceSensors.calibrate();
         
       }
@@ -149,7 +140,7 @@ void ActionsRobot::calibrationSensors(){
     
     unsigned long startTime = millis();
     
-    while(millis() - startTime < 10000)   // make the calibration take 10 seconds
+    while(millis() - startTime < 10000)   
     {
       reflectanceSensors.calibrate();
     }
@@ -198,25 +189,12 @@ void ActionsRobot::suivreUneLigne(){
     sensors[i] = (sensors1[i] + sensors2[i] + sensors3[i] + sensors4[i] + sensors5[i] + sensors6[i] + sensors7[i] + sensors8[i])/8;
   }
 
-
-  // Serial.print("sensors 0 = "); Serial.println(sensors[0]);
-  // Serial.print("sensors 1 = "); Serial.println(sensors[1]);
-  // Serial.print("sensors 2 = "); Serial.println(sensors[2]);
-  // Serial.print("sensors 3 = "); Serial.println(sensors[3]);
-  // Serial.print("sensors 4 = "); Serial.println(sensors[4]);
-  // Serial.print("sensors 5 = "); Serial.println(sensors[5]);
-
-  // Serial.print("position = "); Serial.println(position);
-
-  // Serial.println("");
-
   /////////////////////////// On suis la ligne //////////////////////////
   suivreLigneV2(position);
   
   /////////////////////////// Croisement //////////////////////////
   detecterCroisement(sensors);
-  
-  //detecterLigneV2(sensors);
+
 
   
 
@@ -300,7 +278,7 @@ void ActionsRobot::vitesseMoteurs(int vitesseGauche, int vitesseDroite) {
 
 
 /*
-!!!! Ne fonctionne pas encore !!!!
+!!!! Ne fonctionne pas !!!!
 Permet de detecter une ligne qui se trouve en face du robot
 */
 void ActionsRobot::detecterLigneV2(unsigned int * sensors) {
@@ -341,7 +319,7 @@ void ActionsRobot::detecterLigneV2(unsigned int * sensors) {
 }
 
 /*
-!!!! Ne fonctionne pas encore !!!!
+!!!! Ne fonctionne pas  !!!!
 Permet de un croissement et de le signale avec une LED
 */
 void ActionsRobot::detecterCroisement(unsigned int * sensors) {
@@ -350,11 +328,7 @@ void ActionsRobot::detecterCroisement(unsigned int * sensors) {
 
   if((sensors[0] > 950 || sensors[1] > 950) && (sensors[4] > 950 || sensors[5] > 950)){
     digitalWrite(13, HIGH);
-    //ZumoMotors::setSpeeds(0, 0, pariodeMoteurGauche);
     vitesseMoteurs(0, 0);
-
-    //suivreLigne = true;
-    //button.waitForButton();
 
   }
 
@@ -362,7 +336,7 @@ void ActionsRobot::detecterCroisement(unsigned int * sensors) {
 }
 
 /*
-Return true si le robot est immobile : vitesse nulle pour les deux moteurs.
+Retourne true si le robot est immobile : vitesse nulle pour les deux moteurs.
 */
 bool ActionsRobot::estImmobile(){
 	return immobile;
