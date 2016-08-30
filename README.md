@@ -44,9 +44,17 @@ Les logiciel utiliser : Arduino IDE, QtCreator et Processing.
 
 Ensuite, compiler le code puis tranferer-le dans la carte. Le robot doit etre immobile lors de l'allumage pour que l'IMU s'initialise correctement.
 
-### QT
+### Application QT
 
--lancer le projet avec QTCreator
+> Installer Qt ainsi que le module Qt Chart
+
+> Ouvrir le .pro dans QT Creator
+
+> Demarrer la carte 
+
+> Démarrer le projet dans QT Creator
+
+Pour générer la documentation, il faut d'abord installer le paquet doxygen puis executer la commande doxygen dans le repertoire
 
 ### Proccesing
 
