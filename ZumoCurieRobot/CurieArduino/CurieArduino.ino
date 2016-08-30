@@ -1,10 +1,10 @@
 /*
- * arduinoV2.ino
+ * CurieArduino.ino
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
  *                      Clement Sibut []
 
- * Dernier mise a jour: 26-07-1016 (Quentin)
+ * Dernier mise a jour: 29-08-1016 (Quentin)
  *
  * lib utiliser : RobotZumoCurie
  * 
@@ -74,6 +74,9 @@ BLECharacteristic characteristiqueRecevoirDonnees("3752c0a0-0d25-11e6-97f5-0002a
 int neuronsReconnuePres = 0;
 int neuronsReconnue = 0;
 int distanceReco = 0;
+int tempsReco = -1;
+
+int nbReco = 0; // nombre de reconnaissance sur 30 echantillons (voir reconnaitreMoyenne)
 
 /////////////////////////////// Robot ///////////////////////////////
 
@@ -103,6 +106,8 @@ bool apprentissage = false;
 int numNeurons = 0;
 
 bool reconnaissance = false;
+
+bool reconnaissanceAvecTemps = false;
 
 bool enregistrement = false;
 
@@ -140,7 +145,6 @@ void setup() {
    blePeripheral.setAdvertisedServiceUuid(ZumoService.uuid());
    blePeripheral.addAttribute(ZumoService);
    blePeripheral.addAttribute(characteristiqueEnvoieDonnees);
-   
    blePeripheral.addAttribute(characteristiqueRecevoirDonnees);
    
    blePeripheral.begin();
@@ -205,6 +209,24 @@ void gestionCommandes(){
 
 }
 
+
+bool recoCommande(char l1, bool test1, char l2, bool test2){
+  if(test1 && test2){
+    return (commande[0] == l1 && commande[1] == l2);
+  }
+  else if(test1 && !test2){
+    return (commande[0] == l1 && commande[1] != l2);
+  }
+  else if(!test1 && test2){
+    return (commande[0] != l1 && commande[1] == l2);
+  }
+  else if(!test1 && !test2){
+    return (commande[0] != l1 && commande[1] != l2);
+  }
+
+  return false;
+}
+
 /*
  * Permet de reseptionner les commande envoyer par l'utilisateur
  */
@@ -227,9 +249,7 @@ void lireCommande(){
   
       comm = strtok(commande, "()");
 
-
       int tailleComm = strlen(comm);
-      
 
       for(int i = 0 ; i < tailleComm ; i++){
         commande[i] = comm[i];
@@ -288,50 +308,62 @@ void traiterCommande(){
    * On demande au robot d'apprendre les donnes actuelle du L'IMU et des les enregistrer sur un emplacement du reseau de neurons. 
    * Le but est de repeter plusieur fois l'appelle de cette methode pour memorise toute les varations d'une meme actions, d'un meme mouvement.
    */
-  if (commande[0] == 'a') {
+  if (recoCommande('a', true, 'p', false)) {
     numNeurons = (int)commande[1] - '0';
     apprentissageRobot.apprendreAvecIMU(numNeurons); // On fait "- '0'" pour passer du tableau ASCII a un int
   }
 
-  //////////////////////////// Reconnaissance Actions ////////////////////////////
 
-  // On desactive la commande
-  if(commande[0] == 'r' && commande[1] != 'a' && reconnaissance){
-    reconnaissance = false;
+  //////////////////////////// Apprentissage ponctuelle Actions ////////////////////////////
+
+  /*
+   * On demande au robot d'apprendre les donnes actuelle du L'IMU et des les enregistrer sur un emplacement du reseau de neurons. 
+   */
+  if (recoCommande('a', true, 'p', true)) {
+    numNeurons = (int)commande[2] - '0';
+    apprentissageRobot.apprendreAvecIMU(numNeurons); // On fait "- '0'" pour passer du tableau ASCII a un int
     commandeClean();
   }
 
 
+  //////////////////////////// Reconnaissance Actions avec calcule du temps ////////////////////////////
+
+
+  // On desactive la commande
+  if (recoCommande('r', true, 'a', false) && reconnaissanceAvecTemps) {
+
+    nbReco = 0;
+    enregistrement  = false;
+    commandeClean();
+  }
+
   // On active la commande
-  if ((commande[0] == 'r' && commande[1] != 'a') || reconnaissance) {
-
-    Serial.println("Reconnaissance Actions");
-
+  if (recoCommande('r', true, 'a', false) || reconnaissanceAvecTemps) {
 
     neuronsReconnue = -1;
 
-    //apprentissageRobot.reconnaitre(&neuronsReconnue, &distanceReco);
-    apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco);
+    reconnaitreAvecTemps();
 
-    envoieNeuronsReconnue();
-
-    reconnaissance = true;
+    reconnaissanceAvecTemps = true;
 
     if(commande[0] == 'r' && commande[1] != 'a'){
       commandeClean();
     }
   }
 
+  
+
   //////////////////////////// Reconnaissance Actions avec enregistrement////////////////////////////
 
   // On desactive la commande
-  if (commande[0] == 'e' && commande[1] == 'a' && enregistrement) {
+  if (recoCommande('e', true, 'a', true) && enregistrement) {
     enregistrement  = false;
     commandeClean();
   }
 
   // On active la commande
-  if ((commande[0] == 'e' && commande[1] == 'a') || enregistrement) {
+  if (recoCommande('e', true, 'a', true)  || enregistrement) {
+    
     reconnaitreEtEnregistrerAction();
     envoieNeuronsReconnue();
 
@@ -346,14 +378,14 @@ void traiterCommande(){
   //////////////////////////// Reexecuter Actions ////////////////////////////
 
   // Ici, le robot ne transmet plus de donner et refait les actions appris avec la reconnaisance 
-  if (commande[0] == 'r' && commande[1] == 'a') { 
+  if (recoCommande('r', true, 'a', true)) { 
     reproduireActions();
 
   }
 
    //////////////////////////// vider liste Action enregistrees ////////////////////////////
 
-  if (commande[0] == 'v' && commande[1] == 'l') { 
+  if (recoCommande('v', true, 'l', true)) { 
     apprentissageRobot.viderListeActionReconnue();
   }
 
@@ -364,7 +396,7 @@ void traiterCommande(){
   /*
    * 
    */
-  if (commande[0] == 'g' && commande[1] == 'n') {
+  if (recoCommande('g', true, 'n', true)) {
     apprentissageRobot.getValeursNeuronParId((int)commande[2]);
     commandeClean();
   }
@@ -372,7 +404,7 @@ void traiterCommande(){
   /*
    * 
    */
-  if (commande[0] == 's' && commande[1] == 'n') {
+  if (recoCommande('s', true, 'n', true)) {
     apprentissageRobot.getValeursNeurons();
     commandeClean();
   }
@@ -380,7 +412,7 @@ void traiterCommande(){
   /*
    * 
    */
-  if (commande[0] == 'i' && commande[1] == 'n') {
+  if (recoCommande('i', true, 'n', true)) {
     apprentissageRobot.setValeursNeurons();
     commandeClean();
   }
@@ -388,6 +420,40 @@ void traiterCommande(){
 }
 
 
+/*
+ * Permet de reconnaitre des actions simples apprisent precedemment et retourner le temps.
+ */
+void reconnaitreAvecTemps(){
+
+  // Lors du de debut de la reconnaissance, on demarre le timer pour enregistrer le temps de chaque action reconnue
+  if(neuronsReconnue == neuronsReconnuePres && !reconnaissanceAvecTemps){
+    tempsDebut = millis();
+  }
+
+  apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco, &nbReco);
+  
+  if(neuronsReconnuePres != neuronsReconnue && neuronsReconnuePres != 0){
+    
+    tempsFin = millis();
+    int deffTemps = tempsFin - tempsDebut;
+    tempsDebut = millis();
+
+    Serial.print("deffTemps = ");Serial.println(deffTemps);
+
+    Serial.println("envoie paquet ");
+
+    tempsReco = deffTemps;
+
+    // On envoie la reconnaissance seulement lorsqu'on a fini de reconnaitre le neurone courant (nouveau neurone identifie)
+    // envoieNeuronsReconnue();
+  }
+
+  // On envoie la reconnaissance a chaque tour de boucle
+  envoieNeuronsReconnue();
+  
+  neuronsReconnuePres = neuronsReconnue;
+
+}
 
 /*
  * Permet de reconnaitre des actions simples apprisent precedemment et les enregistrer dans une liste afin de pouvoir les reproduire.
@@ -400,7 +466,7 @@ void reconnaitreEtEnregistrerAction(){
   }
 
   // On demande aux neurons de reconnaitre l'action actuelle grace a l'IMU
-  apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco);
+  apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco, &nbReco);
   
 
   // Si une action differente de la precedente est reconnue et ... TODO 
@@ -484,7 +550,7 @@ void envoieDonneesIMU(){
 void envoieNeuronsReconnue(){
   String res;
 
-  res = "r," + String(neuronsReconnue) + "," + String(distanceReco);
+  res = "r," + String(neuronsReconnue) + "," + String(tempsReco) + "," + String(nbReco);
 
   // On envoie les informations par le service
   envoieDonneesBluetooth(res);

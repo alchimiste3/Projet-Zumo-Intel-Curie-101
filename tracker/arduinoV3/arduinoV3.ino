@@ -1,5 +1,5 @@
 /*
- * arduinoV2.ino
+ * arduinoV3.ino
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
  *                      Clement Sibut []

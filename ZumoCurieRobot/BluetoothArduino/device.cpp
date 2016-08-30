@@ -135,6 +135,8 @@ void Device::decouperPaquet(QString paquets)
     qDebug() << paquets;
     AnalyseurPaquet analyseur;
     TypePaquet type = analyseur.reconnaitre(paquets);
+    qDebug() << "paquet = " << paquets;
+
     qDebug() << "typePaquet" << type;
     if (type == TypePaquet::Position)
     {

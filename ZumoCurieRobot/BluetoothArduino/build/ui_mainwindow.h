@@ -73,6 +73,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *envoyerButton;
     QPushButton *supprimerButton;
+    QPushButton *modifierButton;
     QPushButton *ajouterButton;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_7;
@@ -289,6 +290,11 @@ public:
 
         horizontalLayout->addWidget(supprimerButton);
 
+        modifierButton = new QPushButton(verticalLayoutWidget);
+        modifierButton->setObjectName(QStringLiteral("modifierButton"));
+
+        horizontalLayout->addWidget(modifierButton);
+
         ajouterButton = new QPushButton(verticalLayoutWidget);
         ajouterButton->setObjectName(QStringLiteral("ajouterButton"));
 
@@ -451,6 +457,7 @@ public:
         ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "Param\303\250tre", 0));
         envoyerButton->setText(QApplication::translate("MainWindow", "Envoyer", 0));
         supprimerButton->setText(QApplication::translate("MainWindow", "Supprimer action", 0));
+        modifierButton->setText(QApplication::translate("MainWindow", "Modifier action", 0));
         ajouterButton->setText(QApplication::translate("MainWindow", "Ajouter action", 0));
         label_7->setText(QApplication::translate("MainWindow", "Apprentissage : ", 0));
         labelR->setText(QString());
