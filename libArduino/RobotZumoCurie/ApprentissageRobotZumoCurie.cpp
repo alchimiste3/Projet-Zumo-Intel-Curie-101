@@ -31,8 +31,8 @@ void ApprentissageRobot::apprendreAvecIMU(int numNeurons){
 
   Serial.print("numNeurons = ");Serial.println(numNeurons);
   for (int i = 0 ; i < 5 ; i++){
-    //getVectorIMUSimple();
- 		getVectorIMU();
+    getVectorIMUSimple();
+ 		//getVectorIMU();
     ncount = hNN.Learn(vector, nbEchantillons*nbVals, numNeurons);
   }
   
@@ -78,8 +78,8 @@ void ApprentissageRobot::reconnaitreMoyenne(int * c, int * d, int * nb){
   int tab[128] = { 0 };
 
   for (int i = 0; i < 30; i++){
-    //getVectorIMUSimple();
-    getVectorIMU();
+    getVectorIMUSimple();
+    //getVectorIMU();
     hNN.Classify(vector, nbEchantillons*nbVals,&dist, &cat, &nid);
 
     if (cat!=0x7FFF){
@@ -91,26 +91,26 @@ void ApprentissageRobot::reconnaitreMoyenne(int * c, int * d, int * nb){
   }
 
   // On renvoie la classe (la categorie) qui a le plus de resultat positif
-  // int catMax = 0;
-  // int nbMax = 0;
-  // for (int i = 0; i < 128; i++){
-  //   if(tab[catMax] < tab[i]){
-  //     catMax = i;
-  //     nbMax = tab[i];
-
-  //   }
-  // }
-
-  // Version ou on exclue le 0
-  int catMax = 1;
+  int catMax = 0;
   int nbMax = 0;
-  for (int i = 1; i < 128; i++){
+  for (int i = 0; i < 128; i++){
     if(tab[catMax] < tab[i]){
       catMax = i;
       nbMax = tab[i];
 
     }
   }
+
+  // // Version ou on exclue le 0
+  // int catMax = 1;
+  // int nbMax = 0;
+  // for (int i = 1; i < 128; i++){
+  //   if(tab[catMax] < tab[i]){
+  //     catMax = i;
+  //     nbMax = tab[i];
+
+  //   }
+  // }
 
   Serial.print("Nombre max de reconaissance pour i = ");Serial.print(catMax);Serial.print(" est :");Serial.print(nbMax);Serial.println("/30");
 

@@ -286,7 +286,7 @@ void traiterCommande(){
   /*
    * On effectue la calibration du senseur a l'avant du robot qui permet du suivre une ligne
    */
-  if (commande[0] == 'c' && commande[1] == 's') {
+  if (recoCommande('c', true, 's', true)) {
     actionRobot.calibrationSensors();
     commandeInit();
 
@@ -297,9 +297,8 @@ void traiterCommande(){
   /*
    * On demande au robot de suivre une ligne 
    */
-  if (commande[0] == 's' && commande[1] == 'l') {
+  if (recoCommande('s', true, 'l', true)) {
     actionRobot.suivreUneLigne();
-
   }
 
   //////////////////////////// Apprentissage Actions ////////////////////////////
@@ -333,7 +332,7 @@ void traiterCommande(){
   if (recoCommande('r', true, 'a', false) && reconnaissanceAvecTemps) {
 
     nbReco = 0;
-    enregistrement  = false;
+    reconnaissanceAvecTemps  = false;
     commandeClean();
   }
 
@@ -421,12 +420,13 @@ void traiterCommande(){
 
 
 /*
- * Permet de reconnaitre des actions simples apprisent precedemment et retourner le temps.
+ * Permet de reconnaitre des actions simples apprisent precedemment avec le temps.
  */
 void reconnaitreAvecTemps(){
 
   // Lors du de debut de la reconnaissance, on demarre le timer pour enregistrer le temps de chaque action reconnue
-  if(neuronsReconnue == neuronsReconnuePres && !reconnaissanceAvecTemps){
+  if(!reconnaissanceAvecTemps){
+    Serial.println("debut");
     tempsDebut = millis();
   }
 
@@ -445,11 +445,11 @@ void reconnaitreAvecTemps(){
     tempsReco = deffTemps;
 
     // On envoie la reconnaissance seulement lorsqu'on a fini de reconnaitre le neurone courant (nouveau neurone identifie)
-    // envoieNeuronsReconnue();
+    envoieNeuronsReconnue();
   }
 
   // On envoie la reconnaissance a chaque tour de boucle
-  envoieNeuronsReconnue();
+  //envoieNeuronsReconnue();
   
   neuronsReconnuePres = neuronsReconnue;
 
@@ -461,7 +461,7 @@ void reconnaitreAvecTemps(){
 void reconnaitreEtEnregistrerAction(){
 
   // Lors du de debut de la reconnaissance, on demarre le timer pour enregistrer le temps de chaque action reconnue
-  if(neuronsReconnue == neuronsReconnuePres && !enregistrement){
+  if(!enregistrement){
     tempsDebut = millis();
   }
 
@@ -550,7 +550,7 @@ void envoieDonneesIMU(){
 void envoieNeuronsReconnue(){
   String res;
 
-  res = "r," + String(neuronsReconnue) + "," + String(tempsReco) + "," + String(nbReco);
+  res = "r," + String(neuronsReconnue) + "," + String(tempsReco); // + "," + String(nbReco);
 
   // On envoie les informations par le service
   envoieDonneesBluetooth(res);
