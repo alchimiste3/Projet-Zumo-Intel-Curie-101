@@ -550,7 +550,7 @@ void envoieDonneesIMU(){
 void envoieNeuronsReconnue(){
   String res;
 
-  res = "r," + String(neuronsReconnue) + "," + String(tempsReco); // + "," + String(nbReco);
+  res = "r," + String(neuronsReconnuePres) + "," + String(tempsReco); // + "," + String(nbReco);
 
   // On envoie les informations par le service
   envoieDonneesBluetooth(res);
