@@ -111,9 +111,10 @@ signals:
 
     /**
      * @brief majReconaissance
-     * Signal émis lors de la reconaisse d'un mouvement, le paramètre contient le numéro de mouvement / neurone
+     * Signal émis lors de la reconaisse d'un mouvement, le premier paramètre contient le numéro d'action / neurone
+     * Le second paramètre contient la durée de l'action
      */
-    void majReconaissance(int);
+    void majReconaissance(int, int);
 };
 
 #endif // DEVICE_H

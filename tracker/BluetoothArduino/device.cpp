@@ -119,10 +119,11 @@ void Device::decouperPaquet(QString paquets)
     else if (type == TypePaquet::Reconaissance)
     {
         QList<QString> listeValeurs = paquets.split(",");
-        if (listeValeurs.size() >= 2)
+        if (listeValeurs.size() >= 3)
         {
             qDebug() << "Valeur reconnue : " << listeValeurs[1].toInt();
-            emit majReconaissance(listeValeurs[1].toInt());
+
+            emit majReconaissance(listeValeurs[1].toInt(), listeValeurs[2].toInt());
         }
     }
     else if (type == TypePaquet::Erreur)

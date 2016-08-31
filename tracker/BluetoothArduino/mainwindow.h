@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
     ApprendreWindow* apprendreWindow;
     Mouvement* m;
     QList<Action*> actionsTableau;
+    QList<Action*> actionsReconnues;
     LineChart* chart;
     int indexModifie;
 public:
@@ -104,7 +105,7 @@ private slots:
      * @param value
      * Affiche la valeur reconnue
      */
-    void redMajReconaissance(int value);
+    void redMajReconaissance(int value, int delai);
 
     /**
      * @param checked

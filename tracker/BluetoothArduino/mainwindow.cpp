@@ -33,7 +33,7 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
     QObject::connect(ajouterWindow, SIGNAL(accepted()), this, SLOT(redAccepted()));
     QObject::connect(apprendreWindow, SIGNAL(accepted()), this, SLOT(redAcceptedCommandeApprendre()));
     QObject::connect(d, SIGNAL(majValues(float, float, float, float,float,float,float,float,float,float)), this, SLOT(redMajValues(float, float, float, float,float,float,float,float,float,float)));
-    QObject::connect(d, SIGNAL(majReconaissance(int)), this, SLOT(redMajReconaissance(int)));
+    QObject::connect(d, SIGNAL(majReconaissance(int, int)), this, SLOT(redMajReconaissance(int, int)));
 }
 
 MainWindow::~MainWindow()
@@ -175,27 +175,36 @@ void MainWindow::redButtonToggled(int id, bool etat)
 
 void MainWindow::on_apprendreButton_clicked()
 {
-    if (ui->apprendreButton->text() == "Apprendre")
-    {
-        apprendreWindow->show();
-    }
-    else
-    {
-        ui->apprendreButton->setText("Apprendre");
-        d->envoyerCommande("(r," + Action(TypeAction::Arreter, QString("Arreter")).getCommande() + ");");
-    }
+    apprendreWindow->show();
 }
 
 void MainWindow::redAcceptedCommandeApprendre()
 {
     QString commandeApprendre = apprendreWindow->getCommandeApprendre();
     d->envoyerCommande(commandeApprendre);
-    ui->apprendreButton->setText("Arreter aprentissage");
 }
 
 void MainWindow::on_reconnaitreButton_clicked(bool checked)
 {
-    d->envoyerCommande("(r);");
+    if (ui->reconnaitreButton->text() == "Reconnaitre")
+    {
+        d->envoyerCommande("(r);");
+        ui->reconnaitreButton->setText("Arreter reconaissance");
+    }
+    else
+    {
+        d->envoyerCommande("(r);");
+        ui->reconnaitreButton->setText("Reconnaitre");
+        qDebug() << "nb actions : " << actionsReconnues[0]->getNbS() << " " << actionsReconnues[1]->getNbS();
+
+        Mouvement* m = new Mouvement(d, this);
+        for (int i = 0; i < actionsReconnues.size(); i++)
+        {
+            m->ajouterAction(actionsReconnues[i]);
+        }
+        m->start();
+        actionsReconnues.clear();
+    }
 }
 
 void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
@@ -203,9 +212,11 @@ void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
     d->envoyerCommande("ra");
 }
 
-void MainWindow::redMajReconaissance(int value)
+void MainWindow::redMajReconaissance(int value, int delai)
 {
-    ui->labelR->setText(QString::number(value));
+    ui->labelR->setText(QString::number(value) + " -> " + QString::number(delai) + "ms");
+    Action* a = new Action(static_cast<TypeAction>(value), QString::number(value), delai/1000);
+    actionsReconnues.append(a);
 }
 
 void MainWindow::on_modifierButton_clicked(bool checked)
