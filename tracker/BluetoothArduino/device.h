@@ -29,7 +29,7 @@ class Device : public QObject
     QLowEnergyCharacteristic positionCharacteristic;
     const QString keyCh1 = "3752c0a0-0d25-11e6-97f5-0002a5d5c51c";
     const QString keyCh2 = "3752c0a0-0d25-11e6-97f5-0002a5d5c51d";
-    const QString nomReseauBLE = "RdWrS";
+    const QString nomReseauBLE = "RdWrS2";
     QFile* file;
     int cptData;
     QString paquets;

@@ -141,7 +141,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(ZumoService.uuid());
    blePeripheral.addAttribute(ZumoService);
    blePeripheral.addAttribute(characteristiqueEnvoieDonnees);
@@ -271,14 +271,14 @@ void lireCommande(){
  */
 void traiterCommande(){
 
-  Serial.println("traiterCommande");
+  //Serial.println("traiterCommande");
 
   //////////////////////////// Action Robot ////////////////////////////
 
   // Permet de modifier les mouvement du robot grace a des actions pres implementees dans la carte
   if (commande[0] == 'm') {
     actionRobot.action(commande);
-    commandeClean();
+    commandeNull();
   }
 
   //////////////////////////// calibration LineSensors ////////////////////////////
@@ -289,7 +289,6 @@ void traiterCommande(){
   if (recoCommande('c', true, 's', true)) {
     actionRobot.calibrationSensors();
     commandeInit();
-
   }
 
   //////////////////////////// Suivre Ligne ////////////////////////////
@@ -321,7 +320,7 @@ void traiterCommande(){
   if (recoCommande('a', true, 'p', true)) {
     numNeurons = (int)commande[2] - '0';
     apprentissageRobot.apprendreAvecIMU(numNeurons); // On fait "- '0'" pour passer du tableau ASCII a un int
-    commandeClean();
+    commandeNull();
   }
 
 
@@ -331,9 +330,15 @@ void traiterCommande(){
   // On desactive la commande
   if (recoCommande('r', true, 'a', false) && reconnaissanceAvecTemps) {
 
-    nbReco = 0;
+    tempsFin = millis();
+    tempsReco = tempsFin - tempsDebut;
+
+    Serial.println("envoie paquet ");
+
+    envoieNeuronsReconnue();
+        
     reconnaissanceAvecTemps  = false;
-    commandeClean();
+    commandeNull();
   }
 
   // On active la commande
@@ -346,7 +351,7 @@ void traiterCommande(){
     reconnaissanceAvecTemps = true;
 
     if(commande[0] == 'r' && commande[1] != 'a'){
-      commandeClean();
+      commandeNull();
     }
   }
 
@@ -357,7 +362,7 @@ void traiterCommande(){
   // On desactive la commande
   if (recoCommande('e', true, 'a', true) && enregistrement) {
     enregistrement  = false;
-    commandeClean();
+    commandeNull();
   }
 
   // On active la commande
@@ -369,7 +374,7 @@ void traiterCommande(){
     enregistrement = true;
 
     if(commande[0] == 'e' && commande[1] == 'a'){
-      commandeClean();
+      commandeNull();
     }
   }
 
@@ -379,13 +384,14 @@ void traiterCommande(){
   // Ici, le robot ne transmet plus de donner et refait les actions appris avec la reconnaisance 
   if (recoCommande('r', true, 'a', true)) { 
     reproduireActions();
-
+    commandeNull();
   }
 
    //////////////////////////// vider liste Action enregistrees ////////////////////////////
 
   if (recoCommande('v', true, 'l', true)) { 
     apprentissageRobot.viderListeActionReconnue();
+    commandeNull();
   }
 
 
@@ -397,7 +403,7 @@ void traiterCommande(){
    */
   if (recoCommande('g', true, 'n', true)) {
     apprentissageRobot.getValeursNeuronParId((int)commande[2]);
-    commandeClean();
+    commandeNull();
   }
   
   /*
@@ -405,7 +411,7 @@ void traiterCommande(){
    */
   if (recoCommande('s', true, 'n', true)) {
     apprentissageRobot.getValeursNeurons();
-    commandeClean();
+    commandeNull();
   }
 
   /*
@@ -413,7 +419,7 @@ void traiterCommande(){
    */
   if (recoCommande('i', true, 'n', true)) {
     apprentissageRobot.setValeursNeurons();
-    commandeClean();
+    commandeNull();
   }
 
 }
@@ -602,7 +608,7 @@ void commandeInit(){
 /*
  * Initialise la commande avec une valeur nulle
  */
-void commandeClean(){
+void commandeNull(){
   
   commande[0] = 'n';
   commande[1] = 'n';

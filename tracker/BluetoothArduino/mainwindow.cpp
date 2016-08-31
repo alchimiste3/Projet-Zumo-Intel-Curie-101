@@ -195,7 +195,7 @@ void MainWindow::on_reconnaitreButton_clicked(bool checked)
     {
         d->envoyerCommande("(r);");
         ui->reconnaitreButton->setText("Reconnaitre");
-        qDebug() << "nb actions : " << actionsReconnues[0]->getNbS() << " " << actionsReconnues[1]->getNbS();
+        //qDebug() << "nb actions : " << actionsReconnues[0]->getNbS() << " " << actionsReconnues[1]->getNbS();
 
         Mouvement* m = new Mouvement(d, this);
         for (int i = 0; i < actionsReconnues.size(); i++)

@@ -118,6 +118,9 @@ void Device::decouperPaquet(QString paquets)
     }
     else if (type == TypePaquet::Reconaissance)
     {
+        qDebug() << "Paquet : " << paquets;
+
+
         QList<QString> listeValeurs = paquets.split(",");
         if (listeValeurs.size() >= 3)
         {
