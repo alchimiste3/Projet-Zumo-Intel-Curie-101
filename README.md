@@ -11,7 +11,8 @@ Ce document indique comment installer et initialiser le matériel pour faire fon
 
 ## Les Parties
 
-Il y a 3 parties dans le projet repartie dans 3 dossier : 
+Il y a 3 parties dans le projet repartie dans 3 dossier :
+
 1. La programmation de la carte Arduino (et du robot).
 2. L'interface utilisateur sur ordi en Qt.
 3. L'affichage graphique du déplacement du robot avec processing.
