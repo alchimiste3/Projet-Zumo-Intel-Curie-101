@@ -68,6 +68,36 @@ Ensuite, dans l'IDE, sélectionner le bon type de carte (Genuino 101) et le bon 
 
 Pour générer la documentation, il faut d'abord installer le paquet doxygen puis executer la commande doxygen dans le repertoire
 
+### Compiler l'application QT pour Android
+
+> Installer Ant et Java s'ils ne sont pas déjà installés
+
+> Installer le Android SDK
+
+> Installer le Android NDK
+
+> Mettre à jour le SDK et choisir la version la plus récente avec la commande
+./android update sdk
+
+> Installer les dépendances suivantes : 
+sudo apt-get install libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
+sudo apt-get install libsdl1.2debian:i386
+
+> Configuration de Qt Creator 
+Aller dans Outils > Options > Android
+Localiser Java, le SDK et le NDK
+Aller dans l'onglet Projet > Ajouter un kit > Choisir Android
+Maintenant, juste en dessus de la fleche verte pour compiler/exécuter, il est possible de choisir le kit à utiliser
+
+> Configuration du téléphone : Activation du mode Debug
+Aller dans Paramètres > Système > A propos de l'appareil, Appuyer 7 fois sur "Numéro de version"
+Aller dans Paramètres > Système > Options de développement, Activer le débogage USB
+
+> Compilation pour Android
+Il suffit maintenant de brancher le téléphone, démarrer la compilation, le choisir dans la liste et saisir le code PIN
+
+Pour plus de détails aller ici : http://doc.qt.io/qt-5/androidgs.html
+
 ### Proccesing
 
 -lancer le fihcier .pde avec Processing
@@ -76,3 +106,5 @@ Pour générer la documentation, il faut d'abord installer le paquet doxygen pui
 
 Bien sur, pour l'instant notre projet est loin d'être finie et il reste beaucoup de choses à faire et à améliorer : Amélioration de l'initialisation du réseau neuronal, de la précision de l'apprentissage, de la syntaxe des commandes, du suivie de ligne (véritable parcoure sur un chemin complexe).
 La stabilité de la carte et du robot est aussi un problème persistant avec des bugs de la carte Arduino qui peut planter totalement
+
+Il faudrait améliorer l'interface pour qu'elle soit adaptée à l'écran sur Android, la création et la modification d'actions est rendue complexe sur Android à cause des nouvelles fenetres qui s'ouvrent.

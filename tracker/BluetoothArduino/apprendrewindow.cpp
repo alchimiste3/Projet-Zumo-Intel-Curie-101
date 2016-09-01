@@ -15,7 +15,7 @@ ApprendreWindow::~ApprendreWindow()
 
 void ApprendreWindow::on_buttonBox_clicked(QAbstractButton *button)
 {
-    commandeApprendre = "a"+ QString::number(ui->spinBoxNeuron->value());
+    commandeApprendre = "(a"+ QString::number(ui->spinBoxNeuron->value()) + ");";
 }
 
 QString ApprendreWindow::getCommandeApprendre()

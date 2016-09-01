@@ -141,7 +141,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS2");
+   blePeripheral.setLocalName("RdWrS");
    blePeripheral.setAdvertisedServiceUuid(ZumoService.uuid());
    blePeripheral.addAttribute(ZumoService);
    blePeripheral.addAttribute(characteristiqueEnvoieDonnees);

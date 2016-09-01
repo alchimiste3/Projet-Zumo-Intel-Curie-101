@@ -199,6 +199,7 @@ void MainWindow::on_reconnaitreButton_clicked(bool checked)
     {
         d->envoyerCommande("(r);");
         ui->reconnaitreButton->setText("Reconnaitre");
+        actionsReconnues.clear();
     }
 }
 
@@ -211,7 +212,6 @@ void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
         mouvementReconnu = true;
     }
     m->start();
-    actionsReconnues.clear();
 }
 
 void MainWindow::redMajReconaissance(int value, int delai)
@@ -224,7 +224,8 @@ void MainWindow::redMajReconaissance(int value, int delai)
 void MainWindow::on_modifierButton_clicked(bool checked)
 {
     QList<QTableWidgetItem *> listeItems = ui->actionsTableWidget->selectedItems();
-    if (listeItems.size() > 0) {
+    if (listeItems.size() > 0)
+    {
         int row = listeItems.first()->row();
         indexModifie = row;
         QString nomAction = ui->actionsTableWidget->item(row, 0)->text();
