@@ -23,7 +23,7 @@ ActionsRobot::ActionsRobot(){
 	m2Speed = 0;
 
   // Periode du signal PWM pour le moteur gauche
-  // pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
+  //pariodeMoteurGauche = 1020; // µs pour une fréquence de 980Hz
 	pariodeMoteurGauche = 2041; // µs pour une fréquence de 490Hz
 
 }
@@ -209,8 +209,12 @@ void ActionsRobot::suivreLigneV2(int position) {
   // On prent une erreur par rapport au centre du robot (centre du capteur de ligne)
   int error = position - 2500;
 
+  Serial.print("error = ");Serial.println(error);
+
+
   // Constante pour tester la sensibiliter de la correction
   float C = 1;
+
 
   // on norme l'erreur avec la vitesse maximum
   int erreurNorm = (((float)error) / 2500.0) * ((float)MAX_SPEED) * C;

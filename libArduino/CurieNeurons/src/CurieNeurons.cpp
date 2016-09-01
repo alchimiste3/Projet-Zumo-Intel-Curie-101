@@ -245,6 +245,7 @@ int CurieNeurons::ReadNeurons(unsigned char neurons[])
 	for (int i=0; i< ncount; i++)
 	{
 		offset+=(i*recLen);
+
 		Temp=NM_NCR;
 		neurons[ offset]=(unsigned char)((Temp & 0xFF00)>>8);
 		neurons[ offset + 1]=(unsigned char)(Temp & 0x00FF);
@@ -266,6 +267,8 @@ int CurieNeurons::ReadNeurons(unsigned char neurons[])
 	NM_NSR=TempNSR; // set the NN back to its calling status
 	return(ncount);
 }
+
+
 //---------------------------------------------------------------------
 // Clear the committed neurons and restore a new content for the neurons
 // from an input array formatted as follows
@@ -288,6 +291,7 @@ int CurieNeurons::WriteNeurons(unsigned char neurons[])
 	for (int i=0; i< ncount; i++)
 	{
 		offset +=(i*recLen);
+
 		NM_NCR= neurons[offset+1];
 		for (int j=0; j<MaxLength; j++) NM_COMP=neurons[offset+2+j];
 		NM_AIF= (neurons[offset + MaxLength +2]<<8)+neurons[offset + MaxLength+3];
@@ -298,6 +302,35 @@ int CurieNeurons::WriteNeurons(unsigned char neurons[])
 	NM_GCR=TempGCR;
 	return(ncount);
 }
+
+// int CurieNeurons::WriteNeurons(unsigned char neurons[])
+// {
+// 	int offset= neurons[0];
+// 	int MaxLength= (neurons[2]*256) + neurons[3];
+// 	int ncount= (neurons[4]<<24) + (neurons[5]<<16) + (neurons[6]<<8) + neurons[7];
+// 	if (ncount>MAXNEURONS) ncount=MAXNEURONS;
+// 	int recLen=MaxLength+8;	
+// 	int TempNSR=NM_NSR; // save value to restore NN status upon exit of the function
+// 	int TempGCR=NM_GCR;
+// 	NM_FORGET= 0;
+// 	NM_NSR= 0x0010;
+// 	NM_RSTCHAIN=0 ;
+// 	for (int i=1; i<= ncount; i++)
+// 	{
+
+// 		NM_NCR= neurons[offset+1];
+// 		for (int j=0; j<MaxLength; j++) NM_COMP=neurons[offset+2+j];
+// 		NM_AIF= (neurons[offset + MaxLength +2]<<8)+neurons[offset + MaxLength+3];
+// 		NM_MINIF= (neurons[offset + MaxLength+4]<<8)+neurons[offset + MaxLength+5];	
+// 		NM_CAT= (neurons[offset + MaxLength+6]<<8)+neurons[offset + MaxLength+7];
+
+// 		offset+=recLen;
+
+// 	}
+// 	NM_NSR=TempNSR; // set the NN back to its calling status
+// 	NM_GCR=TempGCR;
+// 	return(ncount);
+// }
 				
 //-------------------------------------------
 // debugHelpers, send information

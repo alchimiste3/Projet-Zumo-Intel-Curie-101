@@ -93,9 +93,14 @@ void ApprentissageRobot::reconnaitreMoyenne(int * c, int * d, int * nb){
   // On renvoie la classe (la categorie) qui a le plus de resultat positif
   int catMax = 0;
   int nbMax = 0;
+  int catMax2 = 0;
+  int nbMax2 = 0;
+
   for (int i = 0; i < 128; i++){
     if(tab[catMax] < tab[i]){
+    	catMax2 = catMax;
       catMax = i;
+      nbMax2 = nbMax;
       nbMax = tab[i];
 
     }
@@ -113,6 +118,7 @@ void ApprentissageRobot::reconnaitreMoyenne(int * c, int * d, int * nb){
   // }
 
   Serial.print("Nombre max de reconaissance pour i = ");Serial.print(catMax);Serial.print(" est :");Serial.print(nbMax);Serial.println("/30");
+  Serial.print("Nombre max - 1 de reconaissance pour i = ");Serial.print(catMax2);Serial.print(" est :");Serial.print(nbMax2);Serial.println("/30");
 
 
   *c = catMax;
