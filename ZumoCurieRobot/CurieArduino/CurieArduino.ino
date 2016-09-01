@@ -141,7 +141,7 @@ void setup() {
 
    ///////////////////////// Curie BLE /////////////////////////
 
-   blePeripheral.setLocalName("RdWrS");
+   blePeripheral.setLocalName("RdWrS2");
    blePeripheral.setAdvertisedServiceUuid(ZumoService.uuid());
    blePeripheral.addAttribute(ZumoService);
    blePeripheral.addAttribute(characteristiqueEnvoieDonnees);
@@ -239,18 +239,18 @@ void lireCommande(){
     commandeInit();
 
     const unsigned char * val = characteristiqueRecevoirDonnees.value();
-   
+
+    // On convertie les 20 octets envoyer par l'utilisateur en un tableau de char
     for(int i = 0 ; i < 20 ; i++){
       commande[i] = ((char *)val)[i];
     }
 
     if(commande[0] == '('){
       char * comm;
-  
+      
       comm = strtok(commande, "()");
 
       int tailleComm = strlen(comm);
-
       for(int i = 0 ; i < tailleComm ; i++){
         commande[i] = comm[i];
       }
@@ -271,14 +271,14 @@ void lireCommande(){
  */
 void traiterCommande(){
 
-  Serial.println("traiterCommande");
+  //Serial.println("traiterCommande");
 
   //////////////////////////// Action Robot ////////////////////////////
 
   // Permet de modifier les mouvement du robot grace a des actions pres implementees dans la carte
   if (commande[0] == 'm') {
     actionRobot.action(commande);
-    commandeClean();
+    commandeNull();
   }
 
   //////////////////////////// calibration LineSensors ////////////////////////////
@@ -289,7 +289,6 @@ void traiterCommande(){
   if (recoCommande('c', true, 's', true)) {
     actionRobot.calibrationSensors();
     commandeInit();
-
   }
 
   //////////////////////////// Suivre Ligne ////////////////////////////
@@ -321,7 +320,7 @@ void traiterCommande(){
   if (recoCommande('a', true, 'p', true)) {
     numNeurons = (int)commande[2] - '0';
     apprentissageRobot.apprendreAvecIMU(numNeurons); // On fait "- '0'" pour passer du tableau ASCII a un int
-    commandeClean();
+    commandeNull();
   }
 
 
@@ -331,33 +330,35 @@ void traiterCommande(){
   // On desactive la commande
   if (recoCommande('r', true, 'a', false) && reconnaissanceAvecTemps) {
 
-    nbReco = 0;
+    //On envoie le dernier paquet reconnue
+    tempsFin = millis();
+    tempsReco = tempsFin - tempsDebut;
+    Serial.println("envoie paquet ");
+    envoieNeuronsReconnue();
+
+    
     reconnaissanceAvecTemps  = false;
-    commandeClean();
+    commandeNull();
   }
 
   // On active la commande
   if (recoCommande('r', true, 'a', false) || reconnaissanceAvecTemps) {
 
     neuronsReconnue = -1;
-
     reconnaitreAvecTemps();
-
     reconnaissanceAvecTemps = true;
 
     if(commande[0] == 'r' && commande[1] != 'a'){
-      commandeClean();
+      commandeNull();
     }
   }
-
-  
 
   //////////////////////////// Reconnaissance Actions avec enregistrement////////////////////////////
 
   // On desactive la commande
   if (recoCommande('e', true, 'a', true) && enregistrement) {
     enregistrement  = false;
-    commandeClean();
+    commandeNull();
   }
 
   // On active la commande
@@ -369,7 +370,7 @@ void traiterCommande(){
     enregistrement = true;
 
     if(commande[0] == 'e' && commande[1] == 'a'){
-      commandeClean();
+      commandeNull();
     }
   }
 
@@ -379,13 +380,14 @@ void traiterCommande(){
   // Ici, le robot ne transmet plus de donner et refait les actions appris avec la reconnaisance 
   if (recoCommande('r', true, 'a', true)) { 
     reproduireActions();
-
+    commandeNull();
   }
 
    //////////////////////////// vider liste Action enregistrees ////////////////////////////
 
   if (recoCommande('v', true, 'l', true)) { 
     apprentissageRobot.viderListeActionReconnue();
+    commandeNull();
   }
 
 
@@ -397,7 +399,7 @@ void traiterCommande(){
    */
   if (recoCommande('g', true, 'n', true)) {
     apprentissageRobot.getValeursNeuronParId((int)commande[2]);
-    commandeClean();
+    commandeNull();
   }
   
   /*
@@ -405,7 +407,7 @@ void traiterCommande(){
    */
   if (recoCommande('s', true, 'n', true)) {
     apprentissageRobot.getValeursNeurons();
-    commandeClean();
+    commandeNull();
   }
 
   /*
@@ -413,7 +415,7 @@ void traiterCommande(){
    */
   if (recoCommande('i', true, 'n', true)) {
     apprentissageRobot.setValeursNeurons();
-    commandeClean();
+    commandeNull();
   }
 
 }
@@ -433,17 +435,15 @@ void reconnaitreAvecTemps(){
   apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco, &nbReco);
   
   if(neuronsReconnuePres != neuronsReconnue && neuronsReconnuePres != 0){
-    
+
+    // On calcule le temps de l'action précédente et on initialise le temps pour l'action courante
     tempsFin = millis();
     int deffTemps = tempsFin - tempsDebut;
     tempsDebut = millis();
-
-    Serial.print("deffTemps = ");Serial.println(deffTemps);
-
-    Serial.println("envoie paquet ");
-
     tempsReco = deffTemps;
-
+    Serial.print("deffTemps = ");Serial.println(deffTemps);
+    Serial.println("envoie paquet ");
+    
     // On envoie la reconnaissance seulement lorsqu'on a fini de reconnaitre le neurone courant (nouveau neurone identifie)
     envoieNeuronsReconnue();
   }
@@ -468,7 +468,6 @@ void reconnaitreEtEnregistrerAction(){
   // On demande aux neurons de reconnaitre l'action actuelle grace a l'IMU
   apprentissageRobot.reconnaitreMoyenne(&neuronsReconnue, &distanceReco, &nbReco);
   
-
   // Si une action differente de la precedente est reconnue et ... TODO 
   if(neuronsReconnuePres != neuronsReconnue && neuronsReconnuePres != 0){
 
@@ -479,8 +478,7 @@ void reconnaitreEtEnregistrerAction(){
     }
     else{
       int deffTemps = tempsFin - tempsDebut;
-      apprentissageRobot.addActionReconnue(neuronsReconnuePres, tempsFin - tempsDebut);
-      Serial.print("apprentissageRobot.getNbActionReconnue() = ");Serial.println(apprentissageRobot.getNbActionReconnue());
+      apprentissageRobot.addActionReconnue(neuronsReconnuePres, deffTemps);
     }
     
     tempsDebut = millis();
@@ -490,7 +488,6 @@ void reconnaitreEtEnregistrerAction(){
   neuronsReconnuePres = neuronsReconnue;
 
 }
-
 
 
 /*
@@ -513,7 +510,7 @@ void reproduireActions(){
 
     actionRobot.action(numActionChar);
     
-    delay(apprentissageRobot.getTempsActionReconnue(i));
+    delay(temps);
 
   }
   commandeInit();
@@ -535,7 +532,7 @@ void envoieDonneesIMU(){
   res = res + String(ayConv,1) + ",";
   res = res + String(gzConv,2) + ",";
   
-  // On rajoute en plus un boolean qui indique si le roobot est immobile ou pas afin de corriger les erreur lors du calcule de la vitesse et de la position du robot.
+  // On rajoute en plus un boolean qui indique si le roobot est immobile ou pas afin de corriger les erreurs lors du calcule de la vitesse et de la position du robot.
   bool immobile = actionRobot.estImmobile();
   res = res + String(immobile);
 
@@ -561,8 +558,6 @@ void envoieNeuronsReconnue(){
  * Permet d'envoyer un paquet de 20 octets au client du service Bluetooth (20 octet est la limite qui est impose par le BLE)
  */
 void envoieDonneesBluetooth(String res){
-
-
   char donneesEnvoyer[20];
   String resPaquet = res.substring(0, 19);
   res.remove(0, 19);
@@ -593,20 +588,16 @@ void getInfoIMU() {
  * Réinitialise la commande a sa valeur par defaut : m5 → robot immobile
  */
 void commandeInit(){
-  
   commande[0] = 'm';
   commande[1] = '5';
-  
 }
 
 /*
  * Initialise la commande avec une valeur nulle
  */
-void commandeClean(){
-  
+void commandeNull(){
   commande[0] = 'n';
   commande[1] = 'n';
-  
 }
 
 

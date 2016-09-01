@@ -89,6 +89,7 @@ void QTRSensors::read(unsigned int *sensor_values, unsigned char readMode)
         emittersOff();
 
     readPrivate(sensor_values);
+    
     emittersOff();
 
     if(readMode == QTR_EMITTERS_ON_AND_OFF)

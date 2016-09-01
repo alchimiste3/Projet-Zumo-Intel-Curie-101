@@ -105,7 +105,7 @@ void Device::decouperPaquet(QString paquets)
         QList<QString> listeValeurs = paquets.split(",");
         if (listeValeurs.length() == 4)
         {
-            traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), 0, ((float)intervalle)/1000);
+            traitement->traitement(listeValeurs[0].toFloat(), listeValeurs[1].toFloat(), 0, 0, 0, listeValeurs[2].toFloat(), listeValeurs[3].toFloat(), ((float)intervalle)/1000);
 
             file->open(QIODevice::ReadWrite);
             QTextStream stream(file);
@@ -118,6 +118,9 @@ void Device::decouperPaquet(QString paquets)
     }
     else if (type == TypePaquet::Reconaissance)
     {
+        qDebug() << "Paquet : " << paquets;
+
+
         QList<QString> listeValeurs = paquets.split(",");
         if (listeValeurs.size() >= 3)
         {
