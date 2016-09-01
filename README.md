@@ -7,7 +7,7 @@ Projet lancer au cour d'un stage en binome pendant l'ete 2016 au LEAT.
 L’objectif du stage est de mettre en place un petit groupe d'objets mobile (des robots avec des cartes Curie) connecter entre eux et s'organisant autour d’un point centrale. Chacun de ces robots doit pouvoir apprendre et reconnaître son environnement et pouvoir retrouver son “chemin” grâce à l’apprentissage. Le but est de faire parcourir l’environnement par les robots en couvrant le plus de surface en la plus grande autonomie possible vise à vie de l'utilisateur qui pourra interagir avec les robots à partir d’un ordinateur.
 Les applications à long terme sont très variés et dans de nombreux domaine différent  comme par exemple la surveillance, la cartographie, l’exploration, etc. 
 
-Ce document indique comment installer et initialiser le materiel pour faire fonctionner le systeme. Si vous vouler plus de precision sur le contenue, vous pouver consuter directement le code commanter ou lire nos deux rapports de stage.
+Ce document indique comment installer et initialiser le matériel pour faire fonctionner le système. Si vous voulez plus de précision sur le contenu, vous pouvez consulter directement le code commenté ou lire nos deux rapports de stage.
 
 ## Les Parties
 
@@ -53,7 +53,7 @@ Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus sim
 > execute:
 > sudo ~/.arduino15/packages/Intel/tools/arduino101load/1.6.4+1.18/scripts/create_dfu_udev_rule
 
-Ensuite, dans l'IDE, sélectionner le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement. vous pouvez par la suite laisser le robot sur la carte quand vous la brancher sur le port USB).
+Ensuite, dans l'IDE, sélectionner le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement. vous pourrai par la suite laisser le carte sur la robot quand vous la brancher sur le port USB).
 
 ### Application QT
 
