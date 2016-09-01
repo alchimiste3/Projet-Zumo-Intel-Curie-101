@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QScreen>
 #include <QDebug>
 #include "device.h"
 #include "ajouterwindow.h"
@@ -28,6 +29,7 @@ class MainWindow : public QMainWindow
     QList<Action*> actionsReconnues;
     LineChart* chart;
     int indexModifie;
+    bool mouvementReconnu;
 public:
     explicit MainWindow(Device* d, QWidget *parent = 0);
     ~MainWindow();

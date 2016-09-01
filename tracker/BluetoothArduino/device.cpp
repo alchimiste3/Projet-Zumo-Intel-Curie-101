@@ -27,8 +27,8 @@ void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
     {
         device = deviceInfo;
         qDebug() << "Found new device:" << deviceInfo.name() << '(' << deviceInfo.address().toString() << ')';
-        if (deviceInfo.serviceUuids().contains(QBluetoothUuid(keyCh1)))
-        {
+      //  if (deviceInfo.serviceUuids().contains(QBluetoothUuid(keyCh1)))
+      //  {
             controller = QLowEnergyController::createCentral(deviceInfo);
             qDebug() << controller->state();
             connect(controller, SIGNAL(connected()), this, SLOT(deviceConnected()));
@@ -36,7 +36,7 @@ void Device::deviceDiscovered(const QBluetoothDeviceInfo & deviceInfo)
             connect(controller, SIGNAL(serviceDiscovered(QBluetoothUuid)), this, SLOT(serviceScanDone(QBluetoothUuid)));
             controller->setRemoteAddressType(QLowEnergyController::PublicAddress);
             controller->connectToDevice();
-        }
+     //   }
     }
     discoveryAgent->stop();
    // scan();
@@ -99,7 +99,7 @@ void Device::decouperPaquet(QString paquets)
 
     AnalyseurPaquet analyseur;
     TypePaquet type = analyseur.reconnaitre(paquets);
-    qDebug() << "typePaquet : " << type;
+    qDebug() << "typePaquet : " << type << " " << intervalle;
     if (type == TypePaquet::Position)
     {
         QList<QString> listeValeurs = paquets.split(",");

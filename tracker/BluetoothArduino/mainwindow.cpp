@@ -7,6 +7,10 @@ MainWindow::MainWindow(Device* d, QWidget *parent) :
 {
     ui->setupUi(this);
     this->d = d;
+    this->mouvementReconnu = false;
+    QScreen* screen = QApplication::primaryScreen();
+    qDebug() << "SIZE" << screen->size().width() << " - " << screen->size().height();
+    this->resize(400,600);
     indexModifie = 0;
     ui->actionsTableWidget->setColumnCount(4);
     ui->actionsTableWidget->setColumnHidden(3, true);
@@ -195,21 +199,19 @@ void MainWindow::on_reconnaitreButton_clicked(bool checked)
     {
         d->envoyerCommande("(r);");
         ui->reconnaitreButton->setText("Reconnaitre");
-        qDebug() << "nb actions : " << actionsReconnues[0]->getNbS() << " " << actionsReconnues[1]->getNbS();
-
-        Mouvement* m = new Mouvement(d, this);
-        for (int i = 0; i < actionsReconnues.size(); i++)
-        {
-            m->ajouterAction(actionsReconnues[i]);
-        }
-        m->start();
-        actionsReconnues.clear();
     }
 }
 
 void MainWindow::on_reexucuterActionsButton_clicked(bool checked)
 {
-    d->envoyerCommande("ra");
+    Mouvement* m = new Mouvement(d, this);
+    for (int i = 0; i < actionsReconnues.size(); i++)
+    {
+        m->ajouterAction(actionsReconnues[i]);
+        mouvementReconnu = true;
+    }
+    m->start();
+    actionsReconnues.clear();
 }
 
 void MainWindow::redMajReconaissance(int value, int delai)
