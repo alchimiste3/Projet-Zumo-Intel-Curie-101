@@ -1,5 +1,9 @@
 # Projet-Zumo-Intel-Curie-101
 
+### Auteurs :
+* Quentin Laborde (Étudiant en quatrième année à Polytech Nice Sophia en Science informatique)
+* Clément Sibut (Étudiant en quatrième année à Polytech Nice Sophia en Science informatique)
+
 ## Presentation du projet
 
 Projet lancer au cour d'un stage en binome pendant l'ete 2016 au LEAT.
@@ -17,7 +21,7 @@ Il y a 3 parties dans le projet repartie dans 3 dossier :
 2. L'interface utilisateur sur ordi en Qt.
 3. L'affichage graphique du déplacement du robot avec processing.
 
-Ajouter a ca, on a des libs C++ pour la partie Arduino et un dossier contenant des tests, des essayes et des versions anterieurs de notre code.
+Ajouter à ça, on a des libs C++ pour la partie Arduino et un dossier contenant des tests, des essaye et des versions antérieures de notre code.
 
 ## Pour installer : 
 
@@ -54,7 +58,11 @@ Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus sim
 > execute:
 > sudo ~/.arduino15/packages/Intel/tools/arduino101load/1.6.4+1.18/scripts/create_dfu_udev_rule
 
-Ensuite, dans l'IDE, sélectionner le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement. vous pourrai par la suite laisser le carte sur la robot quand vous la brancher sur le port USB).
+Ensuite, dans l'IDE, sélectionner (dans Outils) le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement. vous pourrai par la suite laisser le carte sur la robot quand vous la brancher sur le port USB).
+
+Après avoir démarré le robot, attender quelques secondes puis lancer l'interface utilisateur (Application QT) qui va se connecter au service BLE du robot. Maintenant, vous pouvez contrôler le robot à partir de l'interface.
+
+Si vous laissez le robot brancher par USB, vous pouvez afficher des lignes de texte lors de l'exécution : après le transférer du code, attender quelques secondes puis lancer le moniteur (dans Outils). vous pouvez voir en direct l'exécution de la boucle (loop) Arduino. Pour utiliser le moniteur et éviter des bugs, vous devez transférer le programme avec le robot déjà allumer et brancher au port USB.
 
 ### Application QT
 
