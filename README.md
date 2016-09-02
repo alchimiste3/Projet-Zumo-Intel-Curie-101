@@ -110,6 +110,6 @@ Bien sur, pour l'instant notre projet est loin d'être finie et il reste beaucou
 * Amélioration de la syntaxe des commandes : ce n'est pas vraiment un problème mais il faudrait introduire une norme dans la syntaxe des commandes.
 * Amélioration du suivie de ligne (véritable parcoure sur un chemin complexe) : pour l'instant le suivi de ligne et très basique et il faudrait le complexifier avec des chemins utilisation différente. Un autre problème est le capteur de ligne lui-même qui a tendance à ne plus fonctionner par intermittence. 
 
-La stabilité de la carte et du robot est aussi un problème persistant avec des bugs de la carte Arduino qui peut planter totalement
+La stabilité de la carte et du robot est aussi un problème persistant : la carte Arduino qui peut planter totalement et faire planter le programme Arduino qui s'exécute, c'est un problème matériel pas logiciel.
 
-Il faudrait améliorer l'interface pour qu'elle soit adaptée à l'écran sur Android, la création et la modification d'actions est rendue complexe sur Android à cause des nouvelles fenetres qui s'ouvrent.
+Il faudrait aussi améliorer l'interface pour qu'elle soit adaptée à l'écran sur Android, la création et la modification d'actions est rendue complexe sur Android à cause des nouvelles fenetres qui s'ouvrent.
