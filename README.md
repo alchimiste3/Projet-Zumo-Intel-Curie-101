@@ -104,7 +104,12 @@ Pour plus de détails aller ici : http://doc.qt.io/qt-5/androidgs.html
 
 ## Les truc a faire
 
-Bien sur, pour l'instant notre projet est loin d'être finie et il reste beaucoup de choses à faire et à améliorer : Amélioration de l'initialisation du réseau neuronal, de la précision de l'apprentissage, de la syntaxe des commandes, du suivie de ligne (véritable parcoure sur un chemin complexe).
+Bien sur, pour l'instant notre projet est loin d'être finie et il reste beaucoup de choses à faire et à améliorer.
+* Amélioration de l'initialisation du réseau neuronal : pour l'instant l'installation utilise plus de SRAM que la carte n'en dispose. Ce n'est pas un problème dans notre code mais un problème de compatibilité entre la carte Curie et le réseau. Le problème sera peut-être résolu plus tard par les concepteurs.
+* Amélioration de la précision de l'apprentissage : pour l'instant certains mouvements ne sont pas bien différenciés par les neurones. C'est principalement à cause du type d'apprentissage lui-même qui est polyvalent mais pas d'une grande précision. 
+* Amélioration de la syntaxe des commandes : ce n'est pas vraiment un problème mais il faudrait introduire une norme dans la syntaxe des commandes.
+* Amélioration du suivie de ligne (véritable parcoure sur un chemin complexe) : pour l'instant le suivi de ligne et très basique et il faudrait le complexifier avec des chemins utilisation différente. Un autre problème est le capteur de ligne lui-même qui a tendance à ne plus fonctionner par intermittence. 
+
 La stabilité de la carte et du robot est aussi un problème persistant avec des bugs de la carte Arduino qui peut planter totalement
 
 Il faudrait améliorer l'interface pour qu'elle soit adaptée à l'écran sur Android, la création et la modification d'actions est rendue complexe sur Android à cause des nouvelles fenetres qui s'ouvrent.
