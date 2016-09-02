@@ -58,7 +58,7 @@ Maintenant, vous devais paramètrer Arduino pour utiliser la carte : le plus sim
 > execute:
 > sudo ~/.arduino15/packages/Intel/tools/arduino101load/1.6.4+1.18/scripts/create_dfu_udev_rule
 
-Ensuite, dans l'IDE, sélectionner (dans Outils) le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement. vous pourrai par la suite laisser le carte sur la robot quand vous la brancher sur le port USB).
+Ensuite, dans l'IDE, sélectionner (dans Outils) le bon type de carte (Genuino 101) et le bon programmateur (AVRISP mkll). Compiler le code puis tranferer-le dans la carte grace au câble USB (normalement le bon port est déjà sélectionne mais il faut parfois le changer). Clipser la carte sur le robot et démarrez-le, le robot doit être immobile lors de l'allumage pour que l'IMU s'initialise correctement (vous pourrai par la suite laisser le carte sur la robot quand vous la brancher sur le port USB).
 
 Après avoir démarré le robot, attender quelques secondes puis lancer l'interface utilisateur (Application QT) qui va se connecter au service BLE du robot. Maintenant, vous pouvez contrôler le robot à partir de l'interface.
 
